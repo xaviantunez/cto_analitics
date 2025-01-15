@@ -508,17 +508,6 @@ $(document).ready(function() {
     mostrarplantilla(); // Muestra la plantilla inicial con todos los cronómetros
     // Iniciar todos los cronómetros si están marcados
     $('#iniciar-todos').click(function() {
-        var cnt=0;
-        for (var i = 0; i < nombresCronometros.length; i++) {
-            var jugador = nombresCronometros[i];
-            if ($("#check" + jugador).is(':checked')) cnt++;
-        }
-        if(cnt!=8){
-            alert("Has marcado "+cnt+" jugadores para jugar\n\nRecuerdalo que deben haber 8\n\nRevísalo");
-            return;
-        }
-
-
         if(!iniciado){
             iniciartotaltiempo();
             iniciado=true;
@@ -578,7 +567,6 @@ $(document).ready(function() {
     }
     // Crear el intervalo para cada cronómetro
     function crearIntervalo(jugador) {
-        if (!iniciado) return;
         if (!tiempos[jugador]) {
             tiempos[jugador] = 0;
         }
