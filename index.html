@@ -258,9 +258,12 @@
         .buttondelete{
             margin-left:10px;
         }
+        .spanaccion{
+            display: block; /* Asegura que el botón ocupe toda la línea disponible */
+            margin: 10px auto 10px; /* Agrega espacio encima y centra horizontalmente */
+        }
 		.buttonaccion{
-            padding: 0px;
-            margin-left:2px;
+            margin-left: 5px; /* Agrega espacio encima y centra horizontalmente */
         }
         #divnewplayer{
             width: 30%;
@@ -534,22 +537,10 @@ $(document).ready(function() {
             var jugador = nombresCronometros[i];
             if ($("#check" + jugador).is(':checked')) {
                 iniciarCronometro(jugador);
-                $("#FH"+jugador).show();
-                $("#FR"+jugador).show();
-                $("#RD"+jugador).show();
-                $("#RF"+jugador).show();
-                $("#AS"+jugador).show();
-                $("#GO"+jugador).show();
-                $("#PA"+jugador).show();
+                $("#SP"+jugador).show();
             }else{
                 $('#suplentes').append($('<div class="reservas">').text(jugador));
-                $("#FH"+jugador).hide();
-                $("#FR"+jugador).hide();
-                $("#RD"+jugador).hide();
-                $("#RF"+jugador).hide();
-                $("#AS"+jugador).hide();
-                $("#GO"+jugador).hide();
-                $("#PA"+jugador).hide();
+                $("#SP"+jugador).hide();
             }
         }
     
@@ -677,7 +668,7 @@ $(document).ready(function() {
         for (var i = 0; i < nombresCronometros.length; i++) {
             add_fila_player(nombresCronometros,i);
         }
-        $('.buttonaccion').hide();
+        $('.spanaccion').hide();
         checkeadosrecuperados = JSON.parse(localStorage.getItem('checkeados'));
         if(checkeadosrecuperados){
             checkeadosrecuperados = JSON.parse(localStorage.getItem('checkeados'));
@@ -772,6 +763,9 @@ $(document).ready(function() {
             var checkbox = $("<input>");
             var buttondelete =$("<button>")
             var buttonF =$("<button>")
+            var span2 = $("<span>");
+            span2.attr("class","spanaccion");
+            span2.attr("id","SP"+nombresCronometros[i]);
 			buttonF.text("FH");
 			buttonF.attr("class","buttonaccion");
 			buttonF.attr("id","FH"+nombresCronometros[i]);
@@ -825,13 +819,16 @@ $(document).ready(function() {
                 midiv.append(checkbox);
                 midiv.append(spantiempo);
                 midiv.append(buttondelete);
-                midiv.append(buttonF);                
-                midiv.append(buttonFR);
-                midiv.append(buttonR);
-                midiv.append(buttonRF);
-                midiv.append(buttonA);
-				midiv.append(buttonG);
-				midiv.append(buttonP);
+
+
+                span2.append(buttonF);
+                span2.append(buttonFR);
+                span2.append(buttonR);
+                span2.append(buttonRF);
+                span2.append(buttonA);
+				span2.append(buttonG);
+				span2.append(buttonP);
+                midiv.append(span2);
             $("#cronometros").append(midiv);
     }
 
@@ -840,6 +837,7 @@ $(document).ready(function() {
         clearInterval(totalTiempo);
         pararIntervalos(); // Detiene todos los cronómetros
         iniciado=false;
+        $('.spanaccion').hide();
         
         $('.checkboxplayers').prop('disabled', false);
         if(checkeadosrecuperados){
@@ -895,13 +893,7 @@ $(document).ready(function() {
             clearInterval(intervalos[jugadorEnJuego]);
             delete intervalos[jugadorEnJuego];
             $(`#check${jugadorEnJuego}`).prop('checked', false);
-            $("#FH"+jugadorEnJuego).hide();
-            $("#FR"+jugadorEnJuego).hide();
-            $("#RD"+jugadorEnJuego).hide();
-            $("#RF"+jugadorEnJuego).hide();
-            $("#AS"+jugadorEnJuego).hide();
-            $("#GO"+jugadorEnJuego).hide();
-            $("#PA"+jugadorEnJuego).hide();
+            $("#sp"+jugadorEnJuego).hide();
         }
         if(jugadorFueraJuego){
             $(`#check${jugadorFueraJuego}`).prop('checked', true);
@@ -916,13 +908,7 @@ $(document).ready(function() {
                     arraycheckeados.splice(index2, 1);
                     // Actualizar el array en localStorage
                     localStorage.setItem("checkeados", JSON.stringify(recuperados));
-                    $("#FH"+jugadorFueraJuego).show();
-                    $("#FR"+jugadorFueraJuego).show();
-                    $("#RD"+jugadorFueraJuego).show();
-                    $("#RF"+jugadorFueraJuego).show();
-                    $("#AS"+jugadorFueraJuego).show();
-                    $("#GO"+jugadorFueraJuego).show();
-                    $("#PA"+jugadorFueraJuego).show();
+                    $("#SP"+jugadorFueraJuego).show();
                 }
             } 
             crearIntervalo(jugadorFueraJuego);
