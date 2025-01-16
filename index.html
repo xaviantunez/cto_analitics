@@ -696,7 +696,6 @@ $(document).ready(function() {
     function updateVarLocalStorage(storage,iddiv=''){
         if(iddiv=="")iddiv=storage;
         var div=$("#"+iddiv);
-        alert(iddiv);
         var valor = parseInt(div.text())+1;
         div.text(valor);
         localStorage.setItem(storage, valor);
@@ -886,7 +885,7 @@ $(document).ready(function() {
         $('#goleador-adv-modal').hide();
     });    
     $('#cambiar-estado').click(function() {
-        alert('');
+
         const jugadorEnJuego = $('#jugadores-en-juego').val();
         const jugadorFueraJuego = $('#jugadores-fuera-juego').val();
         if(jugadorEnJuego){
