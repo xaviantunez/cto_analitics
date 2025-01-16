@@ -511,6 +511,10 @@ $(document).ready(function() {
     mostrarplantilla(); // Muestra la plantilla inicial con todos los cronómetros
     // Iniciar todos los cronómetros si están marcados
     $('#iniciar-todos').click(function() {
+        if(totaljugadoresencampo<8){
+            alert('SOLO TIENES '+totaljugadoresencampo+" JUGADORES SELECCIONADOS\n\nPOR FAVOR REVISALO");
+            return
+        }
         if(!iniciado){
             iniciartotaltiempo();
             iniciado=true;
