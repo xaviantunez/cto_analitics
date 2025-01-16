@@ -261,6 +261,7 @@
         .spanaccion{
             display: block; /* Asegura que el botón ocupe toda la línea disponible */
             margin: 10px auto 10px; /* Agrega espacio encima y centra horizontalmente */
+            
         }
 		.buttonaccion{
             margin-left: 5px; /* Agrega espacio encima y centra horizontalmente */
@@ -270,6 +271,15 @@
             display: inline-block;
             vertical-align: top;
             font-size: 15px;
+        }
+        .naranja{
+            background-color: #ffead8 !important;
+        }
+        .rojo{
+            background-color: #ffdfd4 !important;
+        }
+        .verde{
+            background-color: #e7ffde !important;
         }
         /*fin estilo div checkbox jugadores*/
        #salir-cambio,#salir-gol,#salir-gol-adv, #cancel-capitan{background-color: #1a1a19;}
@@ -588,6 +598,11 @@ $(document).ready(function() {
             localStorage.setItem('checkeados', JSON.stringify(arraycheckeados));
             intervalos[jugador] = setInterval(function() {
             tiempos[jugador]++;
+            var clase='rojo';
+            if(tiempos[jugador]>600 && tiempos[jugador]<1200 ) clase='naranja'
+            if(tiempos[jugador]>1500 )clase='verde';
+            //console.log(jugador+' '+clase);
+            if(tiempos[jugador]<1500)$("#"+jugador).toggleClass(clase);
             const minutos = Math.floor(tiempos[jugador] / 60);
             const segundos = tiempos[jugador] % 60;
             $("#time" + jugador).text(`${minutos}:${segundos < 10 ? '0' : ''}${segundos}`);
