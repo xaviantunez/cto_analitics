@@ -548,10 +548,13 @@ $(document).ready(function() {
             if ($("#check" + jugador).is(':checked')) {
                 iniciarCronometro(jugador);
                 $("#SP"+jugador).show();
+
             }else{
                 $('#suplentes').append($('<div class="reservas">').text(jugador));
                 $("#SP"+jugador).hide();
             }
+            showTimeColor(tiempos[jugador],jugador,true);
+            console.log(tiempos[jugador]+" "+jugador);
         }
     
     });
@@ -588,6 +591,22 @@ $(document).ready(function() {
         $(`#time0`).text(`${minutosTotales}:${segundosTotales < 10 ? '0' : ''}${segundosTotales}`);
             }, 1000);
     }
+    function showTimeColor(tiempo, jugador,arranque=false){
+        var clase='rojo';
+        if(tiempo>600 && tiempo<1200 ){
+            clase='naranja';
+            $("#SP"+jugador).removeClass("rojo");
+
+        }
+        if(tiempo>1500 ) {
+            clase = 'verde';
+            $("#SP"+jugador).removeClass("naranja");
+        }
+        if(!arranque) $("#SP"+jugador).toggleClass(clase);
+        else $("#SP"+jugador).addClass(clase);
+        console.log(jugador+' '+tiempo);
+
+    }
     // Crear el intervalo para cada cronómetro
     function crearIntervalo(jugador) {
         if (!tiempos[jugador]) {
@@ -598,11 +617,7 @@ $(document).ready(function() {
             localStorage.setItem('checkeados', JSON.stringify(arraycheckeados));
             intervalos[jugador] = setInterval(function() {
             tiempos[jugador]++;
-            var clase='rojo';
-            if(tiempos[jugador]>600 && tiempos[jugador]<1200 ) clase='naranja'
-            if(tiempos[jugador]>1500 )clase='verde';
-            //console.log(jugador+' '+clase);
-            if(tiempos[jugador]<1500)$("#"+jugador).toggleClass(clase);
+            showTimeColor(tiempos[jugador],jugador);
             const minutos = Math.floor(tiempos[jugador] / 60);
             const segundos = tiempos[jugador] % 60;
             $("#time" + jugador).text(`${minutos}:${segundos < 10 ? '0' : ''}${segundos}`);
@@ -714,6 +729,7 @@ $(document).ready(function() {
         var valor = parseInt(div.text())+1;
         div.text(valor);
         localStorage.setItem(storage, valor);
+
     }
 	$(document).on('click',".buttonaccion", function() {
     //$(".buttondelete").click(function(){
@@ -724,34 +740,36 @@ $(document).ready(function() {
         //Recoger minuto del partido
         const minutosTotales = Math.floor(iniTiempo / 60);
         if(accion=="AS"){
-            var nuevaFila = "<tr><td>asistencia:"+nombre+" min "+minutosTotales+"</td><td></td></tr>";
+            var texto = "asistencia:"+nombre+" min "+minutosTotales+"";
         }
         if(accion=="GO"){
             updateVarLocalStorage('resulCto');
-            var nuevaFila = "<tr><td>Gol: "+nombre+" min "+minutosTotales+"</td><td></td></tr>";
+            var texto = "Gol: "+nombre+" min "+minutosTotales+"";
         }
         if(accion=="FH"){
-            var nuevaFila = "<tr><td>Hace Falta: "+nombre+" min "+minutosTotales+"</td><td></td></tr>";
+            var texto = "Hace Falta: "+nombre+" min "+minutosTotales+"";
             updateVarLocalStorage('faltasCometidasright','faltasRight');
         }
         if(accion=="FR"){
-            var nuevaFila = "<tr><td>Recibe Falta: "+nombre+" min "+minutosTotales+"</td><td></td></tr>";
+            var texto = "Recibe Falta: "+nombre+" min "+minutosTotales+"";
             updateVarLocalStorage('faltasCometidasleft','faltasLeft');
         }
         if(accion=="RD"){
-            var nuevaFila = "<tr><td>Remate Dentro: "+nombre+" min "+minutosTotales+"</td><td></td></tr>";
+            var texto = "Remate Dentro: "+nombre+" min "+minutosTotales+"";
             updateVarLocalStorage('rematesPorterialeft','rematesPorteriaLeft');
         }
         if(accion=="RF"){
-            var nuevaFila = "<tr><td>Remate Fuera: "+nombre+" min "+minutosTotales+"</td><td></td></tr>";
+            var texto = "Remate Fuera: "+nombre+" min "+minutosTotales+"";
             updateVarLocalStorage('rematesFueraleft','rematesFueraLeft');
         }
         if(accion=="PA"){
-            var nuevaFila = "<tr><td>Parada: "+nombre+" min "+minutosTotales+"</td><td></td></tr>";
+            var texto = "Parada: "+nombre+" min "+minutosTotales+"";
             updateVarLocalStorage('paradasPorteroleft','paradasPorteroLeft');
             updateVarLocalStorage('rematesPorteriaright','rematesPorteriaRight');
         }
-
+        //alert(texto);
+        $("#time"+nombre).text(texto);
+        var nuevaFila = "<tr><td>"+texto+"</td><td></td></tr>";
         $("#tablaMarcador").append(nuevaFila);
 
 
