@@ -258,6 +258,9 @@
         .buttondelete{
             margin-left:10px;
         }
+		.buttonaccion{
+            margin-left:10px;
+        }
         #divnewplayer{
             width: 30%;
             display: inline-block;
@@ -374,7 +377,7 @@
                     <div class="numestadisticasleft" id="rematesPorteriaLeft">0</div>
                     <div class="grupdivestadisticas">
                         <div class="estadisticas"><button class="increment-left">+</button></div>
-                        <div class="estadisticas"><span span id="rematesPorteria">Remates a porter&iacute;a</span></div>
+                        <div class="estadisticas"><span span id="rematesPorteria">Remates Dentro</span></div>
                         <div class="estadisticas"><button class="increment-right">+</button></div>
                     </div>
                     <div class="numestadisticasright" id="rematesPorteriaRight">0</div>
@@ -392,7 +395,7 @@
                     <div class="numestadisticasleft" id="cornerLeft">0</div>
                     <div class="grupdivestadisticas">
                         <div class="estadisticas"><button class="increment-left">+</button></div>
-                        <div class="estadisticas"><span span id="cornersFavor">Corners a favor</span></div>
+                        <div class="estadisticas"><span span id="cornersFavor">Corners</span></div>
                         <div class="estadisticas"><button class="increment-right">+</button></div>
                     </div>
                     <div class="numestadisticasright" id="cornerRight">0</div>
@@ -526,8 +529,22 @@ $(document).ready(function() {
             var jugador = nombresCronometros[i];
             if ($("#check" + jugador).is(':checked')) {
                 iniciarCronometro(jugador);
+                $("#FH"+jugador).show();
+                $("#FR"+jugador).show();
+                $("#RD"+jugador).show();
+                $("#RF"+jugador).show();
+                $("#AS"+jugador).show();
+                $("#GO"+jugador).show();
+                $("#PA"+jugador).show();
             }else{
                 $('#suplentes').append($('<div class="reservas">').text(jugador));
+                $("#FH"+jugador).hide();
+                $("#FR"+jugador).hide();
+                $("#RD"+jugador).hide();
+                $("#RF"+jugador).hide();
+                $("#AS"+jugador).hide();
+                $("#GO"+jugador).hide();
+                $("#PA"+jugador).hide();
             }
         }
     
@@ -635,6 +652,7 @@ $(document).ready(function() {
         mostrarplantilla();
     }
     function cambiarJugador(val){
+
         $('#jugadores-en-juego').empty();
         $('#jugadores-fuera-juego').empty();
         //$('#suplentes').empty();
@@ -654,6 +672,7 @@ $(document).ready(function() {
         for (var i = 0; i < nombresCronometros.length; i++) {
             add_fila_player(nombresCronometros,i);
         }
+        $('.buttonaccion').hide();
         checkeadosrecuperados = JSON.parse(localStorage.getItem('checkeados'));
         if(checkeadosrecuperados){
             checkeadosrecuperados = JSON.parse(localStorage.getItem('checkeados'));
@@ -678,6 +697,65 @@ $(document).ready(function() {
         }
         $("#"+nombre).remove();
     });
+    function updateVarLocalStorage(storage){
+        var div=$("#"+storage);
+        var valor = parseInt(parseInt(div.text()))+1;
+        div.text(valor);
+        localStorage.setItem(storage, valor);
+    }
+	$(document).on('click',".buttonaccion", function() {
+    //$(".buttondelete").click(function(){
+        //console.log($(this).attr("id"));
+        var id=$(this).attr("id");
+        var nombre=id.substring(2,id.length)
+        var accion=id.substring(0,2)
+        //Recoger minuto del partido
+        const minutosTotales = Math.floor(iniTiempo / 60);
+        if(accion=="AS"){
+            updateVarLocalStorage('rematesPorteriaLeft');
+            var nuevaFila = "<tr><td>asistencia:"+nombre+" min "+minutosTotales+"</td><td></td></tr>";
+        }
+        if(accion=="GO"){
+            updateVarLocalStorage('resulCto');
+            var nuevaFila = "<tr><td>Gol: "+nombre+" min "+minutosTotales+"</td><td></td></tr>";
+
+        }
+        if(accion=="FH"){
+            var nuevaFila = "<tr><td>Hace Falta: "+nombre+" min "+minutosTotales+"</td><td></td></tr>";
+            updateVarLocalStorage('faltasCometidasright');
+        }
+        if(accion=="FR"){
+            var nuevaFila = "<tr><td>Recibe Falta: "+nombre+" min "+minutosTotales+"</td><td></td></tr>";
+            updateVarLocalStorage('faltasCometidasleft');
+        }
+        if(accion=="RD"){
+            var nuevaFila = "<tr><td>Remate Dentro: "+nombre+" min "+minutosTotales+"</td><td></td></tr>";
+            updateVarLocalStorage('rematesPorterialeft');
+        }
+        if(accion=="RF"){
+            var nuevaFila = "<tr><td>Remate Fuera: "+nombre+" min "+minutosTotales+"</td><td></td></tr>";
+            updateVarLocalStorage('rematesFueraleft');
+        }
+        if(accion=="PA"){
+            var nuevaFila = "<tr><td>Parada: "+nombre+" min "+minutosTotales+"</td><td></td></tr>";
+            updateVarLocalStorage('paradasPortero');
+        }
+
+        $("#tablaMarcador").append(nuevaFila);
+
+
+
+
+
+        /*console.log(nombre);
+        var positiontodelete=nombresCronometros.indexOf(nombre);
+        nombresCronometros.splice(positiontodelete,1);
+        if ($("#check" + nombre).is(':checked')) {
+            totaljugadoresencampo--;
+            $('#jugjugando').text(totaljugadoresencampo);
+        }
+        $("#"+nombre).remove();*/
+    });
     function add_fila_player(nombresCronometros,i){
         //console.log(i+" "+nombresCronometros[i]+" desde add_fila_player");
         var midiv = $("<div>");
@@ -687,6 +765,35 @@ $(document).ready(function() {
             var spantiempo = $("<span>");
             var checkbox = $("<input>");
             var buttondelete =$("<button>")
+            var buttonF =$("<button>")
+			buttonF.text("FH");
+			buttonF.attr("class","buttonaccion");
+			buttonF.attr("id","FH"+nombresCronometros[i]);
+            var buttonFR =$("<button>")
+			buttonFR.text("FR");
+			buttonFR.attr("class","buttonaccion");
+			buttonFR.attr("id","FR"+nombresCronometros[i]);
+			var buttonA =$("<button>")
+			buttonA.text("AS");
+			buttonA.attr("class","buttonaccion");
+			buttonA.attr("id","AS"+nombresCronometros[i]);
+			var buttonR =$("<button>")
+			buttonR.text("RD");
+			buttonR.attr("class","buttonaccion");
+			buttonR.attr("id","RD"+nombresCronometros[i]);
+            var buttonRF =$("<button>")
+			buttonRF.text("RF");
+			buttonRF.attr("class","buttonaccion");
+			buttonRF.attr("id","RF"+nombresCronometros[i]);
+			var buttonG =$("<button>")
+			buttonG.text("GO");
+			buttonG.attr("class","buttonaccion");
+			buttonG.attr("id","GO"+nombresCronometros[i]);
+            var buttonP =$("<button>")
+			buttonP.text("PA");
+			buttonP.attr("class","buttonaccion");
+			buttonP.attr("id","PA"+nombresCronometros[i]);
+			
             checkbox.attr("type", "checkbox");
             checkbox.attr("class", "checkboxplayers");
             checkbox.attr("id", "check" + nombresCronometros[i]);
@@ -712,6 +819,13 @@ $(document).ready(function() {
                 midiv.append(checkbox);
                 midiv.append(spantiempo);
                 midiv.append(buttondelete);
+                midiv.append(buttonF);                
+                midiv.append(buttonFR);
+                midiv.append(buttonR);
+                midiv.append(buttonRF);
+                midiv.append(buttonA);
+				midiv.append(buttonG);
+				midiv.append(buttonP);
             $("#cronometros").append(midiv);
     }
 
@@ -768,12 +882,20 @@ $(document).ready(function() {
         $('#goleador-adv-modal').hide();
     });    
     $('#cambiar-estado').click(function() {
+        alert('');
         const jugadorEnJuego = $('#jugadores-en-juego').val();
         const jugadorFueraJuego = $('#jugadores-fuera-juego').val();
         if(jugadorEnJuego){
             clearInterval(intervalos[jugadorEnJuego]);
             delete intervalos[jugadorEnJuego];
             $(`#check${jugadorEnJuego}`).prop('checked', false);
+            $("#FH"+jugadorEnJuego).hide();
+            $("#FR"+jugadorEnJuego).hide();
+            $("#RD"+jugadorEnJuego).hide();
+            $("#RF"+jugadorEnJuego).hide();
+            $("#AS"+jugadorEnJuego).hide();
+            $("#GO"+jugadorEnJuego).hide();
+            $("#PA"+jugadorEnJuego).hide();
         }
         if(jugadorFueraJuego){
             $(`#check${jugadorFueraJuego}`).prop('checked', true);
@@ -788,6 +910,13 @@ $(document).ready(function() {
                     arraycheckeados.splice(index2, 1);
                     // Actualizar el array en localStorage
                     localStorage.setItem("checkeados", JSON.stringify(recuperados));
+                    $("#FH"+jugadorFueraJuego).show();
+                    $("#FR"+jugadorFueraJuego).show();
+                    $("#RD"+jugadorFueraJuego).show();
+                    $("#RF"+jugadorFueraJuego).show();
+                    $("#AS"+jugadorFueraJuego).show();
+                    $("#GO"+jugadorFueraJuego).show();
+                    $("#PA"+jugadorFueraJuego).show();
                 }
             } 
             crearIntervalo(jugadorFueraJuego);
