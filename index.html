@@ -383,8 +383,8 @@
                     <div class="numestadisticasright" id="rematesPorteriaRight">0</div>
                 </div>
                 <div class="sectionestadistica">
-                    <div class="numestadisticasleft">0</div>
-                    <div class="grupdivestadisticas" id="paradasPorteroLeft">
+                    <div class="numestadisticasleft" id="paradasPorteroLeft">0</div>
+                    <div class="grupdivestadisticas" >
                         <div class="estadisticas"><button class="increment-left">+</button></div>
                         <div class="estadisticas"><span span id="paradasPortero">Paradas portero</span></div>
                         <div class="estadisticas"><button class="increment-right">+</button></div>
@@ -458,7 +458,7 @@ $(document).ready(function() {
         'Andreu', 'Arnau', 'Brais', 'Carlos',
         'Guillem', 'Hugo', 'Ivor', 'Leo',
         'Manel', 'Marc', 'Mateo', 'Miguel',
-        'Victor'
+        'Victor','Pablo'
     ];
     const benjaminB = [
         'Aleix', 'Alexis', 'Arnau', 'Carles', 'Dario',
@@ -697,9 +697,11 @@ $(document).ready(function() {
         }
         $("#"+nombre).remove();
     });
-    function updateVarLocalStorage(storage){
-        var div=$("#"+storage);
-        var valor = parseInt(parseInt(div.text()))+1;
+    function updateVarLocalStorage(storage,iddiv=''){
+        if(iddiv=="")iddiv=storage;
+        var div=$("#"+iddiv);
+        alert(iddiv);
+        var valor = parseInt(div.text())+1;
         div.text(valor);
         localStorage.setItem(storage, valor);
     }
@@ -712,7 +714,6 @@ $(document).ready(function() {
         //Recoger minuto del partido
         const minutosTotales = Math.floor(iniTiempo / 60);
         if(accion=="AS"){
-            updateVarLocalStorage('rematesPorteriaLeft');
             var nuevaFila = "<tr><td>asistencia:"+nombre+" min "+minutosTotales+"</td><td></td></tr>";
         }
         if(accion=="GO"){
@@ -722,23 +723,24 @@ $(document).ready(function() {
         }
         if(accion=="FH"){
             var nuevaFila = "<tr><td>Hace Falta: "+nombre+" min "+minutosTotales+"</td><td></td></tr>";
-            updateVarLocalStorage('faltasCometidasright');
+            updateVarLocalStorage('faltasCometidasright','faltasRight');
         }
         if(accion=="FR"){
             var nuevaFila = "<tr><td>Recibe Falta: "+nombre+" min "+minutosTotales+"</td><td></td></tr>";
-            updateVarLocalStorage('faltasCometidasleft');
+            updateVarLocalStorage('faltasCometidasleft','faltasLeft');
         }
         if(accion=="RD"){
             var nuevaFila = "<tr><td>Remate Dentro: "+nombre+" min "+minutosTotales+"</td><td></td></tr>";
-            updateVarLocalStorage('rematesPorterialeft');
+            updateVarLocalStorage('rematesPorterialeft','rematesPorteriaLeft');
         }
         if(accion=="RF"){
             var nuevaFila = "<tr><td>Remate Fuera: "+nombre+" min "+minutosTotales+"</td><td></td></tr>";
-            updateVarLocalStorage('rematesFueraleft');
+            updateVarLocalStorage('rematesFueraleft','rematesFueraLeft');
         }
         if(accion=="PA"){
             var nuevaFila = "<tr><td>Parada: "+nombre+" min "+minutosTotales+"</td><td></td></tr>";
-            updateVarLocalStorage('paradasPortero');
+            updateVarLocalStorage('paradasPorteroleft','paradasPorteroLeft');
+            updateVarLocalStorage('rematesPorteriaright','rematesPorteriaRight');
         }
 
         $("#tablaMarcador").append(nuevaFila);
