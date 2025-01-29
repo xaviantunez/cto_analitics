@@ -595,15 +595,15 @@ $(document).ready(function() {
         var clase='rojo';
         if(tiempo>600 && tiempo<1200 ){
             clase='naranja';
-            $("#SP"+jugador).removeClass("rojo");
+            $("#name"+jugador).removeClass("rojo");
 
         }
         if(tiempo>1500 ) {
             clase = 'verde';
-            $("#SP"+jugador).removeClass("naranja");
+            $("#name"+jugador).removeClass("naranja");
         }
-        if(!arranque) $("#SP"+jugador).toggleClass(clase);
-        else $("#SP"+jugador).addClass(clase);
+        if(!arranque) $("#name"+jugador).toggleClass(clase);
+        else $("#name"+jugador).addClass(clase);
         console.log(jugador+' '+tiempo);
 
     }
