@@ -273,13 +273,16 @@
             font-size: 15px;
         }
         .naranja{
-            background-color: #ffead8 !important;
+            background-color: #ffcc00 !important;
         }
         .rojo{
-            background-color: #ffdfd4 !important;
+            /*background-color: #ffdfd4 !important;*/
+            background-color: #ff0000 !important;
+            color:#ffffff !important
         }
         .verde{
-            background-color: #e7ffde !important;
+            background-color: #00cc00 !important;
+            color:#ffffff !important
         }
         /*fin estilo div checkbox jugadores*/
        #salir-cambio,#salir-gol,#salir-gol-adv, #cancel-capitan{background-color: #1a1a19;}
@@ -623,7 +626,7 @@ $(document).ready(function() {
     }
     function showTimeColor(tiempo, jugador,arranque=false){
         var clase='rojo';
-        if(tiempo>600 && tiempo<1200 ){
+        if(tiempo>600 && tiempo<1500 ){
             clase='naranja';
             $("#name"+jugador).removeClass("rojo");
 
@@ -631,7 +634,9 @@ $(document).ready(function() {
         if(tiempo>1500 ) {
             clase = 'verde';
             $("#name"+jugador).removeClass("naranja");
+            $("#name"+jugador).removeClass("rojo");
         }
+
         if(!arranque) $("#name"+jugador).toggleClass(clase);
         else $("#name"+jugador).addClass(clase);
         //console.log(jugador+' '+tiempo);
