@@ -278,15 +278,16 @@
         }
         .naranja{
             background-color: #ffcc00 !important;
+            color: transparent; !important
         }
         .rojo{
             /*background-color: #ffdfd4 !important;*/
             background-color: #ff0000 !important;
-            color:#ffffff !important
+            color: transparent; !important
         }
         .verde{
             background-color: #00cc00 !important;
-            color:#ffffff !important
+            color: transparent; !important
         }
         /*fin estilo div checkbox jugadores*/
        #salir-cambio,#salir-gol,#salir-gol-adv, #cancel-capitan{background-color: #1a1a19;}
@@ -483,6 +484,8 @@ $(document).ready(function() {
     var intervalos = {}; // Almacenará los intervalos individuales de cada cronómetro
     var tiempos = {}; // Almacenará el tiempo acumulado de cada cronómetro
     var marcatiempo={};
+    var mensajes={};
+    var marcamensajes={};
     var nombresCronometros=[];
     var equipoElegido;
     var pdfParte='Primera Parte ';
@@ -520,6 +523,8 @@ $(document).ready(function() {
         equipotitular=JSON.parse(localStorage.getItem('equipotitular'));
         enmarcha=JSON.parse(localStorage.getItem('iniciado'));
         marcatiempo=JSON.parse(localStorage.getItem('marcatiempo'));
+        marcamensajes=JSON.parse(localStorage.getItem('marcamensajes'));
+        mensajes=JSON.parse(localStorage.getItem('mensajes'));
         if(enmarcha=="") enmarcha=0;
 
         var nombresCronometrosTemp =JSON.parse(localStorage.getItem('nombresCronometros'));
@@ -567,7 +572,7 @@ $(document).ready(function() {
                 tiempos[jugador]+=Math.floor(Date.now() / 1000)-marcatiempo[jugador];
                 if (primero){
                     iniTiempo+=Math.floor(Date.now() / 1000)-marcatiempo[jugador];
-                    console.log(iniTiempo);
+                    //console.log(iniTiempo);
                     primero=false;
                 }
             }
@@ -645,17 +650,17 @@ $(document).ready(function() {
         var clase='rojo';
         if(tiempo>600 && tiempo<1500 ){
             clase='naranja';
-            $("#name"+jugador).removeClass("rojo");
+            $("#ES"+jugador).removeClass("rojo");
 
         }
         if(tiempo>1500 ) {
             clase = 'verde';
-            $("#name"+jugador).removeClass("naranja");
-            $("#name"+jugador).removeClass("rojo");
+            $("#ES"+jugador).removeClass("naranja");
+            $("#ES"+jugador).removeClass("rojo");
         }
 
-        if(!arranque) $("#name"+jugador).toggleClass(clase);
-        else $("#name"+jugador).addClass(clase);
+        if(!arranque) $("#ES"+jugador).toggleClass(clase);
+        else $("#ES"+jugador).addClass(clase);
         //console.log(jugador+' '+tiempo);
 
     }
@@ -678,6 +683,17 @@ $(document).ready(function() {
                 localStorage.setItem('tiempos', JSON.stringify(tiempos));
                 marcatiempo[jugador] = Math.floor(Date.now() / 1000);
                 localStorage.setItem('marcatiempo', JSON.stringify(marcatiempo));
+                if(mensajes != null){
+                    if(mensajes[jugador]!=null){
+                        if(Math.floor(Date.now() / 1000)-marcamensajes[jugador]>5){
+                            mensajes[jugador]="";
+                            marcamensajes[jugador]="";
+                            localStorage.setItem('marcamensajes', JSON.stringify(marcamensajes));
+                            localStorage.setItem('mensajes', JSON.stringify(mensajes));
+                            $("#INFO"+jugador).text("");
+                        }
+                    }
+                }
             }, 1000); 
         }
     }
@@ -715,6 +731,8 @@ $(document).ready(function() {
         localStorage.removeItem('capitan');
         localStorage.removeItem('iniciado');
         localStorage.removeItem('marcatiempo');
+        localStorage.removeItem('marcamensajes');
+        localStorage.removeItem('mensajes');
         for (var i = 0; i < nombresCronometros.length; i++) {
             //console.log("array  "+nombresCronometros[i]);
             var jugador=nombresCronometros[i];
@@ -781,6 +799,7 @@ $(document).ready(function() {
         }
         $("#"+nombre).remove();
     });
+
     function updateVarLocalStorage(storage,iddiv=''){
         if(iddiv=="")iddiv=storage;
         var div=$("#"+iddiv);
@@ -789,6 +808,7 @@ $(document).ready(function() {
         localStorage.setItem(storage, valor);
 
     }
+
 	$(document).on('click',".buttonaccion", function() {
     //$(".buttondelete").click(function(){
         //console.log($(this).attr("id"));
@@ -826,7 +846,11 @@ $(document).ready(function() {
             updateVarLocalStorage('rematesPorteriaright','rematesPorteriaRight');
         }
         //alert(texto);
-        $("#time"+nombre).text(texto);
+        $("#INFO"+nombre).text(" "+texto);
+        mensajes[nombre]=texto;
+        marcamensajes[nombre]= Math.floor(Date.now() / 1000);
+        localStorage.setItem('marcamensajes', JSON.stringify(marcamensajes));
+        localStorage.setItem('mensajes', JSON.stringify(mensajes));
         var nuevaFila = "<tr><td>"+texto+"</td><td></td></tr>";
         $("#tablaMarcador").append(nuevaFila);
 
@@ -853,32 +877,47 @@ $(document).ready(function() {
             var checkbox = $("<input>");
             var buttondelete =$("<button>")
             var buttonF =$("<button>")
+            var span1 = $("<span style='color: transparent; !important'>");
             var span2 = $("<span>");
+            var span3 = $("<span>");
+            //CODIGO POR COLORES DEL TIEMPO JUGADO
+            span1.attr("id","ES"+nombresCronometros[i]);
+            span1.text("H");
+            //MENU ACCIONES RAPIDAS POR JUGADOR
             span2.attr("class","spanaccion");
             span2.attr("id","SP"+nombresCronometros[i]);
+
+            span3.attr("id","INFO"+nombresCronometros[i]);
+            //FALTA HECHA
 			buttonF.text("FH");
 			buttonF.attr("class","buttonaccion");
 			buttonF.attr("id","FH"+nombresCronometros[i]);
+            //FALTA RECIBIDA
             var buttonFR =$("<button>")
 			buttonFR.text("FR");
 			buttonFR.attr("class","buttonaccion");
 			buttonFR.attr("id","FR"+nombresCronometros[i]);
+            //ASISTENCIA
 			var buttonA =$("<button>")
 			buttonA.text("AS");
 			buttonA.attr("class","buttonaccion");
 			buttonA.attr("id","AS"+nombresCronometros[i]);
+            //REMATE DENTRO DE LOS 3 PALOS
 			var buttonR =$("<button>")
 			buttonR.text("RD");
 			buttonR.attr("class","buttonaccion");
 			buttonR.attr("id","RD"+nombresCronometros[i]);
+            //REMATE FUERA
             var buttonRF =$("<button>")
 			buttonRF.text("RF");
 			buttonRF.attr("class","buttonaccion");
 			buttonRF.attr("id","RF"+nombresCronometros[i]);
 			var buttonG =$("<button>")
+            //GOL
 			buttonG.text("GO");
 			buttonG.attr("class","buttonaccion");
 			buttonG.attr("id","GO"+nombresCronometros[i]);
+            //PARADA DEL PORTERO
             var buttonP =$("<button>")
 			buttonP.text("PA");
 			buttonP.attr("class","buttonaccion");
@@ -905,9 +944,11 @@ $(document).ready(function() {
                 console.log("entra per el else");
                 spantiempo.text(`${minutos}:${segundos < 10 ? '0' : ''}${segundos}`)
             };
+                midiv.append(span1);
                 midiv.append(spanjugador);
                 midiv.append(checkbox);
                 midiv.append(spantiempo);
+                midiv.append(span3);
                 midiv.append(buttondelete);
 
 
