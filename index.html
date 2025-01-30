@@ -484,6 +484,7 @@ $(document).ready(function() {
     var intervalos = {}; // Almacenará los intervalos individuales de cada cronómetro
     var tiempos = {}; // Almacenará el tiempo acumulado de cada cronómetro
     var marcatiempo={};
+    var marcatiempoTotal=0;
     var mensajes={};
     var marcamensajes={};
     var nombresCronometros=[];
@@ -518,6 +519,7 @@ $(document).ready(function() {
         //-----------------------
         tiempos = JSON.parse(localStorage.getItem('tiempos'));
         iniTiempo = JSON.parse(localStorage.getItem('tiempototal'));
+        marcatiempoTotal = JSON.parse(localStorage.getItem('marcatiempototal'));
         adversario = JSON.parse(localStorage.getItem('adversario'));
         capitan = JSON.parse(localStorage.getItem('capitan'))
         equipotitular=JSON.parse(localStorage.getItem('equipotitular'));
@@ -570,14 +572,10 @@ $(document).ready(function() {
             var jugador = nombresCronometros[i];
             if ($("#check" + jugador).is(':checked')) {
                 tiempos[jugador]+=Math.floor(Date.now() / 1000)-marcatiempo[jugador];
-                if (primero){
-                    iniTiempo+=Math.floor(Date.now() / 1000)-marcatiempo[jugador];
-                    //console.log(iniTiempo);
-                    primero=false;
-                }
             }
         }
         console.log(tiempos);
+        iniTiempo+=Math.floor(Date.now() / 1000)-marcatiempoTotal;
     }
 
     function iniciar(){
@@ -643,8 +641,11 @@ $(document).ready(function() {
         const minutosTotales = Math.floor(iniTiempo / 60);
         const segundosTotales = iniTiempo % 60;
         localStorage.setItem('tiempototal', JSON.stringify(iniTiempo));
+        marcatiempoTotal = Math.floor(Date.now() / 1000);
+        localStorage.setItem('marcatiempototal', JSON.stringify(marcatiempoTotal));
         $(`#time0`).text(`${minutosTotales}:${segundosTotales < 10 ? '0' : ''}${segundosTotales}`);
             }, 1000);
+
     }
     function showTimeColor(tiempo, jugador,arranque=false){
         var clase='rojo';
@@ -680,6 +681,9 @@ $(document).ready(function() {
             const segundos = tiempos[jugador] % 60;
             
             $("#time" + jugador).text(`${minutos}:${segundos < 10 ? '0' : ''}${segundos}`);
+                if((Math.floor(Date.now() / 1000)-marcatiempo[jugador])>2){
+                    if(primero==false) tiempos[jugador]+=Math.floor(Date.now() / 1000)-marcatiempo[jugador];
+                }
                 localStorage.setItem('tiempos', JSON.stringify(tiempos));
                 marcatiempo[jugador] = Math.floor(Date.now() / 1000);
                 localStorage.setItem('marcatiempo', JSON.stringify(marcatiempo));
@@ -733,6 +737,7 @@ $(document).ready(function() {
         localStorage.removeItem('marcatiempo');
         localStorage.removeItem('marcamensajes');
         localStorage.removeItem('mensajes');
+        localStorage.removeItem('marcatiempototal');
         for (var i = 0; i < nombresCronometros.length; i++) {
             //console.log("array  "+nombresCronometros[i]);
             var jugador=nombresCronometros[i];
