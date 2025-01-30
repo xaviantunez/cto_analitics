@@ -989,6 +989,7 @@ $(document).ready(function() {
             $(`#check${jugadorEnJuego}`).prop('checked', false);
             $("#SP"+jugadorEnJuego).hide();
             $("#cronometros").append($("#"+jugadorEnJuego));
+            showTimeColor(tiempos[jugadorEnJuego],jugadorEnJuego,true);
         }
         if(jugadorFueraJuego){
             $(`#check${jugadorFueraJuego}`).prop('checked', true);
