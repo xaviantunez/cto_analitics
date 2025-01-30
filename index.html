@@ -818,7 +818,7 @@ $(document).ready(function() {
         //Recoger minuto del partido
         const minutosTotales = Math.floor(iniTiempo / 60);
         if(accion=="AS"){
-            var texto = "asistencia:"+nombre+" min "+minutosTotales+"";
+            var texto = "Asistencia:"+nombre+" min "+minutosTotales+"";
         }
         if(accion=="GO"){
             updateVarLocalStorage('resulCto');
@@ -846,8 +846,8 @@ $(document).ready(function() {
             updateVarLocalStorage('rematesPorteriaright','rematesPorteriaRight');
         }
         //alert(texto);
-        $("#INFO"+nombre).text(" "+texto);
-        mensajes[nombre]=texto;
+        $("#INFO"+nombre).text(" "+texto.slice(0,texto.indexOf(":")));
+        mensajes[nombre]=texto.slice(0,texto.indexOf(":"));
         marcamensajes[nombre]= Math.floor(Date.now() / 1000);
         localStorage.setItem('marcamensajes', JSON.stringify(marcamensajes));
         localStorage.setItem('mensajes', JSON.stringify(mensajes));
