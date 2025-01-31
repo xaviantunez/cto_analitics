@@ -485,8 +485,10 @@ $(document).ready(function() {
     var tiempos = {}; // Almacenará el tiempo acumulado de cada cronómetro
     var marcatiempo={};
     var marcatiempoTotal=0;
+    var marcatiempototalDate=0;
     var mensajes={};
     var marcamensajes={};
+    var mensajestablaMarcador=[];
     var nombresCronometros=[];
     var equipoElegido;
     var pdfParte='Primera Parte ';
@@ -520,6 +522,7 @@ $(document).ready(function() {
         tiempos = JSON.parse(localStorage.getItem('tiempos'));
         iniTiempo = JSON.parse(localStorage.getItem('tiempototal'));
         marcatiempoTotal = JSON.parse(localStorage.getItem('marcatiempototal'));
+        marcatiempototalDate = JSON.parse(localStorage.getItem('marcatiempototaldate'));
         adversario = JSON.parse(localStorage.getItem('adversario'));
         capitan = JSON.parse(localStorage.getItem('capitan'))
         equipotitular=JSON.parse(localStorage.getItem('equipotitular'));
@@ -527,7 +530,10 @@ $(document).ready(function() {
         marcatiempo=JSON.parse(localStorage.getItem('marcatiempo'));
         marcamensajes=JSON.parse(localStorage.getItem('marcamensajes'));
         mensajes=JSON.parse(localStorage.getItem('mensajes'));
+        mensajestablaMarcador=JSON.parse(localStorage.getItem('mensajestablamarcador'));
         if(enmarcha=="") enmarcha=0;
+        if(mensajes == null) mensajes={};
+        if(marcamensajes == null) marcamensajes={};
 
         var nombresCronometrosTemp =JSON.parse(localStorage.getItem('nombresCronometros'));
         if(nombresCronometrosTemp){
@@ -560,6 +566,7 @@ $(document).ready(function() {
         //
         ajustaCronometros()
         iniciar();
+        ajustarMensajeTablaMarcador();
     }
         // Iniciar todos los cronómetros si están marcados
     $('#iniciar-todos').click(function() {
@@ -624,16 +631,51 @@ $(document).ready(function() {
             $(this).text(0); 
         });
     }
+    function fechaHora() {
+        let ahora = new Date();
+
+        // Obtener los componentes de la fecha
+        let dia = ahora.getDate();
+        let mes = ahora.getMonth() + 1; // Enero es 0
+        let anio = ahora.getFullYear();
+
+        // Obtener los componentes de la hora
+        let horas = ahora.getHours();
+        let minutos = ahora.getMinutes();
+        let segundos = ahora.getSeconds();
+
+        // Asegurar que los números sean de dos dígitos
+        mes = mes < 10 ? "0" + mes : mes;
+        dia = dia < 10 ? "0" + dia : dia;
+        horas = horas < 10 ? "0" + horas : horas;
+        minutos = minutos < 10 ? "0" + minutos : minutos;
+        segundos = segundos < 10 ? "0" + segundos : segundos;
+
+        let cadena = `${dia}/${mes}/${anio} ${horas}:${minutos}:${segundos}`;
+
+        // Mostrar la fecha y hora en el elemento con id "fecha-hora"
+        return cadena;
+    }
 
     function iniciartotaltiempo(){
+        if(marcatiempototalDate==null || marcatiempototalDate==0)
+        {
+            marcatiempototalDate = fechaHora();
+            localStorage.setItem('marcatiempototaldate', JSON.stringify(marcatiempototalDate));
+            mensajeTablaMarcador('INICIO TIEMPO TOTAL');
+        }
         totalTiempo = setInterval(function() {
-        iniTiempo++;
-        const minutosTotales = Math.floor(iniTiempo / 60);
-        const segundosTotales = iniTiempo % 60;
-        localStorage.setItem('tiempototal', JSON.stringify(iniTiempo));
-        marcatiempoTotal = Math.floor(Date.now() / 1000);
-        localStorage.setItem('marcatiempototal', JSON.stringify(marcatiempoTotal));
-        $(`#time0`).text(`${minutosTotales}:${segundosTotales < 10 ? '0' : ''}${segundosTotales}`);
+            if((Math.floor(Date.now() / 1000)-marcatiempoTotal)>2 && marcatiempoTotal>0){
+                iniTiempo+=Math.floor(Date.now() / 1000)-marcatiempoTotal;
+            }
+            else iniTiempo++;
+            const minutosTotales = Math.floor(iniTiempo / 60);
+            const segundosTotales = iniTiempo % 60;
+
+            localStorage.setItem('tiempototal', JSON.stringify(iniTiempo));
+            marcatiempoTotal = Math.floor(Date.now() / 1000);
+            localStorage.setItem('marcatiempototal', JSON.stringify(marcatiempoTotal));
+            $(`#time0`).text(`${minutosTotales}:${segundosTotales < 10 ? '0' : ''}${segundosTotales}`+'  ('+marcatiempototalDate+')');
             }, 1000);
 
     }
@@ -671,7 +713,8 @@ $(document).ready(function() {
             }
         }
         localStorage.setItem('tiempos', JSON.stringify(tiempos));
-        console.log(tiempos);
+
+        console.log("ajustar Tiempo Total " +marcatiempoTotal);
         if(marcatiempoTotal != null) {
             iniTiempo += Math.floor(Date.now() / 1000) - marcatiempoTotal;
             localStorage.setItem('tiempototal', JSON.stringify(iniTiempo));
@@ -757,6 +800,11 @@ $(document).ready(function() {
         localStorage.removeItem('marcamensajes');
         localStorage.removeItem('mensajes');
         localStorage.removeItem('marcatiempototal');
+        localStorage.removeItem('marcatiempototaldate');
+        localStorage.removeItem('mensajestablamarcador');
+
+
+
         for (var i = 0; i < nombresCronometros.length; i++) {
             //console.log("array  "+nombresCronometros[i]);
             var jugador=nombresCronometros[i];
@@ -773,10 +821,13 @@ $(document).ready(function() {
         $('#tablaMarcador tr').not(':eq(0), :eq(1)').remove();
         $(".checkboxplayers").prop('checked', false);
         $("#cronometros").empty();
-        //localStorage.removeItem('nombresCronometros');
+        localStorage.removeItem('nombresCronometros');
+        localStorage.removeItem('equipotitular');
+        //window.location.reload()
 
-        //mostrarplantilla();
-        window.location.reload()
+        mostrarplantilla();
+
+
     }
 
     function cambiarJugador(val){
@@ -812,6 +863,33 @@ $(document).ready(function() {
             $('#jugjugando').text(totaljugadoresencampo);
         }
     }
+
+    document.addEventListener("visibilitychange", function() {
+        if (document.hidden) {
+            console.log("El navegador ha entrado en suspensión.");
+        } else {
+            console.log("El navegador ha vuelto a estar activo.");
+        }
+    });
+
+    $(document).on("visibilitychange", function() {
+        if (document.hidden) {
+            console.log("El navegador está en segundo plano o suspendido.");
+        } else {
+            console.log("El navegador está activo.");
+            window.location.reload();
+        }
+    });
+
+    $(window).on("blur", function() {
+        console.log("El usuario cambió de pestaña o minimizó la app.");
+    });
+
+    $(window).on("focus", function() {
+        console.log("El usuario volvió a la página.");
+        window.location.reload();
+    });
+
     $(document).on('click',".buttondelete", function() {
     //$(".buttondelete").click(function(){
         //console.log($(this).attr("id"));
@@ -834,6 +912,18 @@ $(document).ready(function() {
         div.text(valor);
         localStorage.setItem(storage, valor);
 
+    }
+    function ajustarMensajeTablaMarcador(){
+        for (var i = 0; i < mensajestablaMarcador.length; i++) {
+            $("#tablaMarcador").append(mensajestablaMarcador[i]);
+        }
+
+    }
+    function mensajeTablaMarcador(cadena){
+        var nuevaFila = "<tr><td>"+fechaHora()+' '+cadena+"</td><td></td></tr>";
+        mensajestablaMarcador.push(nuevaFila);
+        $("#tablaMarcador").append(nuevaFila);
+        localStorage.setItem('mensajestablamarcador',JSON.stringify(mensajestablaMarcador));
     }
 
 	$(document).on('click',".buttonaccion", function() {
@@ -874,12 +964,12 @@ $(document).ready(function() {
         }
         //alert(texto);
         $("#INFO"+nombre).text(" "+texto.slice(0,texto.indexOf(":")));
+        
         mensajes[nombre]=texto.slice(0,texto.indexOf(":"));
         marcamensajes[nombre]= Math.floor(Date.now() / 1000);
         localStorage.setItem('marcamensajes', JSON.stringify(marcamensajes));
         localStorage.setItem('mensajes', JSON.stringify(mensajes));
-        var nuevaFila = "<tr><td>"+texto+"</td><td></td></tr>";
-        $("#tablaMarcador").append(nuevaFila);
+        mensajeTablaMarcador(texto);
 
 
 
@@ -1002,17 +1092,21 @@ $(document).ready(function() {
             checkeadosrecuperados.length=0;
         }
         localStorage.setItem('iniciado', JSON.stringify(0));
-        //localStorage.removeItem('checkeados');
+        marcatiempototalDate=null;
+        localStorage.removeItem('marcatiempototaldate');
         //arraycheckeados.length=0;
     });
     // Evento para el botón de reiniciar todos los cronómetros
     $('#reiniciar-todos').click(function() {
 
         $('#delete-cookies-modal').show();
+
     });
     $('#eliminarsesion').click(function() {
         reiniciarIntervalos(); // Detiene y reinicia todos los cronómetros
         $('#delete-cookies-modal').hide();
+        window.location.reload();
+
     });
     $('#continuarsesion').click(function() {
         $('#delete-cookies-modal').hide();
@@ -1133,10 +1227,9 @@ $(document).ready(function() {
         $("#resulCto").text(resulCto);
         //Recoger minuto del partido  
         const minutosTotales = Math.floor(iniTiempo / 60);
-        //crear fila en la tabla 
-        var nuevaFila = "<tr><td>"+goleador+" min "+minutosTotales+" asistencia "+asistente+"</td><td></td></tr>";
-            // Añadir la nueva fila a la tabla
-            $("#tablaMarcador").append(nuevaFila);
+         //crear fila en la tabla
+         mensajeTablaMarcador(goleador+" min "+minutosTotales+" asistencia "+asistente);
+
         //actualizar en el div el nuevo resultado
         localStorage.setItem('resulCto', JSON.stringify(resulCto));  
         //incrementar el disparo a porteria
@@ -1159,9 +1252,9 @@ $(document).ready(function() {
         resulAdv++;
         //recojo el numero del campo de texto
         const minutosTotales = Math.floor(iniTiempo / 60);
-        var nuevaFila = "<tr><td></td><td>Min. "+minutosTotales+" </td></tr>";
+        mensajeTablaMarcador(minutosTotales);
         // Añadir la nueva fila a la tabla
-        $("#tablaMarcador").append(nuevaFila);
+
         //actualizar en el div el nuevo resultado
         $("#resulAdv").text(resulAdv);
         localStorage.setItem('resulAdv', JSON.stringify(resulAdv));    
