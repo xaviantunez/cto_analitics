@@ -566,18 +566,6 @@ $(document).ready(function() {
         iniciar();
     });
 
-    function ajustaCronometros(){
-        var primero=true;
-        for (var i = 0; i < nombresCronometros.length; i++) {
-            var jugador = nombresCronometros[i];
-            if ($("#check" + jugador).is(':checked')) {
-                tiempos[jugador]+=Math.floor(Date.now() / 1000)-marcatiempo[jugador];
-            }
-        }
-        console.log(tiempos);
-        iniTiempo+=Math.floor(Date.now() / 1000)-marcatiempoTotal;
-    }
-
     function iniciar(){
         if(totaljugadoresencampo<8){
             alert('SOLO TIENES '+totaljugadoresencampo+" JUGADORES SELECCIONADOS\n\nPOR FAVOR REVISALO");
@@ -623,6 +611,7 @@ $(document).ready(function() {
             }
         });
     }
+
     function removeestadisticas() {
         arrayestadisticas.forEach(function (estadistica) {
             localStorage.removeItem(estadistica+'left');
@@ -635,6 +624,7 @@ $(document).ready(function() {
             $(this).text(0); 
         });
     }
+
     function iniciartotaltiempo(){
         totalTiempo = setInterval(function() {
         iniTiempo++;
@@ -647,6 +637,7 @@ $(document).ready(function() {
             }, 1000);
 
     }
+
     function showTimeColor(tiempo, jugador,arranque=false){
         var clase='rojo';
         if(tiempo>600 && tiempo<1500 ){
@@ -665,6 +656,30 @@ $(document).ready(function() {
         //console.log(jugador+' '+tiempo);
 
     }
+
+    function ajustaCronometros(){
+        var primero=true;
+        for (var i = 0; i < nombresCronometros.length; i++) {
+            var jugador = nombresCronometros[i];
+            if ($("#check" + jugador).is(':checked')) {
+                if(marcatiempo !=null) {
+                    if(marcatiempo[jugador]!=null) {
+                        tiempos[jugador] += Math.floor(Date.now() / 1000) - marcatiempo[jugador];
+                        marcatiempo[jugador] = Math.floor(Date.now() / 1000);
+                    }
+                }
+            }
+        }
+        localStorage.setItem('tiempos', JSON.stringify(tiempos));
+        console.log(tiempos);
+        if(marcatiempoTotal != null) {
+            iniTiempo += Math.floor(Date.now() / 1000) - marcatiempoTotal;
+            localStorage.setItem('tiempototal', JSON.stringify(iniTiempo));
+            marcatiempoTotal = Math.floor(Date.now() / 1000);
+        }
+
+    }
+
     // Crear el intervalo para cada cronómetro
     function crearIntervalo(jugador) {
         if (!tiempos[jugador]) {
@@ -687,6 +702,8 @@ $(document).ready(function() {
                 localStorage.setItem('tiempos', JSON.stringify(tiempos));
                 marcatiempo[jugador] = Math.floor(Date.now() / 1000);
                 localStorage.setItem('marcatiempo', JSON.stringify(marcatiempo));
+
+                //timeout para hacer desaparecer el mensaje
                 if(mensajes != null){
                     if(mensajes[jugador]!=null){
                         if(Math.floor(Date.now() / 1000)-marcamensajes[jugador]>5){
@@ -707,6 +724,7 @@ $(document).ready(function() {
             crearIntervalo(jugador);
         }
     }
+
     function pararIntervalos() {
         for (var jugador in intervalos) {
             clearInterval(intervalos[jugador]);
@@ -714,6 +732,7 @@ $(document).ready(function() {
         }
         localStorage.setItem('tiempos', JSON.stringify(tiempos));
     }
+
     function reiniciarIntervalos() {
         //addeventchange();
         $('#divequipos').show();
@@ -756,8 +775,10 @@ $(document).ready(function() {
         $("#cronometros").empty();
         //localStorage.removeItem('nombresCronometros');
 
-        mostrarplantilla();
+        //mostrarplantilla();
+        window.location.reload()
     }
+
     function cambiarJugador(val){
 
         $('#jugadores-en-juego').empty();
@@ -775,6 +796,7 @@ $(document).ready(function() {
         }
         $('#jugadores-modal').show();
     }
+
     function mostrarplantilla() {
         for (var i = 0; i < nombresCronometros.length; i++) {
             add_fila_player(nombresCronometros,i);
