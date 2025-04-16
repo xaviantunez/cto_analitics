@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Control de Tiempo y Eventos para Jugadores</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+            margin-top: 0;
+        }
+        .section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: white;
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            margin: 5px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-size: 14px;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        button.danger {
+            background-color: #e74c3c;
+        }
+        button.danger:hover {
+            background-color: #c0392b;
+        }
+        button.success {
+            background-color: #2ecc71;
+        }
+        button.success:hover {
+            background-color: #27ae60;
+        }
+        button.warning {
+            background-color: #f39c12;
+        }
+        button.warning:hover {
+            background-color: #d35400;
+        }
+        button.small {
+            padding: 4px 8px;
+            font-size: 12px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f2f2f2;
+            position: sticky;
+            top: 0;
+        }
+        tr:hover {
+            background-color: #f9f9f9;
+        }
+        .aligned-player {
+            background-color: #e8f4fc;
+        }
+        .timer {
+            font-family: monospace;
+            font-size: 1.4em;
+            font-weight: bold;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input[type="text"], input[type="number"], select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+        .event-log {
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-radius: 4px;
+        }
+        .log-entry {
+            margin-bottom: 8px;
+            padding: 8px;
+            border-bottom: 1px solid #eee;
+            font-size: 14px;
+        }
+        .log-time {
+            color: #7f8c8d;
+            font-size: 0.85em;
+            margin-right: 10px;
+        }
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+        }
+        .checkbox-container input {
+            margin-right: 8px;
+        }
+        .player-events {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin-top: 5px;
+        }
+        .event-counter {
+            display: flex;
+            align-items: center;
+            background-color: #f2f2f2;
+            border-radius: 4px;
+            padding: 3px 8px;
+        }
+        .event-counter span {
+            margin: 0 8px;
+            min-width: 20px;
+            text-align: center;
+        }
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        .status-running {
+            background-color: #2ecc71;
+        }
+        .status-paused {
+            background-color: #f39c12;
+        }
+        .status-stopped {
+            background-color: #e74c3c;
+        }
+        @media (max-width: 768px) {
+            th, td {
+                padding: 8px 10px;
+                font-size: 14px;
+            }
+            button {
+                padding: 6px 10px;
+                font-size: 13px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Control de Tiempo y Eventos para Jugadores</h1>
+        
+        <div class="section">
+            <h2>Configuración de Jugadores</h2>
+            <div class="form-group">
+                <label for="newPlayerName">Nombre del Jugador:</label>
+                <div class="controls">
+                    <input type="text" id="newPlayerName" placeholder="Ingrese nombre del jugador">
+                    <button id="addPlayerBtn" class="success"><i class="fas fa-plus"></i> Añadir Jugador</button>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="newEventName">Nombre de Evento para Jugadores:</label>
+                <div class="controls">
+                    <input type="text" id="newEventName" placeholder="Ingrese nombre de evento">
+                    <button id="addEventTypeBtn" class="success"><i class="fas fa-plus"></i> Añadir Tipo de Evento</button>
+                </div>
+            </div>
+            
+            <table id="playersTable">
+                <thead>
+                    <tr>
+                        <th>Alineado</th>
+                        <th>Jugador</th>
+                        <th>Tiempo</th>
+                        <th>Eventos</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="playersList">
+                    <!-- Jugadores se añadirán aquí dinámicamente -->
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="section">
+            <h2>Control de Tiempo</h2>
+            <div class="controls">
+                <div>
+                    <span id="timerStatus" class="status-indicator status-stopped"></span>
+                    <span id="globalTimer" class="timer">00:00:00</span>
+                </div>
+                <div>
+                    <button id="startTimerBtn" class="success"><i class="fas fa-play"></i> Iniciar</button>
+                    <button id="pauseTimerBtn" class="warning"><i class="fas fa-pause"></i> Pausar</button>
+                    <button id="resetTimerBtn"><i class="fas fa-undo"></i> Reiniciar</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>Tipos de Eventos</h2>
+            <div id="eventTypesList" class="player-events">
+                <!-- Tipos de eventos se añadirán aquí -->
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>Historial de Acciones</h2>
+            <div class="controls">
+                <button id="clearLogBtn" class="danger"><i class="fas fa-trash"></i> Limpiar Historial</button>
+                <button id="clearAllBtn" class="danger"><i class="fas fa-broom"></i> Resetear Todo</button>
+            </div>
+            <div class="event-log" id="actionLog">
+                <!-- Registros de acciones se añadirán aquí -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Variables de estado
+            let timerInterval;
+            let isTimerRunning = false;
+            let globalSeconds = 0;
+            let players = JSON.parse(localStorage.getItem('players')) || [];
+            let eventTypes = JSON.parse(localStorage.getItem('eventTypes')) || [];
+            let actionLog = JSON.parse(localStorage.getItem('actionLog')) || [];
+            
+            // Elementos del DOM
+            const playersList = document.getElementById('playersList');
+            const eventTypesList = document.getElementById('eventTypesList');
+            const actionLogElement = document.getElementById('actionLog');
+            const globalTimerElement = document.getElementById('globalTimer');
+            const timerStatusElement = document.getElementById('timerStatus');
+            const newPlayerNameInput = document.getElementById('newPlayerName');
+            const newEventNameInput = document.getElementById('newEventName');
+            
+            // Botones
+            const addPlayerBtn = document.getElementById('addPlayerBtn');
+            const addEventTypeBtn = document.getElementById('addEventTypeBtn');
+            const startTimerBtn = document.getElementById('startTimerBtn');
+            const pauseTimerBtn = document.getElementById('pauseTimerBtn');
+            const resetTimerBtn = document.getElementById('resetTimerBtn');
+            const clearLogBtn = document.getElementById('clearLogBtn');
+            const clearAllBtn = document.getElementById('clearAllBtn');
+            
+            // Inicialización
+            renderPlayers();
+            renderEventTypes();
+            renderActionLog();
+            updateGlobalTimerDisplay();
+            updateTimerStatus();
+            
+            // Event Listeners
+            addPlayerBtn.addEventListener('click', addPlayer);
+            addEventTypeBtn.addEventListener('click', addEventType);
+            startTimerBtn.addEventListener('click', startTimer);
+            pauseTimerBtn.addEventListener('click', pauseTimer);
+            resetTimerBtn.addEventListener('click', resetTimer);
+            clearLogBtn.addEventListener('click', clearActionLog);
+            clearAllBtn.addEventListener('click', clearAllData);
+            
+            // Funciones
+            
+            function formatTime(seconds) {
+                const hrs = Math.floor(seconds / 3600);
+                const mins = Math.floor((seconds % 3600) / 60);
+                const secs = seconds % 60;
+                return `${String(hrs).padStart(2, '0')}:${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+            }
+            
+            function updateGlobalTimerDisplay() {
+                globalTimerElement.textContent = formatTime(globalSeconds);
+            }
+            
+            function updateTimerStatus() {
+                if (isTimerRunning) {
+                    timerStatusElement.className = 'status-indicator status-running';
+                    timerStatusElement.title = 'Temporizador en marcha';
+                } else {
+                    timerStatusElement.className = globalSeconds > 0 ? 'status-indicator status-paused' : 'status-indicator status-stopped';
+                    timerStatusElement.title = globalSeconds > 0 ? 'Temporizador pausado' : 'Temporizador detenido';
+                }
+            }
+            
+            function startTimer() {
+                if (!isTimerRunning) {
+                    isTimerRunning = true;
+                    timerInterval = setInterval(() => {
+                        globalSeconds++;
+                        updateGlobalTimerDisplay();
+                        
+                        // Actualizar tiempo para jugadores alineados
+                        players.forEach(player => {
+                            if (player.isAligned) {
+                                player.seconds++;
+                                updatePlayerDisplay(player.id);
+                            }
+                        });
+                        
+                        saveData();
+                    }, 1000);
+                    
+                    // Registrar jugadores alineados al iniciar
+                    const alignedPlayers = players.filter(p => p.isAligned).map(p => p.name);
+                    logAction(`Temporizador iniciado | Jugadores alineados: ${alignedPlayers.join(', ') || 'Ninguno'}`);
+                    
+                    updateTimerStatus();
+                    updateTimerControls();
+                }
+            }
+            
+            function pauseTimer() {
+                if (isTimerRunning) {
+                    clearInterval(timerInterval);
+                    isTimerRunning = false;
+                    
+                    // Registrar jugadores alineados al pausar
+                    const alignedPlayers = players.filter(p => p.isAligned).map(p => p.name);
+                    logAction(`Temporizador pausado | Jugadores alineados: ${alignedPlayers.join(', ') || 'Ninguno'}`);
+                    
+                    updateTimerStatus();
+                    updateTimerControls();
+                }
+            }
+            
+            function resetTimer() {
+                pauseTimer();
+                globalSeconds = 0;
+                updateGlobalTimerDisplay();
+                logAction(`Temporizador reiniciado`);
+                updateTimerStatus();
+                saveData();
+            }
+            
+            function updateTimerControls() {
+                startTimerBtn.disabled = isTimerRunning;
+                pauseTimerBtn.disabled = !isTimerRunning;
+                resetTimerBtn.disabled = isTimerRunning;
+            }
+            
+            function addPlayer() {
+                const name = newPlayerNameInput.value.trim();
+                if (name) {
+                    const newPlayer = {
+                        id: Date.now(),
+                        name: name,
+                        isAligned: false,
+                        seconds: 0,
+                        events: {}
+                    };
+                    
+                    // Inicializar eventos para este jugador
+                    eventTypes.forEach(eventType => {
+                        newPlayer.events[eventType.name] = 0;
+                    });
+                    
+                    players.push(newPlayer);
+                    saveData();
+                    renderPlayers();
+                    newPlayerNameInput.value = '';
+                    logAction(`Jugador añadido: ${name}`);
+                }
+            }
+            
+            function togglePlayerAlignment(playerId) {
+                const player = players.find(p => p.id === playerId);
+                if (player) {
+                    player.isAligned = !player.isAligned;
+                    saveData();
+                    updatePlayerDisplay(playerId);
+                    logAction(`Jugador ${player.name} ${player.isAligned ? 'alineado' : 'desalineado'}`);
+                }
+            }
+            
+            function removePlayer(playerId) {
+                const playerIndex = players.findIndex(p => p.id === playerId);
+                if (playerIndex !== -1) {
+                    const playerName = players[playerIndex].name;
+                    players.splice(playerIndex, 1);
+                    saveData();
+                    renderPlayers();
+                    logAction(`Jugador eliminado: ${playerName}`);
+                }
+            }
+            
+            function updatePlayerDisplay(playerId) {
+                const player = players.find(p => p.id === playerId);
+                if (player) {
+                    const playerRow = document.querySelector(`tr[data-player-id="${playerId}"]`);
+                    if (playerRow) {
+                        playerRow.querySelector('.player-time').textContent = formatTime(player.seconds);
+                        playerRow.querySelector('.player-status').checked = player.isAligned;
+                        
+                        if (player.isAligned) {
+                            playerRow.classList.add('aligned-player');
+                        } else {
+                            playerRow.classList.remove('aligned-player');
+                        }
+                        
+                        // Actualizar eventos del jugador
+                        const eventsContainer = playerRow.querySelector('.player-events-container');
+                        if (eventsContainer) {
+                            eventsContainer.innerHTML = '';
+                            eventTypes.forEach(eventType => {
+                                const eventValue = player.events[eventType.name] || 0;
+                                const eventElement = document.createElement('div');
+                                eventElement.className = 'event-counter';
+                                eventElement.innerHTML = `
+                                    <span>${eventType.name}</span>
+                                    <button class="small decrease-event-btn" data-player-id="${playerId}" data-event-name="${eventType.name}">
+                                        <i class="fas fa-minus"></i>
+                                    </button>
+                                    <span>${eventValue}</span>
+                                    <button class="small increase-event-btn" data-player-id="${playerId}" data-event-name="${eventType.name}">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                `;
+                                eventsContainer.appendChild(eventElement);
+                            });
+                            
+                            // Añadir event listeners a los botones de eventos
+                            eventsContainer.querySelectorAll('.increase-event-btn').forEach(btn => {
+                                btn.addEventListener('click', function() {
+                                    modifyPlayerEvent(
+                                        this.dataset.playerId, 
+                                        this.dataset.eventName, 
+                                        1
+                                    );
+                                });
+                            });
+                            
+                            eventsContainer.querySelectorAll('.decrease-event-btn').forEach(btn => {
+                                btn.addEventListener('click', function() {
+                                    modifyPlayerEvent(
+                                        this.dataset.playerId, 
+                                        this.dataset.eventName, 
+                                        -1
+                                    );
+                                });
+                            });
+                        }
+                    }
+                }
+            }
+            
+            function renderPlayers() {
+                playersList.innerHTML = '';
+                
+                if (players.length === 0) {
+                    playersList.innerHTML = '<tr><td colspan="5">No hay jugadores añadidos</td></tr>';
+                    return;
+                }
+                
+                players.forEach(player => {
+                    const row = document.createElement('tr');
+                    row.dataset.playerId = player.id;
+                    if (player.isAligned) row.classList.add('aligned-player');
+                    
+                    row.innerHTML = `
+                        <td class="checkbox-container">
+                            <input type="checkbox" class="player-status" ${player.isAligned ? 'checked' : ''}>
+                        </td>
+                        <td>${player.name}</td>
+                        <td class="player-time">${formatTime(player.seconds)}</td>
+                        <td class="player-events-container"></td>
+                        <td>
+                            <button class="danger small remove-player-btn" data-id="${player.id}">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    `;
+                    
+                    playersList.appendChild(row);
+                    
+                    // Añadir event listeners a los elementos recién creados
+                    row.querySelector('.player-status').addEventListener('change', () => togglePlayerAlignment(player.id));
+                    row.querySelector('.remove-player-btn').addEventListener('click', () => removePlayer(player.id));
+                    
+                    // Renderizar eventos del jugador
+                    updatePlayerDisplay(player.id);
+                });
+            }
+            
+            function addEventType() {
+                const name = newEventNameInput.value.trim();
+                if (name && !eventTypes.some(et => et.name === name)) {
+                    const newEventType = {
+                        name: name
+                    };
+                    
+                    eventTypes.push(newEventType);
+                    
+                    // Añadir este evento a todos los jugadores existentes
+                    players.forEach(player => {
+                        player.events[name] = player.events[name] || 0;
+                    });
+                    
+                    saveData();
+                    renderEventTypes();
+                    renderPlayers();
+                    newEventNameInput.value = '';
+                    logAction(`Tipo de evento añadido: ${name}`);
+                }
+            }
+            
+            function removeEventType(eventName) {
+                const eventIndex = eventTypes.findIndex(et => et.name === eventName);
+                if (eventIndex !== -1) {
+                    eventTypes.splice(eventIndex, 1);
+                    
+                    // Eliminar este evento de todos los jugadores
+                    players.forEach(player => {
+                        delete player.events[eventName];
+                    });
+                    
+                    saveData();
+                    renderEventTypes();
+                    renderPlayers();
+                    logAction(`Tipo de evento eliminado: ${eventName}`);
+                }
+            }
+            
+            function renderEventTypes() {
+                eventTypesList.innerHTML = '';
+                
+                if (eventTypes.length === 0) {
+                    eventTypesList.innerHTML = '<div>No hay tipos de evento definidos</div>';
+                    return;
+                }
+                
+                eventTypes.forEach(eventType => {
+                    const eventElement = document.createElement('div');
+                    eventElement.className = 'event-counter';
+                    eventElement.innerHTML = `
+                        <span>${eventType.name}</span>
+                        <button class="small danger remove-event-type-btn" data-event-name="${eventType.name}">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    `;
+                    eventTypesList.appendChild(eventElement);
+                    
+                    // Añadir event listener al botón de eliminar
+                    eventElement.querySelector('.remove-event-type-btn').addEventListener('click', function() {
+                        if (confirm(`¿Eliminar el tipo de evento "${this.dataset.eventName}" y todos sus registros?`)) {
+                            removeEventType(this.dataset.eventName);
+                        }
+                    });
+                });
+            }
+            
+            function modifyPlayerEvent(playerId, eventName, change) {
+                const player = players.find(p => p.id === playerId);
+                if (player) {
+                    const currentValue = player.events[eventName] || 0;
+                    const newValue = currentValue + change;
+                    
+                    // No permitir valores negativos
+                    if (newValue >= 0) {
+                        player.events[eventName] = newValue;
+                        saveData();
+                        updatePlayerDisplay(playerId);
+                        logAction(`Evento actualizado: ${player.name} - ${eventName} ${change > 0 ? '+' : ''}${change} = ${newValue}`);
+                    }
+                }
+            }
+            
+            function logAction(message) {
+                const timestamp = new Date();
+                const logEntry = {
+                    time: timestamp.toISOString(),
+                    message: message
+                };
+                
+                actionLog.unshift(logEntry); // Añadir al principio para que lo más reciente aparezca primero
+                saveData();
+                renderActionLog();
+            }
+            
+            function renderActionLog() {
+                actionLogElement.innerHTML = '';
+                
+                if (actionLog.length === 0) {
+                    actionLogElement.innerHTML = '<div class="log-entry">No hay acciones registradas</div>';
+                    return;
+                }
+                
+                actionLog.forEach(entry => {
+                    const logEntry = document.createElement('div');
+                    logEntry.className = 'log-entry';
+                    
+                    const time = new Date(entry.time);
+                    const timeString = time.toLocaleTimeString() + ' ' + time.toLocaleDateString();
+                    
+                    logEntry.innerHTML = `
+                        <div>
+                            <span class="log-time">${timeString}</span>
+                            <span>${entry.message}</span>
+                        </div>
+                    `;
+                    
+                    actionLogElement.appendChild(logEntry);
+                });
+            }
+            
+            function clearActionLog() {
+                if (confirm('¿Estás seguro de que quieres borrar todo el historial de acciones?')) {
+                    actionLog = [];
+                    saveData();
+                    renderActionLog();
+                    logAction('Historial de acciones limpiado');
+                }
+            }
+            
+            function clearAllData() {
+                if (confirm('¿Estás seguro de que quieres borrar TODOS los datos? Esta acción no se puede deshacer.')) {
+                    players = [];
+                    eventTypes = [];
+                    actionLog = [];
+                    globalSeconds = 0;
+                    pauseTimer();
+                    updateGlobalTimerDisplay();
+                    updateTimerStatus();
+                    
+                    saveData();
+                    renderPlayers();
+                    renderEventTypes();
+                    renderActionLog();
+                    
+                    logAction('Todos los datos han sido reseteados');
+                }
+            }
+            
+            function saveData() {
+                localStorage.setItem('players', JSON.stringify(players));
+                localStorage.setItem('eventTypes', JSON.stringify(eventTypes));
+                localStorage.setItem('actionLog', JSON.stringify(actionLog));
+                localStorage.setItem('globalSeconds', globalSeconds.toString());
+                localStorage.setItem('isTimerRunning', isTimerRunning.toString());
+            }
+            
+            // Cargar estado del temporizador al iniciar
+            const savedGlobalSeconds = localStorage.getItem('globalSeconds');
+            if (savedGlobalSeconds) {
+                globalSeconds = parseInt(savedGlobalSeconds);
+                updateGlobalTimerDisplay();
+            }
+            
+            const savedIsTimerRunning = localStorage.getItem('isTimerRunning');
+            if (savedIsTimerRunning === 'true') {
+                startTimer();
+            }
+        });
+    </script>
+</body>
+</html>
