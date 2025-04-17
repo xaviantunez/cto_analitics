@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estadísticas del Partido</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="stats-container">
+        <header>
+            <h1>Estadísticas del Partido</h1>
+            <img src="assets/images/logo.png" alt="Logo del equipo">
+        </header>
+        <div id="match-info">
+            <p><strong>Equipo Local:</strong> <span id="team-local"></span></p>
+            <p><strong>Equipo Rival:</strong> <span id="team-rival"></span></p>
+            <p><strong>Fecha y Hora:</strong> <span id="match-date"></span></p>
+            <p><strong>Torneo:</strong> <span id="tournament-name"></span></p>
+        </div>
+        <div id="player-stats">
+            <!-- Aquí irán los jugadores alineados y sus eventos -->
+        </div>
+        <button id="start-stop-timer">Iniciar/Pausar</button>
+        <button id="reset-timer">Resetear</button>
+        <button id="save-match">Guardar Partido</button>
+    </div>
+    <script src="js/stats.js"></script>
+</body>
+</html>
