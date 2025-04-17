@@ -1,32 +1,48 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Historial de Partidos</title>
-    <link rel="stylesheet" href="css/style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Histórico de Partidos - Estadísticas CTO</title>
+  <link rel="stylesheet" href="css/historico.css">
 </head>
 <body>
-    <header class="navbar">
-  <div class="navbar-logo">
-    <img src="../assets/logo.png" alt="Logo" class="logo-img" />
-    <span>Estadísticas CTO</span>
-  </div>
-  <nav class="navbar-links" id="navbar-links">
-    <!-- Se llenará con JS según el rol -->
-  </nav>
-  <div class="navbar-user">
-    <span id="user-name"></span>
-    <button onclick="logout()">Cerrar sesión</button>
-  </div>
-</header>
 
-    <div class="history-container">
-        <h1>Historial de Partidos</h1>
-        <div id="match-list">
-            <!-- Aquí se cargarán los partidos guardados -->
-        </div>
+  <header>
+    <img src="imagenes/logo.png" alt="Logo" class="logo">
+    <h1>Histórico de Partidos</h1>
+  </header>
+
+  <main>
+    <div class="filtros">
+      <label for="equipoSeleccionado">Seleccionar equipo:</label>
+      <select id="equipoSeleccionado" onchange="filtrarPartidos()">
+        <option value="todos">Todos los equipos</option>
+      </select>
+      <button onclick="exportarExcel()">Exportar a Excel</button>
     </div>
-    <script src="js/history.js"></script>
+
+    <table id="tablaHistorico">
+      <thead>
+        <tr>
+          <th>Fecha</th>
+          <th>Hora</th>
+          <th>Equipo Local</th>
+          <th>Equipo Rival</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+
+    <div id="detallesPartido" style="display:none;">
+      <h2>Detalles del Partido</h2>
+      <div id="detallesContenido"></div>
+      <button onclick="cerrarDetalles()">Cerrar</button>
+    </div>
+  </main>
+
+  <script src="js/historico.js"></script>
 </body>
 </html>
+
