@@ -7,6 +7,20 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+    <header class="navbar">
+  <div class="navbar-logo">
+    <img src="../assets/logo.png" alt="Logo" class="logo-img" />
+    <span>Estadísticas CTO</span>
+  </div>
+  <nav class="navbar-links" id="navbar-links">
+    <!-- Se llenará con JS según el rol -->
+  </nav>
+  <div class="navbar-user">
+    <span id="user-name"></span>
+    <button onclick="logout()">Cerrar sesión</button>
+  </div>
+</header>
+
     <div class="maintenance-container">
         <h1>Mantenimiento de Equipos y Jugadores</h1>
         <button id="add-team-btn">Agregar Equipo</button>
