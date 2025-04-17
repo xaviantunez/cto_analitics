@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mantenimiento de Equipos - Estadísticas CTO</title>
+  <link rel="stylesheet" href="css/mantenimiento_equipos.css">
+</head>
+<body>
+
+  <header>
+    <img src="imagenes/logo.png" alt="Logo" class="logo">
+    <h1>Mantenimiento de Equipos y Jugadores</h1>
+  </header>
+
+  <main>
+    <section>
+      <h2>Equipos</h2>
+      <div>
+        <label for="nombreEquipo">Nombre del equipo:</label>
+        <input type="text" id="nombreEquipo" placeholder="Nuevo equipo">
+        <button onclick="crearEquipo()">Crear Equipo</button>
+      </div>
+      <table id="tablaEquipos">
+        <thead>
+          <tr>
+            <th>Nombre del Equipo</th>
+            <th>Jugadores</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>Jugadores</h2>
+      <div>
+        <label for="jugadorNombre">Nombre del jugador:</label>
+        <input type="text" id="jugadorNombre" placeholder="Nuevo jugador">
+        <select id="equipoSeleccionado">
+          <option value="">Seleccionar Equipo</option>
+        </select>
+        <button onclick="crearJugador()">Crear Jugador</button>
+      </div>
+
+      <div id="jugadoresEquipo"></div>
+    </section>
+  </main>
+
+  <script src="js/mantenimiento_equipos.js"></script>
+</body>
+</html>
