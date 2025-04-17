@@ -1,0 +1,194 @@
+import React, { useState, useEffect } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Card, CardContent } from "@/components/ui/card";
+import { Download, Plus, Minus, Trash2 } from "lucide-react";
+import * as XLSX from "xlsx";
+
+const initialPlayers = [
+  { name: "Jugador 1", aligned: false, minutes: 0, events: {} },
+  { name: "Jugador 2", aligned: false, minutes: 0, events: {} },
+  // Añadir más jugadores si se desea
+];
+
+const STORAGE_KEY = "jugadores_tiempo_eventos";
+
+export default function App() {
+  const [players, setPlayers] = useState([]);
+  const [team, setTeam] = useState("");
+  const [rival, setRival] = useState("");
+  const [timerRunning, setTimerRunning] = useState(false);
+  const [log, setLog] = useState([]);
+  const [intervalId, setIntervalId] = useState(null);
+
+  useEffect(() => {
+    const savedData = JSON.parse(localStorage.getItem(STORAGE_KEY));
+    if (savedData) {
+      setPlayers(savedData.players);
+      setTeam(savedData.team);
+      setRival(savedData.rival);
+      setLog(savedData.log);
+    } else {
+      setPlayers(initialPlayers);
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem(
+      STORAGE_KEY,
+      JSON.stringify({ players, team, rival, log })
+    );
+  }, [players, team, rival, log]);
+
+  const toggleTimer = () => {
+    const alignedPlayers = players.filter(p => p.aligned);
+    if (!timerRunning && (alignedPlayers.length < 6 || alignedPlayers.length > 8)) {
+      alert("Debe haber entre 6 y 8 jugadores alineados para iniciar el tiempo.");
+      return;
+    }
+
+    const timestamp = new Date().toLocaleTimeString();
+    setLog(prev => [
+      ...prev,
+      {
+        time: timestamp,
+        action: `${timerRunning ? "Tiempo detenido" : "Tiempo iniciado"} - Alineados: ${alignedPlayers.map(p => p.name).join(", ")}`
+      }
+    ]);
+
+    if (timerRunning) {
+      clearInterval(intervalId);
+      setIntervalId(null);
+    } else {
+      const id = setInterval(() => {
+        setPlayers(prev => prev.map(p =>
+          p.aligned ? { ...p, minutes: p.minutes + 1 } : p
+        ));
+      }, 60000);
+      setIntervalId(id);
+    }
+    setTimerRunning(!timerRunning);
+  };
+
+  const resetTimer = () => {
+    if (intervalId) clearInterval(intervalId);
+    setTimerRunning(false);
+    setIntervalId(null);
+  };
+
+  const toggleAlign = index => {
+    setPlayers(prev => {
+      const updated = [...prev];
+      updated[index].aligned = !updated[index].aligned;
+      return updated;
+    });
+  };
+
+  const updateEvent = (index, event, change) => {
+    const timestamp = new Date().toLocaleTimeString();
+    setPlayers(prev => {
+      const updated = [...prev];
+      const player = updated[index];
+      const current = player.events[event] || 0;
+      player.events[event] = current + change;
+      return updated;
+    });
+    if (timerRunning) {
+      setLog(prev => [
+        ...prev,
+        { time: timestamp, action: `Evento '${event}' (${change > 0 ? '+' : '-'}) para ${players[index].name}` }
+      ]);
+    }
+  };
+
+  const removeEvent = (index, event) => {
+    setPlayers(prev => {
+      const updated = [...prev];
+      delete updated[index].events[event];
+      return updated;
+    });
+  };
+
+  const clearAll = () => {
+    if (intervalId) clearInterval(intervalId);
+    setPlayers(initialPlayers);
+    setTeam("");
+    setRival("");
+    setLog([]);
+    setTimerRunning(false);
+  };
+
+  const exportToExcel = () => {
+    const worksheet = XLSX.utils.json_to_sheet(log);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Log");
+    XLSX.writeFile(workbook, "registro_eventos.xlsx");
+  };
+
+  return (
+    <div className="p-4 space-y-4">
+      <Card>
+        <CardContent className="space-y-2 p-4">
+          <div className="flex space-x-2">
+            <Input placeholder="Nombre del equipo" value={team} onChange={e => setTeam(e.target.value)} />
+            <Input placeholder="Rival" value={rival} onChange={e => setRival(e.target.value)} />
+          </div>
+          <div className="flex space-x-2">
+            <Button onClick={toggleTimer}>{timerRunning ? "Pausar" : "Iniciar"}</Button>
+            <Button onClick={resetTimer}>Reiniciar</Button>
+            <Button onClick={clearAll} variant="destructive">Borrar Todo</Button>
+          </div>
+        </CardContent>
+      </Card>
+
+      {players.map((player, i) => (
+        <Card key={i}>
+          <CardContent className="p-4 space-y-2">
+            <div className="flex items-center justify-between">
+              <div>
+                <input
+                  type="checkbox"
+                  checked={player.aligned}
+                  onChange={() => toggleAlign(i)}
+                  className="mr-2"
+                />
+                <strong>{player.name}</strong> - {player.minutes} min
+              </div>
+            </div>
+            <div className="flex space-x-2 flex-wrap">
+              {Object.entries(player.events).map(([event, value]) => (
+                <div key={event} className="flex items-center space-x-1">
+                  <span>{event}: {value}</span>
+                  <Button size="sm" onClick={() => updateEvent(i, event, 1)}><Plus size={12} /></Button>
+                  <Button size="sm" onClick={() => updateEvent(i, event, -1)}><Minus size={12} /></Button>
+                  <Button size="sm" onClick={() => removeEvent(i, event)} variant="ghost"><Trash2 size={12} /></Button>
+                </div>
+              ))}
+              <Input
+                placeholder="Nuevo evento"
+                onKeyDown={e => {
+                  if (e.key === "Enter" && e.target.value) {
+                    updateEvent(i, e.target.value, 0);
+                    e.target.value = "";
+                  }
+                }}
+              />
+            </div>
+          </CardContent>
+        </Card>
+      ))}
+
+      <Card>
+        <CardContent className="p-4">
+          <h2 className="font-bold text-lg mb-2">Registro de Eventos</h2>
+          <ul className="max-h-64 overflow-y-auto space-y-1">
+            {log.map((entry, i) => (
+              <li key={i}>{entry.time} - {entry.action}</li>
+            ))}
+          </ul>
+          <Button onClick={exportToExcel} className="mt-2"><Download size={16} className="mr-2" />Exportar a Excel</Button>
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
