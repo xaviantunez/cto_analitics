@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estadísticas de Fútbol</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Estadísticas de Fútbol</h1>
+        
+        <!-- Configuración inicial -->
+        <div class="setup-section">
+            <h2>Configuración del Partido</h2>
+            <div class="team-input">
+                <label for="local-team">Equipo Local:</label>
+                <input type="text" id="local-team" placeholder="Nombre del equipo local">
+                <button id="save-local-team">Guardar Equipo</button>
+                
+                <label for="rival-team">Equipo Rival:</label>
+                <input type="text" id="rival-team" placeholder="Nombre del equipo rival">
+            </div>
+            
+            <div class="team-select">
+                <label for="select-team">Seleccionar Equipo Guardado:</label>
+                <select id="select-team">
+                    <option value="">-- Seleccione un equipo --</option>
+                </select>
+                <button id="load-team">Cargar Equipo</button>
+                <button id="delete-team">Eliminar Equipo</button>
+            </div>
+            
+            <div class="player-management">
+                <h3>Jugadores</h3>
+                <input type="text" id="new-player" placeholder="Nombre del jugador">
+                <button id="add-player">Añadir Jugador</button>
+                <ul id="player-list"></ul>
+            </div>
+            
+            <button id="start-match" disabled>Iniciar Partido</button>
+        </div>
+        
+        <!-- Panel de partido (visible solo cuando el partido está iniciado) -->
+        <div class="match-section" style="display: none;">
+            <div class="match-header">
+                <h2 id="match-title">Partido: Local vs Rival</h2>
+                <div class="match-timer">
+                    <span id="match-time">00:00</span>
+                    <button id="pause-timer">Pausar</button>
+                    <button id="reset-timer">Reiniciar</button>
+                </div>
+            </div>
+            
+            <div class="match-controls">
+                <button id="add-event-type">Añadir Tipo de Evento</button>
+                <input type="text" id="new-event-type" placeholder="Nombre del nuevo evento">
+            </div>
+            
+            <div class="lineup-section">
+                <h3>Alineación</h3>
+                <div class="player-lineup" id="player-lineup"></div>
+                <button id="save-lineup">Guardar Alineación</button>
+            </div>
+            
+            <div class="stats-section">
+                <h3>Estadísticas</h3>
+                <table id="stats-table">
+                    <thead>
+                        <tr>
+                            <th>Jugador</th>
+                            <th>Posición</th>
+                            <th>T. Juego</th>
+                            <!-- Eventos dinámicos se añadirán aquí -->
+                        </tr>
+                    </thead>
+                    <tbody id="stats-body">
+                        <!-- Filas de jugadores se añadirán aquí -->
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="match-notes">
+                <h3>Impresiones del Partido</h3>
+                <textarea id="match-impressions" placeholder="Escribe aquí tus impresiones del partido..."></textarea>
+                <button id="save-notes">Guardar Notas</button>
+            </div>
+            
+            <div class="event-log">
+                <h3>Registro de Eventos</h3>
+                <div class="log-controls">
+                    <button id="export-log">Exportar a Excel</button>
+                    <button id="clear-log">Limpiar Registro</button>
+                </div>
+                <table id="log-table">
+                    <thead>
+                        <tr>
+                            <th>Tiempo</th>
+                            <th>Evento</th>
+                        </tr>
+                    </thead>
+                    <tbody id="log-body">
+                        <!-- Eventos se añadirán aquí -->
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="match-history">
+                <h3>Historial de Partidos</h3>
+                <select id="match-history-select">
+                    <option value="">-- Seleccione un partido --</option>
+                </select>
+                <button id="load-match">Cargar Partido</button>
+                <button id="delete-match">Eliminar Partido</button>
+                <button id="end-match">Finalizar Partido</button>
+            </div>
+        </div>
+    </div>
+    
+    <script src="js/storage.js"></script>
+    <script src="js/excel-export.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
