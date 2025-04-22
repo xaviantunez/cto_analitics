@@ -1,16 +1,9 @@
 [
   {
-    "usuario": "admin",
+    "username": "admin",
     "password": "admin123",
-    "rol": "admin",
-    "equipo": "Equipo Verde",
-    "funciones": ["coordinador", "entrenador"]
-  },
-  {
-    "usuario": "juan",
-    "password": "1234",
-    "rol": "usuario",
-    "equipo": "Equipo Verde",
-    "funciones": ["delegado"]
+    "role": "administrador",
+    "functions": ["coordinador"],
+    "team": "Equipo A"
   }
 ]

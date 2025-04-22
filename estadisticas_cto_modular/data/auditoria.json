@@ -1,0 +1,20 @@
+[
+  {
+    "usuario": "admin",
+    "fecha": "2025-04-20",
+    "accion": "Creó un nuevo usuario",
+    "pagina": "usuarios.html"
+  },
+  {
+    "usuario": "entrenador1",
+    "fecha": "2025-04-19",
+    "accion": "Registró un nuevo partido",
+    "pagina": "historico.html"
+  },
+  {
+    "usuario": "coordinador2",
+    "fecha": "2025-04-19",
+    "accion": "Editó plantilla de Equipo A",
+    "pagina": "equipos.html"
+  }
+]

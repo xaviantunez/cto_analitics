@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Histórico de Partidos - Estadísticas CTO</title>
+  <link rel="stylesheet" href="style.css" />
+  <script defer src="historico.js"></script>
+</head>
+<body>
+  <nav>
+    <a href="index.html">Inicio</a>
+    <a href="usuarios.html">Usuarios</a>
+    <a href="equipos.html">Equipos</a>
+    <a href="estadisticas.html">Estadísticas</a>
+    <a href="historico.html" class="active">Histórico</a>
+    <a href="auditoria.html">Auditoría</a>
+  </nav>
+  <main>
+    <h1>Histórico de Partidos</h1>
+
+    <label for="equipoFiltro">Filtrar por equipo:</label>
+    <select id="equipoFiltro">
+      <option value="todos">Todos</option>
+    </select>
+
+    <div id="partidosContainer"></div>
+  </main>
+</body>
+</html>

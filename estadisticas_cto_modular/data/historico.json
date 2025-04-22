@@ -1,0 +1,24 @@
+[
+  {
+    "fecha": "2025-04-15",
+    "equipo": "Equipo A",
+    "rival": "Equipo B",
+    "resultado": "3 - 2",
+    "resumen": "Victoria ajustada con dos goles de Juan y uno de Pedro.",
+    "eventos": [
+      {"jugador": "Juan", "evento": "Gol", "minuto": 12},
+      {"jugador": "Pedro", "evento": "Gol", "minuto": 45},
+      {"jugador": "Juan", "evento": "Gol", "minuto": 68}
+    ]
+  },
+  {
+    "fecha": "2025-04-18",
+    "equipo": "Equipo B",
+    "rival": "Equipo C",
+    "resultado": "1 - 1",
+    "resumen": "Empate tras un gol tardío del rival.",
+    "eventos": [
+      {"jugador": "Carlos", "evento": "Gol", "minuto": 55}
+    ]
+  }
+]

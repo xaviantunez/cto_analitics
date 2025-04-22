@@ -4,63 +4,57 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Estadísticas del Partido</title>
-  <link rel="stylesheet" href="../css/style.css" />
-  <link rel="stylesheet" href="../css/estadisticas.css" />
+  <link rel="stylesheet" href="style.css" />
+  <script defer src="estadisticas.js"></script>
 </head>
 <body>
-  <header>
-    <h1>Estadísticas del Partido</h1>
-    <nav>
-      <a href="login.html">Inicio</a>
-      <a href="mantenimiento_usuarios.html">Usuarios</a>
-      <a href="mantenimiento_equipos.html">Equipos</a>
-      <a href="historico.html">Histórico</a>
-      <a href="auditoria.html">Auditoría</a>
-      <a href="analisis.html">Análisis</a>
-    </nav>
-  </header>
+  <nav>
+    <a href="index.html">Inicio</a>
+    <a href="usuarios.html">Usuarios</a>
+    <a href="equipos.html">Equipos</a>
+    <a href="estadisticas.html" class="active">Estadísticas</a>
+    <a href="historico.html">Histórico</a>
+    <a href="auditoria.html">Auditoría</a>
+  </nav>
 
   <main>
-    <section id="info-general">
-      <h2>Datos del Partido</h2>
-      <input type="text" id="equipoLocal" placeholder="Equipo Local" />
-      <input type="text" id="equipoRival" placeholder="Equipo Rival" />
-      <input type="datetime-local" id="fechaHora" />
-      <input type="text" id="torneo" placeholder="Nombre del Torneo" />
-      <img src="../img/logo.png" alt="Logo" id="logo-equipo" />
-    </section>
+    <h1>Estadísticas del Partido</h1>
 
-    <section id="reloj">
-      <h2>Reloj del Partido</h2>
-      <div id="cronometro">00:00</div>
-      <button onclick="iniciarPartido()">Iniciar</button>
-      <button onclick="pausarPartido()">Pausar</button>
-      <button onclick="resetearPartido()">Resetear</button>
-    </section>
-
-    <section id="alineacion">
-      <h2>Alineación</h2>
-      <div id="jugadores"></div>
+    <section>
+      <label>Equipo Local: <input type="text" id="equipoLocal"></label>
+      <label>Equipo Rival: <input type="text" id="equipoRival"></label>
+      <label>Fecha: <input type="date" id="fechaPartido"></label>
+      <label>Hora: <input type="time" id="horaPartido"></label>
+      <label>Torneo: <input type="text" id="torneo"></label>
+      <img src="logo.png" class="logo" alt="Logo camiseta">
     </section>
 
     <section>
+      <h2>Control de Tiempo</h2>
+      <p>Tiempo Total: <span id="tiempoTotal">00:00</span></p>
+      <button onclick="iniciarTiempo()">Iniciar</button>
+      <button onclick="pausarTiempo()">Pausar</button>
+      <button onclick="resetearTiempo()">Resetear</button>
+    </section>
+
+    <section id="jugadores">
+      <h2>Jugadores Alineados</h2>
+      <ul id="listaJugadores">
+        <!-- Jugadores con tiempo y eventos -->
+      </ul>
+    </section>
+
+    <section id="eventos">
       <h2>Eventos del Partido</h2>
-      <div id="eventos-generales"></div>
-    </section>
-
-    <section>
-      <h2>Resumen del Partido</h2>
-      <textarea id="resumen" placeholder="Escribe un resumen del partido..."></textarea>
-      <button onclick="guardarPartido()">Guardar Partido</button>
+      <ul id="logEventos"></ul>
       <button onclick="exportarExcel()">Exportar a Excel</button>
     </section>
 
     <section>
-      <h2>Registro de Eventos</h2>
-      <ul id="registro-eventos"></ul>
+      <h2>Resumen</h2>
+      <textarea id="resumenPartido" rows="5" cols="50"></textarea>
+      <button onclick="guardarEnHistorico()">Guardar en Histórico</button>
     </section>
   </main>
-
-  <script src="../js/estadisticas.js"></script>
 </body>
 </html>

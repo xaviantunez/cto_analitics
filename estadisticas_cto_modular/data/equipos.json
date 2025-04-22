@@ -1,4 +1,10 @@
-{
-  "Equipo Verde": ["Juan Pérez", "Carlos Ruiz", "Luis Soto"],
-  "Atlético Blanco": ["Marcos Díaz", "Pedro Gómez"]
-}
+[
+  {
+    "nombre": "Equipo A",
+    "jugadores": ["Jugador 1", "Jugador 2"]
+  },
+  {
+    "nombre": "Equipo B",
+    "jugadores": ["Jugador 3", "Jugador 4"]
+  }
+]

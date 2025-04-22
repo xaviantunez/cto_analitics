@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Auditoría - Estadísticas CTO</title>
+  <link rel="stylesheet" href="style.css" />
+  <script defer src="auditoria.js"></script>
+</head>
+<body>
+  <nav>
+    <a href="index.html">Inicio</a>
+    <a href="usuarios.html">Usuarios</a>
+    <a href="equipos.html">Equipos</a>
+    <a href="estadisticas.html">Estadísticas</a>
+    <a href="historico.html">Histórico</a>
+    <a href="auditoria.html" class="active">Auditoría</a>
+  </nav>
+
+  <main>
+    <h1>Auditoría del Sistema</h1>
+
+    <div class="filtros">
+      <label for="filtroUsuario">Usuario:</label>
+      <input type="text" id="filtroUsuario" placeholder="Filtrar por usuario" oninput="filtrarAuditoria()"/>
+
+      <label for="filtroFecha">Fecha:</label>
+      <input type="date" id="filtroFecha" onchange="filtrarAuditoria()" />
+    </div>
+
+    <ul id="listaAuditoria"></ul>
+
+    <button onclick="exportarAuditoria()">Exportar a Excel</button>
+  </main>
+</body>
+</html>
