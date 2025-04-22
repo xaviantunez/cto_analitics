@@ -1,0 +1,27 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Mantenimiento de Usuarios</title>
+  <link rel="stylesheet" href="../css/usuarios.css">
+</head>
+<body>
+  <header>
+    <h1>Mantenimiento de Usuarios</h1>
+  </header>
+  <main>
+    <form id="formUsuario">
+      <input type="text" id="nombreUsuario" placeholder="Nombre de usuario" required>
+      <input type="password" id="password" placeholder="Contraseña" required>
+      <select id="rol">
+        <option value="usuario">Usuario</option>
+        <option value="admin">Administrador</option>
+      </select>
+      <button type="submit">Guardar</button>
+    </form>
+    <ul id="listaUsuarios"></ul>
+  </main>
+  <script src="../js/usuarios.js"></script>
+</body>
+</html>
