@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         localStorage.setItem(usersKey, JSON.stringify([newUser]));
         localStorage.setItem("currentUser", JSON.stringify(newUser));
-        window.location.href = "pages/stats.html";
+        window.location.href = "pages/estadisticas.html";
     });
 
     // Login normal
@@ -41,7 +41,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const found = users.find(u => u.username === user && u.password === pass);
         if (found) {
             localStorage.setItem("currentUser", JSON.stringify(found));
-            window.location.href = "pages/stats.html";
+            window.location.href = "pages/estadisticas.html";
         } else {
             errorMsg.innerText = "Usuario o contraseña incorrectos";
         }
