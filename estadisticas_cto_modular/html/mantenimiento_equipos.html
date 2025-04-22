@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mantenimiento de Equipos</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="../css/equipos.css" />
+</head>
+<body>
+  <header>
+    <h1>Mantenimiento de Equipos</h1>
+    <nav>
+      <a href="estadisticas.html">Estadísticas</a>
+      <a href="historico.html">Histórico</a>
+      <a href="mantenimiento_usuarios.html">Usuarios</a>
+      <a href="auditoria.html">Auditoría</a>
+      <a href="analisis.html">Análisis</a>
+    </nav>
+  </header>
+
+  <main>
+    <section id="gestion-equipos">
+      <h2>Equipos</h2>
+      <input type="text" id="nuevo-equipo" placeholder="Nombre del nuevo equipo" />
+      <button onclick="crearEquipo()">Crear equipo</button>
+      <ul id="lista-equipos"></ul>
+    </section>
+
+    <section id="gestion-jugadores" style="display: none;">
+      <h2>Jugadores de <span id="nombre-equipo"></span></h2>
+      <input type="text" id="nuevo-jugador" placeholder="Nombre del jugador" />
+      <button onclick="agregarJugador()">Añadir jugador</button>
+      <ul id="lista-jugadores"></ul>
+    </section>
+  </main>
+
+  <script src="../js/equipos.js"></script>
+</body>
+</html>

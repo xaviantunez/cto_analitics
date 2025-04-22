@@ -1,27 +1,55 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Mantenimiento de Usuarios</title>
-  <link rel="stylesheet" href="../css/usuarios.css">
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="../css/usuarios.css" />
 </head>
 <body>
   <header>
-    <h1>Mantenimiento de Usuarios</h1>
+    <h1>Gestión de Usuarios</h1>
+    <nav>
+      <a href="estadisticas.html">Estadísticas</a>
+      <a href="mantenimiento_equipos.html">Equipos</a>
+      <a href="historico.html">Histórico</a>
+      <a href="auditoria.html">Auditoría</a>
+      <a href="analisis.html">Análisis</a>
+    </nav>
   </header>
+
   <main>
-    <form id="formUsuario">
-      <input type="text" id="nombreUsuario" placeholder="Nombre de usuario" required>
-      <input type="password" id="password" placeholder="Contraseña" required>
+    <section>
+      <h2>Crear Usuario</h2>
+      <input type="text" id="usuario" placeholder="Usuario" />
+      <input type="password" id="password" placeholder="Contraseña" />
+      <input type="text" id="equipo" placeholder="Equipo asignado" />
+      <input type="text" id="funcion" placeholder="Función (puede tener varias separadas por coma)" />
       <select id="rol">
-        <option value="usuario">Usuario</option>
         <option value="admin">Administrador</option>
+        <option value="usuario">Usuario</option>
       </select>
-      <button type="submit">Guardar</button>
-    </form>
-    <ul id="listaUsuarios"></ul>
+      <button onclick="crearUsuario()">Crear Usuario</button>
+    </section>
+
+    <section>
+      <h2>Usuarios Registrados</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Usuario</th>
+            <th>Rol</th>
+            <th>Equipo</th>
+            <th>Funciones</th>
+            <th>Acción</th>
+          </tr>
+        </thead>
+        <tbody id="tabla-usuarios"></tbody>
+      </table>
+    </section>
   </main>
+
   <script src="../js/usuarios.js"></script>
 </body>
 </html>
