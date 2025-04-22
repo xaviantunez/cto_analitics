@@ -1,0 +1,37 @@
+#info-general, #reloj, #alineacion, section {
+  padding: 1rem;
+  border-bottom: 1px solid #ddd;
+}
+
+#logo-equipo {
+  height: 80px;
+  margin-top: 1rem;
+}
+
+#cronometro {
+  font-size: 2rem;
+  font-weight: bold;
+  margin: 1rem 0;
+}
+
+button {
+  margin: 0.5rem;
+  padding: 0.5rem 1rem;
+  background-color: #2f8f2f;
+  color: white;
+  border: none;
+  border-radius: 0.4rem;
+  cursor: pointer;
+}
+
+textarea {
+  width: 100%;
+  height: 100px;
+  margin-top: 0.5rem;
+  padding: 0.5rem;
+}
+
+input {
+  padding: 0.5rem;
+  margin: 0.3rem;
+}
