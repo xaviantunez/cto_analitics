@@ -2,54 +2,51 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Mantenimiento de Usuarios</title>
-  <link rel="stylesheet" href="../css/style.css" />
-  <link rel="stylesheet" href="../css/usuarios.css" />
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <header>
-    <h1>Gestión de Usuarios</h1>
+    <h1>Mantenimiento de Usuarios</h1>
     <nav>
+      <a href="login.html">Login</a>
       <a href="estadisticas.html">Estadísticas</a>
       <a href="mantenimiento_equipos.html">Equipos</a>
+      <a href="auditoria.html">Auditoria</a>
+      <a href="mantenimiento_usuarios.html">Usuarios</a>
       <a href="historico.html">Histórico</a>
-      <a href="auditoria.html">Auditoría</a>
-      <a href="analisis.html">Análisis</a>
     </nav>
   </header>
 
-  <main>
-    <section>
-      <h2>Crear Usuario</h2>
-      <input type="text" id="usuario" placeholder="Usuario" />
-      <input type="password" id="password" placeholder="Contraseña" />
-      <input type="text" id="equipo" placeholder="Equipo asignado" />
-      <input type="text" id="funcion" placeholder="Función (puede tener varias separadas por coma)" />
-      <select id="rol">
-        <option value="admin">Administrador</option>
-        <option value="usuario">Usuario</option>
+  <section>
+    <h2>Agregar nuevo usuario</h2>
+    <form id="userForm">
+      <input type="text" id="username" placeholder="Usuario" required />
+      <input type="password" id="password" placeholder="Contraseña" required />
+      <label for="equipo">Equipo asignado:</label>
+      <select id="equipo" required></select>
+      <label for="funcion">Función:</label>
+      <select id="funcion" required>
+        <option value="delegado">Delegado</option>
+        <option value="entrenador">Entrenador</option>
+        <option value="coordinador">Coordinador</option>
+        <option value="director">Director</option>
       </select>
-      <button onclick="crearUsuario()">Crear Usuario</button>
-    </section>
+      <label for="rol">Rol:</label>
+      <select id="rol" required>
+        <option value="usuario">Usuario</option>
+        <option value="administrador">Administrador</option>
+      </select>
+      <button type="submit">Agregar Usuario</button>
+    </form>
+  </section>
 
-    <section>
-      <h2>Usuarios Registrados</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Usuario</th>
-            <th>Rol</th>
-            <th>Equipo</th>
-            <th>Funciones</th>
-            <th>Acción</th>
-          </tr>
-        </thead>
-        <tbody id="tabla-usuarios"></tbody>
-      </table>
-    </section>
-  </main>
+  <section>
+    <h2>Usuarios Registrados</h2>
+    <ul id="userList"></ul>
+  </section>
 
-  <script src="../js/usuarios.js"></script>
+  <script src="usuarios.js"></script>
 </body>
 </html>
