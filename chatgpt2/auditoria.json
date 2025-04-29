@@ -1,0 +1,16 @@
+[
+  {
+    "fecha": "2025-04-29",
+    "usuario": "admin",
+    "accion": "Creación de usuario",
+    "equipo": "Equipo A",
+    "pagina": "usuarios.html"
+  },
+  {
+    "fecha": "2025-04-29",
+    "usuario": "entrenador1",
+    "accion": "Modificación de estadísticas",
+    "equipo": "Equipo A",
+    "pagina": "estadisticas.html"
+  }
+]

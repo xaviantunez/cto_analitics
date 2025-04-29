@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Usuarios - Estadísticas CTO</title>
+  <link rel="stylesheet" href="style.css">
+  <script defer src="usuarios.js"></script>
+</head>
+<body>
+  <nav>
+    <a href="index.html">Inicio</a>
+    <a href="usuarios.html" class="active">Usuarios</a>
+    <a href="equipos.html">Equipos</a>
+    <a href="estadisticas.html">Estadísticas</a>
+    <a href="historico.html">Histórico</a>
+    <a href="auditoria.html">Auditoría</a>
+  </nav>
+
+  <main>
+    <h1>Mantenimiento de Usuarios</h1>
+
+    <section id="createUserSection">
+      <h2>Crear Nuevo Usuario</h2>
+      <form id="createUserForm">
+        <label for="username">Nombre de Usuario:</label>
+        <input type="text" id="username" required />
+        <label for="password">Contraseña:</label>
+        <input type="password" id="password" required />
+        <label for="roles">Roles:</label>
+        <select id="roles" multiple>
+          <option value="administrador">Administrador</option>
+          <option value="usuario">Usuario</option>
+        </select>
+        <label for="functions">Funciones:</label>
+        <input type="text" id="functions" placeholder="Función, Ej. Entrenador" />
+        <button type="submit">Crear Usuario</button>
+      </form>
+    </section>
+
+    <section id="usersListSection">
+      <h2>Usuarios Existentes</h2>
+      <ul id="usersList">
+        <!-- Los usuarios existentes se mostrarán aquí -->
+      </ul>
+    </section>
+  </main>
+</body>
+</html>

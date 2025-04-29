@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Equipos - Estadísticas CTO</title>
+  <link rel="stylesheet" href="style.css">
+  <script defer src="equipos.js"></script>
+</head>
+<body>
+  <nav>
+    <a href="index.html">Inicio</a>
+    <a href="usuarios.html">Usuarios</a>
+    <a href="equipos.html" class="active">Equipos</a>
+    <a href="estadisticas.html">Estadísticas</a>
+    <a href="historico.html">Histórico</a>
+    <a href="auditoria.html">Auditoría</a>
+  </nav>
+
+  <main>
+    <h1>Mantenimiento de Equipos</h1>
+
+    <section id="createTeamSection">
+      <h2>Crear Nuevo Equipo</h2>
+      <form id="createTeamForm">
+        <label for="teamName">Nombre del Equipo:</label>
+        <input type="text" id="teamName" required />
+        <button type="submit">Crear Equipo</button>
+      </form>
+    </section>
+
+    <section id="teamsListSection">
+      <h2>Equipos Existentes</h2>
+      <ul id="teamsList">
+        <!-- Equipos existentes se mostrarán aquí -->
+      </ul>
+    </section>
+  </main>
+</body>
+</html>

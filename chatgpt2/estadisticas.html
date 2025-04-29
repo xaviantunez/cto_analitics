@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Estadísticas del Partido - Estadísticas CTO</title>
+  <link rel="stylesheet" href="style.css" />
+  <script defer src="estadisticas.js"></script>
+</head>
+<body>
+  <nav>
+    <a href="index.html">Inicio</a>
+    <a href="usuarios.html">Usuarios</a>
+    <a href="equipos.html">Equipos</a>
+    <a href="estadisticas.html" class="active">Estadísticas</a>
+    <a href="historico.html">Histórico</a>
+    <a href="auditoria.html">Auditoría</a>
+  </nav>
+
+  <main>
+    <h1>Estadísticas del Partido</h1>
+
+    <section class="info-partido">
+      <img src="camiseta_logo.png" alt="Logo Camiseta" class="logo-camiseta"/>
+      <label>Equipo Local: <input type="text" id="equipoLocal" /></label>
+      <label>Equipo Rival: <input type="text" id="equipoRival" /></label>
+      <label>Torneo: <input type="text" id="torneo" /></label>
+      <label>Fecha: <input type="date" id="fecha" /></label>
+      <label>Hora: <input type="time" id="hora" /></label>
+    </section>
+
+    <section class="cronometro">
+      <h2>Cronómetro</h2>
+      <p id="tiempo">00:00:00</p>
+      <button id="iniciar">Iniciar</button>
+      <button id="pausar">Pausar</button>
+      <button id="resetear">Resetear</button>
+    </section>
+
+    <section class="alineacion">
+      <h2>Alineación</h2>
+      <ul id="jugadoresAlineados">
+        <!-- Jugadores se cargarán aquí -->
+      </ul>
+    </section>
+
+    <section class="eventos">
+      <h2>Eventos</h2>
+      <div class="eventos-equipos">
+        <div>
+          <h3>Equipo Local</h3>
+          <ul id="eventosLocal">
+            <!-- Eventos Local -->
+          </ul>
+        </div>
+        <div>
+          <h3>Equipo Rival</h3>
+          <ul id="eventosRival">
+            <!-- Eventos Rival -->
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="resumen">
+      <h2>Resumen del Partido</h2>
+      <textarea id="resumenTexto" rows="5" placeholder="Escribe tus impresiones del partido..."></textarea>
+    </section>
+
+    <section class="guardar">
+      <button id="guardarPartido">Guardar Partido</button>
+      <button id="exportarExcel">Exportar a Excel</button>
+    </section>
+
+    <section class="registro-eventos">
+      <h2>Registro de Eventos</h2>
+      <ul id="logEventos">
+        <!-- Registro dinámico -->
+      </ul>
+    </section>
+  </main>
+</body>
+</html>

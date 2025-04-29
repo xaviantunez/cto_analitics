@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Auditoría - Estadísticas CTO</title>
+  <link rel="stylesheet" href="style.css">
+  <script defer src="auditoria.js"></script>
+</head>
+<body>
+  <nav>
+    <a href="index.html">Inicio</a>
+    <a href="usuarios.html">Usuarios</a>
+    <a href="equipos.html">Equipos</a>
+    <a href="estadisticas.html">Estadísticas</a>
+    <a href="historico.html">Histórico</a>
+    <a href="auditoria.html" class="active">Auditoría</a>
+  </nav>
+
+  <main>
+    <h1>Auditoría de Acciones</h1>
+    
+    <form id="filterForm">
+      <label for="userFilter">Filtrar por Usuario:</label>
+      <select id="userFilter">
+        <option value="all">Todos</option>
+      </select>
+
+      <label for="dateFilter">Filtrar por Fecha:</label>
+      <input type="date" id="dateFilter">
+
+      <label for="teamFilter">Filtrar por Equipo:</label>
+      <select id="teamFilter">
+        <option value="all">Todos</option>
+      </select>
+
+      <button type="submit">Filtrar</button>
+    </form>
+
+    <div id="auditList">
+      <!-- Aquí se cargarán las acciones registradas -->
+    </div>
+  </main>
+</body>
+</html>
