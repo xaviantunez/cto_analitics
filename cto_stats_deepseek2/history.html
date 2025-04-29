@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Historial - Estadísticas Fútbol</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <img src="img/logo.png" alt="Logo Estadísticas Fútbol">
+        </div>
+        <nav>
+            <ul>
+                <li><a href="stats.html">Estadísticas</a></li>
+                <li><a href="teams.html">Equipos</a></li>
+                <li><a href="history.html">Historial</a></li>
+                <li><a href="#" id="logout">Cerrar Sesión</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <h1>Historial de Partidos</h1>
+        
+        <section class="filters">
+            <div class="form-group">
+                <label for="teamFilter">Filtrar por equipo:</label>
+                <select id="teamFilter">
+                    <option value="all">Todos los equipos</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="dateFrom">Desde:</label>
+                <input type="date" id="dateFrom">
+            </div>
+            <div class="form-group">
+                <label for="dateTo">Hasta:</label>
+                <input type="date" id="dateTo">
+            </div>
+            <button id="applyFilters">Aplicar Filtros</button>
+        </section>
+        
+        <section class="matches-list">
+            <table id="matchesTable">
+                <thead>
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Torneo</th>
+                        <th>Local</th>
+                        <th>Visitante</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </section>
+        
+        <section class="match-details" id="matchDetails" style="display: none;">
+            <h2>Detalles del Partido</h2>
+            <div id="matchDetailsContent"></div>
+            <button id="saveChangesBtn">Guardar Cambios</button>
+        </section>
+    </main>
+
+    <script src="js/auth.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/history.js"></script>
+</body>
+</html>

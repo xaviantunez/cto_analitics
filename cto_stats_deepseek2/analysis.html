@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Análisis - Estadísticas Fútbol</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <img src="img/logo.png" alt="Logo Estadísticas Fútbol">
+        </div>
+        <nav>
+            <ul>
+                <li><a href="stats.html">Estadísticas</a></li>
+                <li><a href="teams.html">Equipos</a></li>
+                <li><a href="history.html">Historial</a></li>
+                <li><a href="audit.html">Auditoría</a></li>
+                <li><a href="analysis.html">Análisis</a></li>
+                <li><a href="#" id="logout">Cerrar Sesión</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <h1>Análisis de Datos</h1>
+        
+        <section class="analysis-filters">
+            <div class="form-group">
+                <label for="analysisTeam">Equipo:</label>
+                <select id="analysisTeam">
+                    <option value="all">Todos los equipos</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="analysisPlayer">Jugador:</label>
+                <select id="analysisPlayer">
+                    <option value="all">Todos los jugadores</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="analysisDateFrom">Desde:</label>
+                <input type="date" id="analysisDateFrom">
+            </div>
+            <div class="form-group">
+                <label for="analysisDateTo">Hasta:</label>
+                <input type="date" id="analysisDateTo">
+            </div>
+            <button id="applyAnalysisFilters">Aplicar Filtros</button>
+        </section>
+        
+        <section class="analysis-results">
+            <div class="chart-container">
+                <canvas id="winsLossesChart"></canvas>
+            </div>
+            <div class="chart-container">
+                <canvas id="playingTimeChart"></canvas>
+            </div>
+            <div class="chart-container">
+                <canvas id="positionTimeChart"></canvas>
+            </div>
+            
+            <h2>Estadísticas Detalladas</h2>
+            <table id="detailedStatsTable">
+                <thead>
+                    <tr>
+                        <th>Jugador</th>
+                        <th>Partidos</th>
+                        <th>Titular</th>
+                        <th>Tiempo Total</th>
+                        <th>Eventos</th>
+                        <th>Por Posición</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+            <button id="exportAnalysisData">Exportar a Excel</button>
+        </section>
+    </main>
+
+    <script src="js/auth.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/analysis.js"></script>
+</body>
+</html>
