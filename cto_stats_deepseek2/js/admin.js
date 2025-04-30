@@ -23,7 +23,7 @@ function loadUsers() {
     const tbody = document.querySelector('#usersTable tbody');
     tbody.innerHTML = '';
 
-    if(users=="") exit;
+    if(users=="" or users==null) exit;
     users.forEach(user => {
         const tr = document.createElement('tr');
         
