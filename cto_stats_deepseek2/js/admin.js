@@ -102,7 +102,7 @@ function loadFunctions() {
     const functions = JSON.parse(localStorage.getItem('functions'));
     const ul = document.getElementById('functionsList');
     ul.innerHTML = '';
-    
+    if(functions=="" || functions==null) return;
     functions.forEach(func => {
         const li = document.createElement('li');
         li.textContent = func;
@@ -119,11 +119,13 @@ function addUser() {
         alert('Por favor, complete todos los campos');
         return;
     }
-    
+
     const users = JSON.parse(localStorage.getItem('users'));
-    if (users.some(u => u.username === username)) {
-        alert('El usuario ya existe');
-        return;
+    if(users!="" && users!=null){        
+        if (users.some(u => u.username === username)) {
+            alert('El usuario ya existe');
+            return;
+        }
     }
     
     const newUser = {
@@ -197,11 +199,14 @@ function addFunction() {
         alert('Por favor, ingrese un nombre para la nueva función');
         return;
     }
+
     
     const functions = JSON.parse(localStorage.getItem('functions'));
-    if (functions.includes(newFunc)) {
-        alert('Esta función ya existe');
-        return;
+    if(functions!="" && functions!=null){
+        if (functions.includes(newFunc)) {
+            alert('Esta función ya existe');
+            return;
+        }
     }
     
     functions.push(newFunc);
