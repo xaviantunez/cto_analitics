@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function cargarEquipos() {
-  await fetch('data/equipos.json')
+  fetch('data/equipos.json')
     .then(response => response.json())
     .then(data => {
       equipos = data;
@@ -24,7 +24,7 @@ function cargarEquipos() {
 }
 
 function guardarEquipos() {
-  await fetch('data/equipos.json', {
+  fetch('data/equipos.json', {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(equipos)
@@ -35,7 +35,7 @@ function guardarEquipos() {
 }
 
 function cargarAuditoria() {
-  await fetch('data/auditoria.json')
+  fetch('data/auditoria.json')
     .then(response => response.json())
     .then(data => {
       auditoria = data;
@@ -44,7 +44,7 @@ function cargarAuditoria() {
 }
 
 function guardarAuditoria() {
-  await fetch('data/auditoria.json', {
+  fetch('data/auditoria.json', {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(auditoria)
