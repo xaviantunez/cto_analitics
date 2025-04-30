@@ -1,0 +1,5 @@
+[
+  { "nombre": "coordinador", "permisos": ["crear_equipo", "borrar_equipo", "gestionar_jugadores"] },
+  { "nombre": "entrenador", "permisos": ["editar_estadisticas", "gestionar_jugadores_propios"] },
+  { "nombre": "delegado", "permisos": ["editar_estadisticas", "gestionar_jugadores_propios"] }
+]

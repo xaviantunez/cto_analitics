@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Configuración de Usuarios</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script src="utils.js"></script>
+    <script src="usuarios.js" defer></script>
+</head>
+<body>
+    <header>
+        <h1>Gestión de Usuarios</h1>
+        <nav>
+            <ul id="menuOpciones"></ul>
+        </nav>
+    </header>
+
+    <main>
+        <section>
+            <h2>Crear/Editar Usuario</h2>
+            <form id="formUsuario">
+                <label>Usuario: <input type="text" id="usuario" required></label>
+                <label>Contraseña: <input type="password" id="contrasena" required></label>
+                <label>Rol:
+                    <select id="rol">
+                        <option value="administrador">Administrador</option>
+                        <option value="usuario">Usuario</option>
+                    </select>
+                </label>
+                <label>Equipo: <input type="text" id="equipo"></label>
+                <label>Funciones:
+                    <select id="funciones" multiple></select>
+                </label>
+                <button type="submit">Guardar</button>
+            </form>
+        </section>
+
+        <section>
+            <h2>Usuarios Registrados</h2>
+            <ul id="listaUsuarios"></ul>
+        </section>
+
+        <section>
+            <h2>Funciones</h2>
+            <form id="formFuncion">
+                <input type="text" id="nuevaFuncion" placeholder="Nueva función">
+                <button type="submit">Agregar función</button>
+            </form>
+            <ul id="listaFunciones"></ul>
+        </section>
+    </main>
+</body>
+</html>

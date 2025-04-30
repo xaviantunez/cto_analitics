@@ -1,0 +1,16 @@
+[
+    {
+        "usuario": "admin",
+        "contrasena": "admin123",
+        "rol": "administrador",
+        "equipo": "",
+        "funciones": ["coordinador"]
+    },
+    {
+        "usuario": "entrenador1",
+        "contrasena": "pass123",
+        "rol": "usuario",
+        "equipo": "Juveniles",
+        "funciones": ["entrenador"]
+    }
+]

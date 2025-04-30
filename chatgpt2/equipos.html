@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Gestión de Equipos</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script src="utils.js"></script>
+  <script src="menu.js"></script>
+  <script src="equipos.js" defer></script>
+</head>
+<body>
+  <header>
+    <h1>Gestión de Equipos y Jugadores</h1>
+    <nav>
+      <ul id="menuOpciones"></ul>
+    </nav>
+  </header>
+
+  <main>
+    <section>
+      <h2>Crear Equipo</h2>
+      <form id="formEquipo">
+        <input type="text" id="nuevoEquipo" placeholder="Nombre del equipo" required />
+        <button type="submit">Crear</button>
+      </form>
+    </section>
+
+    <section>
+      <h2>Equipos</h2>
+      <select id="selectEquipo"></select>
+      <button id="borrarEquipo">Borrar equipo</button>
+    </section>
+
+    <section>
+      <h2>Jugadores del equipo</h2>
+      <form id="formJugador">
+        <input type="text" id="nuevoJugador" placeholder="Nombre del jugador" required />
+        <button type="submit">Añadir jugador</button>
+      </form>
+      <ul id="listaJugadores"></ul>
+    </section>
+  </main>
+</body>
+</html>
