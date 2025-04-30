@@ -7,7 +7,7 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
   const users = await response.json();
   console.log(users);
   const user = users.find(
-    (u) => u.username === username && u.password === password
+    (u) => u.usuario === username && u.clave === password
   );
 
   if (user) {
