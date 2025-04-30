@@ -1,16 +1,28 @@
-[
+{
+  "usuarios": [
     {
-        "usuario": "admin",
-        "contrasena": "admin123",
-        "rol": "administrador",
-        "equipo": "",
-        "funciones": ["coordinador"]
+      "id": 1,
+      "username": "admin",
+      "password": "admin123",
+      "rol": "administrador",
+      "equipo": "Todos",
+      "funciones": ["coordinador", "entrenador", "delegado"]
     },
     {
-        "usuario": "entrenador1",
-        "contrasena": "pass123",
-        "rol": "usuario",
-        "equipo": "Juveniles",
-        "funciones": ["entrenador"]
+      "id": 2,
+      "username": "juanperez",
+      "password": "futbol2024",
+      "rol": "usuario",
+      "equipo": "Juveniles A",
+      "funciones": ["entrenador"]
+    },
+    {
+      "id": 3,
+      "username": "lauragomez",
+      "password": "equipo22",
+      "rol": "usuario",
+      "equipo": "Cadetes B",
+      "funciones": ["delegado"]
     }
-]
+  ]
+}
