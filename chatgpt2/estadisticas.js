@@ -1,148 +1,94 @@
-let cronometro = null;
-let segundos = 0;
+let tiempo = 0;
+let cronometroInterval = null;
 let enMarcha = false;
-let jugadores = [];
-let alineados = new Set();
-let eventos = [];
-let registro = [];
 
-const tiempoElemento = document.getElementById('tiempo');
-const iniciarBtn = document.getElementById('iniciar');
-const pausarBtn = document.getElementById('pausar');
-const resetearBtn = document.getElementById('resetear');
-const logEventos = document.getElementById('logEventos');
-const jugadoresUl = document.getElementById('jugadoresAlineados');
-const resumenTextarea = document.getElementById('resumenTexto');
+document.addEventListener("DOMContentLoaded", async () => {
+  const nav = await fetch("nav.html");
+  document.getElementById("nav-placeholder").innerHTML = await nav.text();
 
-// Simula jugadores (en producción esto vendría de datos locales o de un equipo)
-jugadores = [
-  { nombre: "Jugador 1", posicion: "portero" },
-  { nombre: "Jugador 2", posicion: "defensa derecho" },
-  { nombre: "Jugador 3", posicion: "medio centro" },
-  { nombre: "Jugador 4", posicion: "delantero" },
-  { nombre: "Jugador 5", posicion: "banda derecha" },
-  { nombre: "Jugador 6", posicion: "pivote" },
-  { nombre: "Jugador 7", posicion: "defensa izquierdo" },
-  { nombre: "Jugador 8", posicion: "banda izquierda" }
-];
+  const cronometro = document.getElementById("cronometro");
+  const iniciar = document.getElementById("iniciar");
+  const pausar = document.getElementById("pausar");
+  const resetear = document.getElementById("resetear");
 
-function actualizarTiempo() {
-  segundos++;
-  const hrs = String(Math.floor(segundos / 3600)).padStart(2, '0');
-  const mins = String(Math.floor((segundos % 3600) / 60)).padStart(2, '0');
-  const secs = String(segundos % 60).padStart(2, '0');
-  tiempoElemento.textContent = `${hrs}:${mins}:${secs}`;
-}
-
-function registrarEvento(texto) {
-  const marca = tiempoElemento.textContent;
-  const li = document.createElement("li");
-  li.textContent = `[${marca}] ${texto}`;
-  logEventos.appendChild(li);
-  registro.push({ tiempo: marca, descripcion: texto });
-}
-
-function iniciarCrono() {
-  if (!enMarcha && alineados.size >= 6 && alineados.size <= 8) {
-    cronometro = setInterval(actualizarTiempo, 1000);
+  iniciar.addEventListener("click", () => {
+    if (enMarcha) return;
+    cronometroInterval = setInterval(() => {
+      tiempo++;
+      cronometro.textContent = formatTime(tiempo);
+    }, 1000);
     enMarcha = true;
-    registrarEvento("Inicio del cronómetro");
-    registrarEvento("Alineación activa: " + Array.from(alineados).join(", "));
-  } else {
-    alert("Deben estar alineados entre 6 y 8 jugadores.");
-  }
-}
+    logEvento("Inicio del tiempo");
+  });
 
-function pausarCrono() {
-  if (cronometro) {
-    clearInterval(cronometro);
+  pausar.addEventListener("click", () => {
+    clearInterval(cronometroInterval);
     enMarcha = false;
-    registrarEvento("Pausa del cronómetro");
-  }
+    logEvento("Pausa del tiempo");
+  });
+
+  resetear.addEventListener("click", () => {
+    clearInterval(cronometroInterval);
+    tiempo = 0;
+    cronometro.textContent = "00:00";
+    enMarcha = false;
+    logEvento("Reinicio del tiempo");
+  });
+
+  cargarJugadores();
+  cargarEventos();
+});
+
+function formatTime(t) {
+  const mins = String(Math.floor(t / 60)).padStart(2, "0");
+  const secs = String(t % 60).padStart(2, "0");
+  return `${mins}:${secs}`;
 }
 
-function resetearCrono() {
-  pausarCrono();
-  segundos = 0;
-  tiempoElemento.textContent = "00:00:00";
-  registrarEvento("Cronómetro reseteado");
+function logEvento(texto) {
+  const log = document.getElementById("logEventos");
+  const item = document.createElement("li");
+  item.textContent = `[${formatTime(tiempo)}] ${texto}`;
+  log.appendChild(item);
 }
 
 function cargarJugadores() {
-  jugadoresUl.innerHTML = "";
+  const tbody = document.querySelector("#tablaJugadores tbody");
+  const jugadores = ["Juan", "Pedro", "Luis", "Carlos"];
   jugadores.forEach(j => {
-    const li = document.createElement("li");
-
-    const label = document.createElement("label");
-    label.textContent = j.nombre;
-
-    const checkbox = document.createElement("input");
-    checkbox.type = "checkbox";
-    checkbox.addEventListener("change", () => {
-      if (checkbox.checked) {
-        alineados.add(j.nombre);
-      } else {
-        alineados.delete(j.nombre);
-      }
-    });
-
-    const select = document.createElement("select");
-    [
-      "portero", "defensa derecho", "defensa izquierdo",
-      "banda izquierda", "banda derecha",
-      "medio centro", "pivote", "medio ofensivo", "delantero"
-    ].forEach(pos => {
-      const option = document.createElement("option");
-      option.value = pos;
-      option.textContent = pos;
-      if (j.posicion === pos) option.selected = true;
-      select.appendChild(option);
-    });
-
-    li.appendChild(checkbox);
-    li.appendChild(label);
-    li.appendChild(select);
-    jugadoresUl.appendChild(li);
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${j}</td>
+      <td>
+        <select>
+          <option value="portero">Portero</option>
+          <option value="defensa derecho">Defensa Derecho</option>
+          <option value="defensa izquierdo">Defensa Izquierdo</option>
+          <option value="banda izquierda">Banda Izquierda</option>
+          <option value="banda derecha">Banda Derecha</option>
+          <option value="medio centro">Medio Centro</option>
+          <option value="pivote">Pivote</option>
+          <option value="medio ofensivo">Medio Ofensivo</option>
+          <option value="delantero">Delantero</option>
+        </select>
+      </td>
+      <td><input type="checkbox" /></td>
+      <td><button onclick="modificarEvento('${j}', 1)">+ Evento</button> <button onclick="modificarEvento('${j}', -1)">- Evento</button></td>
+    `;
+    tbody.appendChild(tr);
   });
 }
 
-function guardarPartido() {
-  const resumen = resumenTextarea.value;
-  const datos = {
-    equipoLocal: document.getElementById("equipoLocal").value,
-    equipoRival: document.getElementById("equipoRival").value,
-    torneo: document.getElementById("torneo").value,
-    fecha: document.getElementById("fecha").value,
-    hora: document.getElementById("hora").value,
-    resumen,
-    registro,
-    jugadoresAlineados: Array.from(alineados),
-    tiempo: tiempoElemento.textContent
-  };
-
-  let historico = JSON.parse(localStorage.getItem("historicoPartidos") || "[]");
-  historico.push(datos);
-  localStorage.setItem("historicoPartidos", JSON.stringify(historico));
-
-  alert("Partido guardado en el histórico.");
+function modificarEvento(jugador, valor) {
+  logEvento(`${jugador} ${valor > 0 ? 'recibe' : 'pierde'} evento`);
 }
 
-function exportarAExcel() {
-  let csv = "Tiempo,Evento\n";
-  registro.forEach(r => {
-    csv += `"${r.tiempo}","${r.descripcion}"\n`;
+function cargarEventos() {
+  const contenedor = document.getElementById("listaEventos");
+  const eventos = ["Gol", "Asistencia", "Falta", "Tarjeta Amarilla", "Tarjeta Roja"];
+  eventos.forEach(ev => {
+    const div = document.createElement("div");
+    div.innerHTML = `<span>${ev}</span> <button>+</button> <button>-</button>`;
+    contenedor.appendChild(div);
   });
-  const blob = new Blob([csv], { type: "text/csv" });
-  const link = document.createElement("a");
-  link.href = URL.createObjectURL(blob);
-  link.download = "registro_partido.csv";
-  link.click();
 }
-
-iniciarBtn.addEventListener("click", iniciarCrono);
-pausarBtn.addEventListener("click", pausarCrono);
-resetearBtn.addEventListener("click", resetearCrono);
-document.getElementById("guardarPartido").addEventListener("click", guardarPartido);
-document.getElementById("exportarExcel").addEventListener("click", exportarAExcel);
-
-window.addEventListener("load", cargarJugadores);

@@ -1,0 +1,10 @@
+[
+  {
+    "nombre": "Equipo A",
+    "jugadores": ["Juan", "Pedro", "Luis", "Carlos"]
+  },
+  {
+    "nombre": "Equipo B",
+    "jugadores": ["Mario", "Andrés", "Pablo"]
+  }
+]

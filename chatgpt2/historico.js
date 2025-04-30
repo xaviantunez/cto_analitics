@@ -1,46 +1,48 @@
-document.addEventListener('DOMContentLoaded', () => {
-  const teamSelect = document.getElementById('teamSelect');
-  const matchList = document.getElementById('matchList');
+document.addEventListener("DOMContentLoaded", async () => {
+  const nav = await fetch("nav.html");
+  document.getElementById("nav-placeholder").innerHTML = await nav.text();
 
-  // Cargar los equipos para el filtro
-  fetch('data/equipos.json')
-    .then(response => response.json())
-    .then(equipos => {
-      equipos.forEach(equipo => {
-        const option = document.createElement('option');
-        option.value = equipo.nombre;
-        option.textContent = equipo.nombre;
-        teamSelect.appendChild(option);
-      });
-    });
+  cargarEquipos();
+  cargarPartidos();
+});
 
-  // Función para cargar los partidos
-  function loadMatches(teamFilter = 'all') {
-    fetch('data/partidos.json')
-      .then(response => response.json())
-      .then(partidos => {
-        matchList.innerHTML = '';
-        const filteredMatches = teamFilter === 'all' 
-          ? partidos 
-          : partidos.filter(partido => partido.equipoLocal === teamFilter || partido.equipoVisitante === teamFilter);
-
-        filteredMatches.forEach(partido => {
-          const matchItem = document.createElement('div');
-          matchItem.classList.add('match-item');
-          matchItem.innerHTML = `
-            <h3>${partido.equipoLocal} vs ${partido.equipoVisitante}</h3>
-            <p>Fecha: ${partido.fecha} | Hora: ${partido.hora}</p>
-            <a href="estadisticas.html?id=${partido.id}">Ver Estadísticas</a>
-          `;
-          matchList.appendChild(matchItem);
-        });
-      });
-  }
-
-  teamSelect.addEventListener('change', (event) => {
-    loadMatches(event.target.value);
+function cargarEquipos() {
+  const equipos = JSON.parse(localStorage.getItem("equipos")) || [];
+  const select = document.getElementById("equipoFiltro");
+  equipos.forEach(eq => {
+    const opt = document.createElement("option");
+    opt.value = eq.nombre;
+    opt.textContent = eq.nombre;
+    select.appendChild(opt);
   });
 
-  // Cargar partidos inicialmente
-  loadMatches();
-});
+  select.addEventListener("change", cargarPartidos);
+}
+
+function cargarPartidos() {
+  const equipo = document.getElementById("equipoFiltro").value;
+  const partidos = JSON.parse(localStorage.getItem("historicoPartidos")) || [];
+  const tbody = document.getElementById("tablaPartidos");
+  tbody.innerHTML = "";
+
+  const filtrados = equipo === "todos" ? partidos : partidos.filter(p => p.equipoLocal === equipo || p.equipoRival === equipo);
+  
+  filtrados.sort((a, b) => new Date(b.fecha + "T" + b.hora) - new Date(a.fecha + "T" + b.hora));
+
+  filtrados.forEach(p => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${p.fecha}</td>
+      <td>${p.hora}</td>
+      <td>${p.equipoLocal}</td>
+      <td>${p.equipoRival}</td>
+      <td><button onclick="verPartido('${p.id}')">Ver/Editar</button></td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+function verPartido(id) {
+  localStorage.setItem("partidoSeleccionado", id);
+  window.location.href = "estadisticas.html?modo=editar";
+}

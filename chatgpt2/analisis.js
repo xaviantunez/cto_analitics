@@ -1,73 +1,97 @@
-document.addEventListener('DOMContentLoaded', () => {
-  const teamFilter = document.getElementById('teamFilter');
-  const dateFilter = document.getElementById('dateFilter');
-  const analysisResults = document.getElementById('analysisResults');
-
-  // Cargar los equipos para el filtro
-  fetch('data/equipos.json')
-    .then(response => response.json())
-    .then(equipos => {
-      equipos.forEach(equipo => {
-        const option = document.createElement('option');
-        option.value = equipo.nombre;
-        option.textContent = equipo.nombre;
-        teamFilter.appendChild(option);
-      });
-    });
-
-  // Función para cargar y analizar los partidos
-  function loadAndAnalyzeMatches(teamFilterValue = 'all', dateFilterValue = '') {
-    fetch('data/historico.json')
-      .then(response => response.json())
-      .then(historico => {
-        analysisResults.innerHTML = '';
-        const filteredMatches = historico.filter(match => {
-          const matchTeam = teamFilterValue === 'all' || match.equipoLocal === teamFilterValue || match.equipoVisitante === teamFilterValue;
-          const matchDate = !dateFilterValue || match.fecha === dateFilterValue;
-          return matchTeam && matchDate;
-        });
-
-        if (filteredMatches.length === 0) {
-          analysisResults.innerHTML = '<p>No se encontraron partidos para los filtros seleccionados.</p>';
-          return;
-        }
-
-        // Aquí irían las gráficas y análisis de los partidos
-        // Generamos los sumatorios y gráficos
-        const totalVictorias = filteredMatches.filter(match => match.resultado === 'victoria').length;
-        const totalDerrotas = filteredMatches.filter(match => match.resultado === 'derrota').length;
-        const totalEmpates = filteredMatches.filter(match => match.resultado === 'empate').length;
-
-        analysisResults.innerHTML = `
-          <h2>Resumen de Análisis</h2>
-          <p>Victorias: ${totalVictorias}</p>
-          <p>Derrotas: ${totalDerrotas}</p>
-          <p>Empates: ${totalEmpates}</p>
-          <h3>Gráfica de Resultados</h3>
-          <canvas id="resultsChart"></canvas>
-        `;
-
-        // Crear la gráfica (utilizando Chart.js o cualquier librería de gráficos)
-        const ctx = document.getElementById('resultsChart').getContext('2d');
-        new Chart(ctx, {
-          type: 'pie',
-          data: {
-            labels: ['Victorias', 'Derrotas', 'Empates'],
-            datasets: [{
-              label: 'Resultados de los partidos',
-              data: [totalVictorias, totalDerrotas, totalEmpates],
-              backgroundColor: ['#4caf50', '#f44336', '#ff9800'],
-              borderColor: ['#388e3c', '#d32f2f', '#f57c00'],
-              borderWidth: 1
-            }]
-          }
-        });
-      });
-  }
-
-  // Generar análisis al aplicar filtros
-  document.getElementById('filterForm').addEventListener('submit', (event) => {
-    event.preventDefault();
-    loadAndAnalyzeMatches(teamFilter.value, dateFilter.value);
-  });
+document.addEventListener("DOMContentLoaded", async () => {
+  const nav = await fetch("nav.html");
+  document.getElementById("nav-placeholder").innerHTML = await nav.text();
+  cargarEquipos();
 });
+
+function cargarEquipos() {
+  const equipos = JSON.parse(localStorage.getItem("equipos")) || [];
+  const select = document.getElementById("equipoAnalisis");
+  equipos.forEach(e => {
+    const opt = document.createElement("option");
+    opt.value = e.nombre;
+    opt.textContent = e.nombre;
+    select.appendChild(opt);
+  });
+
+  select.addEventListener("change", cargarPartidos);
+}
+
+function cargarPartidos() {
+  const equipo = document.getElementById("equipoAnalisis").value;
+  const partidos = JSON.parse(localStorage.getItem("partidos")) || [];
+  const select = document.getElementById("partidosAnalisis");
+  select.innerHTML = "";
+
+  partidos
+    .filter(p => equipo === "" || p.equipoLocal === equipo || p.equipoVisitante === equipo)
+    .forEach(p => {
+      const opt = document.createElement("option");
+      opt.value = p.id;
+      opt.textContent = `${p.fecha} ${p.equipoLocal} vs ${p.equipoVisitante}`;
+      select.appendChild(opt);
+    });
+}
+
+function analizar() {
+  const partidosSeleccionados = Array.from(document.getElementById("partidosAnalisis").selectedOptions).map(o => o.value);
+  const partidos = JSON.parse(localStorage.getItem("partidos")) || [];
+  const datos = partidos.filter(p => partidosSeleccionados.includes(p.id));
+
+  const goles = { aFavor: 0, enContra: 0 };
+  const posiciones = {};
+  const tiempoJugado = {};
+
+  datos.forEach(p => {
+    goles.aFavor += p.estadisticas.golesFavor || 0;
+    goles.enContra += p.estadisticas.golesContra || 0;
+
+    (p.jugadores || []).forEach(j => {
+      if (!tiempoJugado[j.nombre]) tiempoJugado[j.nombre] = 0;
+      tiempoJugado[j.nombre] += j.tiempo || 0;
+
+      const pos = j.posicion || "Sin posición";
+      posiciones[pos] = (posiciones[pos] || 0) + 1;
+    });
+  });
+
+  generarGraficoBarras("graficoGoles", ["Goles a favor", "Goles en contra"], [goles.aFavor, goles.enContra]);
+  generarGraficoTorta("graficoPosiciones", Object.keys(posiciones), Object.values(posiciones));
+  generarGraficoBarras("graficoTiempoJugado", Object.keys(tiempoJugado), Object.values(tiempoJugado));
+}
+
+function generarGraficoBarras(id, etiquetas, datos) {
+  new Chart(document.getElementById(id), {
+    type: 'bar',
+    data: {
+      labels: etiquetas,
+      datasets: [{
+        label: 'Cantidad',
+        backgroundColor: ['#4caf50', '#f44336'],
+        data: datos
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { display: false }
+      }
+    }
+  });
+}
+
+function generarGraficoTorta(id, etiquetas, datos) {
+  new Chart(document.getElementById(id), {
+    type: 'pie',
+    data: {
+      labels: etiquetas,
+      datasets: [{
+        backgroundColor: etiquetas.map(() => '#' + Math.floor(Math.random()*16777215).toString(16)),
+        data: datos
+      }]
+    },
+    options: {
+      responsive: true
+    }
+  });
+}

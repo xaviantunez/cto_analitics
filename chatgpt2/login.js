@@ -1,47 +1,19 @@
-// Datos de usuarios simulados para la autenticación
-const users = [
-    {
-        username: 'admin',
-        password: 'admin123',
-        role: 'administrador'
-    },
-    {
-        username: 'user1',
-        password: 'password1',
-        role: 'usuario'
-    },
-    {
-        username: 'entrenador1',
-        password: 'entrenador123',
-        role: 'entrenador'
-    },
-    {
-        username: 'delegado1',
-        password: 'delegado123',
-        role: 'delegado'
-    }
-];
+document.getElementById("loginForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const username = document.getElementById("username").value.trim();
+  const password = document.getElementById("password").value.trim();
 
-// Función que maneja el login
-document.getElementById('loginForm').addEventListener('submit', function (e) {
-    e.preventDefault();
+  const response = await fetch("data/usuarios.json");
+  const users = await response.json();
 
-    // Obtenemos los valores del formulario
-    const username = document.getElementById('username').value;
-    const password = document.getElementById('password').value;
-    const errorMessage = document.getElementById('errorMessage');
+  const user = users.find(
+    (u) => u.username === username && u.password === password
+  );
 
-    // Comprobamos si el usuario y la contraseña coinciden
-    const user = users.find(user => user.username === username && user.password === password);
-
-    if (user) {
-        // Si el usuario es válido, almacenamos su información en el almacenamiento local
-        localStorage.setItem('loggedInUser', JSON.stringify(user));
-
-        // Redirigimos a la página principal del sistema (por ejemplo, la página de estadísticas)
-        window.location.href = 'estadisticas.html';
-    } else {
-        // Si no se encuentra al usuario, mostramos un mensaje de error
-        errorMessage.textContent = 'Usuario o contraseña incorrectos. Intenta nuevamente.';
-    }
+  if (user) {
+    sessionStorage.setItem("user", JSON.stringify(user));
+    window.location.href = "estadisticas.html";
+  } else {
+    document.getElementById("errorMessage").textContent = "Credenciales inválidas";
+  }
 });

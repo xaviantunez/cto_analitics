@@ -1,13 +1,19 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Equipos - Estadísticas CTO</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mantenimiento de Equipos</title>
+  <link rel="stylesheet" href="style.css" />
   <script defer src="equipos.js"></script>
 </head>
 <body>
+  <header>
+    <img src="img/logo.png" alt="Logo" class="logo" />
+    <h1>Equipos y Jugadores</h1>
+  </header>
+  <div id="nav-placeholder"></div>
   <nav>
     <a href="index.html">Inicio</a>
     <a href="usuarios.html">Usuarios</a>
@@ -16,25 +22,15 @@
     <a href="historico.html">Histórico</a>
     <a href="auditoria.html">Auditoría</a>
   </nav>
-
   <main>
-    <h1>Mantenimiento de Equipos</h1>
+    <h2>Equipos registrados</h2>
+    <div id="listaEquipos"></div>
 
-    <section id="createTeamSection">
-      <h2>Crear Nuevo Equipo</h2>
-      <form id="createTeamForm">
-        <label for="teamName">Nombre del Equipo:</label>
-        <input type="text" id="teamName" required />
-        <button type="submit">Crear Equipo</button>
-      </form>
-    </section>
-
-    <section id="teamsListSection">
-      <h2>Equipos Existentes</h2>
-      <ul id="teamsList">
-        <!-- Equipos existentes se mostrarán aquí -->
-      </ul>
-    </section>
+    <h2>Crear nuevo equipo</h2>
+    <form id="formNuevoEquipo">
+      <input type="text" id="nombreEquipo" placeholder="Nombre del equipo" required />
+      <button type="submit">Crear</button>
+    </form>
   </main>
 </body>
 </html>

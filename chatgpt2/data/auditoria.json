@@ -1,0 +1,14 @@
+[
+  {
+    "usuario": "admin",
+    "accion": "Creó el equipo Tiburones",
+    "fecha": "2024-04-01",
+    "hora": "11:15"
+  },
+  {
+    "usuario": "carlos",
+    "accion": "Editó estadísticas del partido 2024-04-01_1230_Tiburones_Estrellas",
+    "fecha": "2024-04-01",
+    "hora": "13:10"
+  }
+]

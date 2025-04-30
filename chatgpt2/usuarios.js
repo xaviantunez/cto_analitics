@@ -1,75 +1,36 @@
-document.addEventListener('DOMContentLoaded', () => {
-  const createUserForm = document.getElementById('createUserForm');
-  const usernameInput = document.getElementById('username');
-  const passwordInput = document.getElementById('password');
-  const rolesSelect = document.getElementById('roles');
-  const functionsInput = document.getElementById('functions');
-  const usersList = document.getElementById('usersList');
+document.addEventListener("DOMContentLoaded", async () => {
+  const nav = await fetch("nav.html");
+  document.getElementById("nav-placeholder").innerHTML = await nav.text();
 
-  // Cargar usuarios desde el archivo JSON
-  function loadUsers() {
-    fetch('data/usuarios.json')
-      .then(response => response.json())
-      .then(usuarios => {
-        usersList.innerHTML = '';
-        usuarios.forEach(usuario => {
-          const listItem = document.createElement('li');
-          listItem.innerHTML = `
-            <strong>${usuario.username}</strong> (${usuario.roles.join(', ')})
-            <ul>
-              <li>Funciones: ${usuario.functions.join(', ')}</li>
-            </ul>
-            <button onclick="editUser('${usuario.username}')">Editar</button>
-            <button onclick="deleteUser('${usuario.username}')">Eliminar</button>
-          `;
-          usersList.appendChild(listItem);
-        });
-      });
-  }
+  const funciones = await fetch("data/funciones.json").then(res => res.json());
+  const usuarios = await fetch("data/usuarios.json").then(res => res.json());
 
-  // Crear un nuevo usuario
-  createUserForm.addEventListener('submit', (event) => {
-    event.preventDefault();
-    const newUsername = usernameInput.value.trim();
-    const newPassword = passwordInput.value.trim();
-    const newRoles = Array.from(rolesSelect.selectedOptions).map(option => option.value);
-    const newFunctions = functionsInput.value.trim().split(',').map(func => func.trim());
-
-    if (newUsername && newPassword && newRoles.length > 0 && newFunctions.length > 0) {
-      fetch('data/usuarios.json')
-        .then(response => response.json())
-        .then(usuarios => {
-          usuarios.push({
-            username: newUsername,
-            password: newPassword,
-            roles: newRoles,
-            functions: newFunctions
-          });
-          saveUsers(usuarios);
-        });
-    }
+  const funcionesContainer = document.getElementById("funcionesDisponibles");
+  funciones.forEach(func => {
+    const label = document.createElement("label");
+    label.innerHTML = `<input type="checkbox" value="${func}">${func}`;
+    funcionesContainer.appendChild(label);
   });
 
-  // Guardar los usuarios actualizados en el archivo JSON
-  function saveUsers(usuarios) {
-    fetch('data/usuarios.json', {
-      method: 'PUT',
-      body: JSON.stringify(usuarios),
-    }).then(() => {
-      loadUsers();
-    });
-  }
+  const tablaBody = document.querySelector("#tablaUsuarios tbody");
+  usuarios.forEach((u, idx) => {
+    const row = document.createElement("tr");
+    row.innerHTML = `
+      <td>${u.username}</td>
+      <td>${u.role}</td>
+      <td>${u.functions.join(", ")}</td>
+      <td>${u.team || "-"}</td>
+      <td><button onclick="eliminarUsuario(${idx})">Eliminar</button></td>
+    `;
+    tablaBody.appendChild(row);
+  });
 
-  // Función para eliminar un usuario
-  function deleteUser(username) {
-    fetch('data/usuarios.json')
-      .then(response => response.json())
-      .then(usuarios => {
-        const updatedUsers = usuarios.filter(usuario => usuario.username !== username);
-        saveUsers(updatedUsers);
-      });
-  }
-
-  // Cargar los usuarios al iniciar la página
-  loadUsers();
+  document.getElementById("formUsuario").addEventListener("submit", e => {
+    e.preventDefault();
+    alert("Funcionalidad de agregar aún no implementada. Guardado local solo en JSON.");
+  });
 });
+
+function eliminarUsuario(index) {
+  alert("Funcionalidad de eliminar aún no implementada.");
+}

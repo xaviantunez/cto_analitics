@@ -1,0 +1,18 @@
+[
+  {
+    "fecha": "2025-04-29",
+    "equipoLocal": "Equipo A",
+    "equipoVisitante": "Equipo B",
+    "resultado": "victoria",
+    "golesLocal": 3,
+    "golesVisitante": 1
+  },
+  {
+    "fecha": "2025-04-30",
+    "equipoLocal": "Equipo C",
+    "equipoVisitante": "Equipo A",
+    "resultado": "derrota",
+    "golesLocal": 2,
+    "golesVisitante": 3
+  }
+]

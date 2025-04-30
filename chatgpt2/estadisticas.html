@@ -3,80 +3,67 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Estadísticas del Partido - Estadísticas CTO</title>
+  <title>Estadísticas del Partido</title>
   <link rel="stylesheet" href="style.css" />
   <script defer src="estadisticas.js"></script>
 </head>
 <body>
-  <nav>
-    <a href="index.html">Inicio</a>
-    <a href="usuarios.html">Usuarios</a>
-    <a href="equipos.html">Equipos</a>
-    <a href="estadisticas.html" class="active">Estadísticas</a>
-    <a href="historico.html">Histórico</a>
-    <a href="auditoria.html">Auditoría</a>
-  </nav>
-
-  <main>
+  <header>
+    <img src="img/logo.png" alt="Logo" class="logo" />
     <h1>Estadísticas del Partido</h1>
-
-    <section class="info-partido">
-      <img src="camiseta_logo.png" alt="Logo Camiseta" class="logo-camiseta"/>
+  </header>
+  <div id="nav-placeholder"></div>
+  <main>
+    <section class="datos-generales">
       <label>Equipo Local: <input type="text" id="equipoLocal" /></label>
       <label>Equipo Rival: <input type="text" id="equipoRival" /></label>
       <label>Torneo: <input type="text" id="torneo" /></label>
-      <label>Fecha: <input type="date" id="fecha" /></label>
-      <label>Hora: <input type="time" id="hora" /></label>
+      <label>Fecha: <input type="date" id="fechaPartido" /></label>
+      <label>Hora: <input type="time" id="horaPartido" /></label>
+      <img src="img/camiseta.png" alt="Camiseta" class="camiseta" />
     </section>
 
-    <section class="cronometro">
-      <h2>Cronómetro</h2>
-      <p id="tiempo">00:00:00</p>
+    <section class="temporizador">
+      <h2>Temporizador</h2>
+      <div id="cronometro">00:00</div>
       <button id="iniciar">Iniciar</button>
       <button id="pausar">Pausar</button>
       <button id="resetear">Resetear</button>
     </section>
 
-    <section class="alineacion">
-      <h2>Alineación</h2>
-      <ul id="jugadoresAlineados">
-        <!-- Jugadores se cargarán aquí -->
-      </ul>
-    </section>
-
-    <section class="eventos">
-      <h2>Eventos</h2>
-      <div class="eventos-equipos">
-        <div>
-          <h3>Equipo Local</h3>
-          <ul id="eventosLocal">
-            <!-- Eventos Local -->
-          </ul>
-        </div>
-        <div>
-          <h3>Equipo Rival</h3>
-          <ul id="eventosRival">
-            <!-- Eventos Rival -->
-          </ul>
-        </div>
-      </div>
+    <section id="alineacion">
+      <h2>Jugadores Alineados</h2>
+      <table id="tablaJugadores">
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Posición</th>
+            <th>Alineado</th>
+            <th>Eventos</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
     </section>
 
     <section class="resumen">
       <h2>Resumen del Partido</h2>
-      <textarea id="resumenTexto" rows="5" placeholder="Escribe tus impresiones del partido..."></textarea>
+      <textarea id="resumenTexto" rows="5" cols="60" placeholder="Resumen del partido..."></textarea>
     </section>
 
-    <section class="guardar">
+    <section class="eventos">
+      <h2>Eventos del Partido</h2>
+      <div id="listaEventos"></div>
+    </section>
+
+    <section class="acciones-finales">
       <button id="guardarPartido">Guardar Partido</button>
-      <button id="exportarExcel">Exportar a Excel</button>
+      <button id="exportarExcel">Exportar Excel</button>
     </section>
 
-    <section class="registro-eventos">
+    <section id="registroEventos">
       <h2>Registro de Eventos</h2>
-      <ul id="logEventos">
-        <!-- Registro dinámico -->
-      </ul>
+      <ul id="logEventos"></ul>
     </section>
   </main>
 </body>
