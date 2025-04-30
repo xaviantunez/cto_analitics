@@ -11,8 +11,8 @@ document.addEventListener('DOMContentLoaded', function() {
     loadFunctions();
 
     // Event listeners
-    document.getElementById('addUser').addEventListener('click', addUser);
-    document.getElementById('addFunction').addEventListener('click', addFunction);
+    document.getElementById('addUserBtn').addEventListener('click', addUser);
+    document.getElementById('addFunctionBtn').addEventListener('click', addFunction);
     document.getElementById('removeEventType').addEventListener('click', removeFunction);
 });
 
