@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Equipos - Estadísticas Fútbol</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <img src="img/logo.png" alt="Logo Estadísticas Fútbol">
+        </div>
+        <nav>
+            <ul>
+                <li><a href="stats.html">Estadísticas</a></li>
+                <li><a href="teams.html">Equipos</a></li>
+                <li><a href="history.html">Historial</a></li>
+                <li><a href="#" id="logout">Cerrar Sesión</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <h1>Gestión de Equipos</h1>
+        
+        <section class="team-management">
+            <div class="form-group">
+                <label for="newTeamName">Nombre del equipo:</label>
+                <input type="text" id="newTeamName">
+                <button id="addTeamBtn">Añadir Equipo</button>
+            </div>
+            
+            <div class="teams-list">
+                <h2>Lista de Equipos</h2>
+                <select id="teamsSelect"></select>
+                <button id="deleteTeamBtn">Eliminar Equipo</button>
+                
+                <h3>Jugadores del Equipo</h3>
+                <div class="form-group">
+                    <label for="newPlayerName">Nombre del jugador:</label>
+                    <input type="text" id="newPlayerName">
+                    <button id="addPlayerBtn">Añadir Jugador</button>
+                </div>
+                
+                <table id="playersTable">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <script src="js/auth.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/teams.js"></script>	
+	<script src="js/initialSetup.js"></script>	
+</body>
+</html>

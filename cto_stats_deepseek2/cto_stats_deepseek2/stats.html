@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estadísticas Partido - Estadísticas Fútbol</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <img src="img/logo.png" alt="Logo Estadísticas Fútbol">
+        </div>
+        <nav>
+            <ul>
+                <li><a href="stats.html">Estadísticas</a></li>
+                <li><a href="teams.html">Equipos</a></li>
+                <li><a href="history.html">Historial</a></li>
+                <li><a href="#" id="logout">Cerrar Sesión</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="match-info">
+            <h1>Estadísticas del Partido</h1>
+            <div class="form-group">
+                <label for="tournament">Torneo:</label>
+                <input type="text" id="tournament">
+            </div>
+            <div class="form-group">
+                <label for="matchDate">Fecha:</label>
+                <input type="date" id="matchDate">
+            </div>
+            <div class="form-group">
+                <label for="matchTime">Hora:</label>
+                <input type="time" id="matchTime">
+            </div>
+            <div class="teams-container">
+                <div class="team">
+                    <label for="localTeam">Equipo Local:</label>
+                    <select id="localTeam"></select>
+                </div>
+                <div class="team">
+                    <label for="visitorTeam">Equipo Visitante:</label>
+                    <select id="visitorTeam"></select>
+                </div>
+            </div>
+        </section>
+
+        <section class="match-controls">
+            <div class="timer-container">
+                <div id="matchTimer">00:00</div>
+                <div class="timer-buttons">
+                    <button id="startTimer">Iniciar</button>
+                    <button id="pauseTimer">Pausar</button>
+                    <button id="resetTimer">Reiniciar</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="players-section">
+            <div class="team-players" id="localPlayers">
+                <h2>Jugadores Locales</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Jugador</th>
+                            <th>Alineado</th>
+                            <th>Posición</th>
+                            <th>Eventos</th>
+                            <th>Tiempo Jugado</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            <div class="team-players" id="visitorPlayers">
+                <h2>Jugadores Visitantes</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Jugador</th>
+                            <th>Alineado</th>
+                            <th>Posición</th>
+                            <th>Eventos</th>
+                            <th>Tiempo Jugado</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="events-section">
+            <h2>Eventos del Partido</h2>
+            <div class="events-log" id="eventsLog"></div>
+            <button id="exportEvents">Exportar a Excel</button>
+        </section>
+
+        <section class="match-summary">
+            <h2>Resumen del Partido</h2>
+            <textarea id="matchSummary" placeholder="Escribe aquí tus impresiones del partido..."></textarea>
+            <button id="saveMatch">Guardar Partido</button>
+        </section>
+    </main>
+
+    <script src="js/auth.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/stats.js"></script>	
+	<script src="js/initialSetup.js"></script>	
+</body>
+</html>

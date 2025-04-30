@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auditoría - Estadísticas Fútbol</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <img src="img/logo.png" alt="Logo Estadísticas Fútbol">
+        </div>
+        <nav>
+            <ul>
+                <li><a href="stats.html">Estadísticas</a></li>
+                <li><a href="teams.html">Equipos</a></li>
+                <li><a href="history.html">Historial</a></li>
+                <li><a href="audit.html">Auditoría</a></li>
+                <li><a href="analysis.html">Análisis</a></li>
+                <li><a href="#" id="logout">Cerrar Sesión</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <h1>Registro de Auditoría</h1>
+        
+        <section class="audit-filters">
+            <div class="form-group">
+                <label for="auditUser">Usuario:</label>
+                <select id="auditUser">
+                    <option value="all">Todos</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="auditTeam">Equipo:</label>
+                <select id="auditTeam">
+                    <option value="all">Todos</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="auditAction">Acción:</label>
+                <select id="auditAction">
+                    <option value="all">Todas</option>
+                    <option value="login">Inicio de sesión</option>
+                    <option value="logout">Cierre de sesión</option>
+                    <option value="create">Creación</option>
+                    <option value="update">Actualización</option>
+                    <option value="delete">Eliminación</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="auditDateFrom">Desde:</label>
+                <input type="date" id="auditDateFrom">
+            </div>
+            <div class="form-group">
+                <label for="auditDateTo">Hasta:</label>
+                <input type="date" id="auditDateTo">
+            </div>
+            <button id="applyAuditFilters">Aplicar Filtros</button>
+            <button id="exportAuditLog">Exportar a Excel</button>
+        </section>
+        
+        <section class="audit-log">
+            <table id="auditTable">
+                <thead>
+                    <tr>
+                        <th>Fecha/Hora</th>
+                        <th>Usuario</th>
+                        <th>Equipo</th>
+                        <th>Acción</th>
+                        <th>Detalles</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </section>
+    </main>
+
+    <script src="js/auth.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/audit.js"></script>	
+	<script src="js/initialSetup.js"></script>
+	
+</body>
+</html>
