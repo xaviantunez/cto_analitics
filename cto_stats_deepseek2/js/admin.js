@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Event listeners
     document.getElementById('addUserBtn').addEventListener('click', addUser);
     document.getElementById('addFunctionBtn').addEventListener('click', addFunction);
-    document.getElementById('removeEventType').addEventListener('click', removeFunction);
+    //document.getElementById('removeEventType').addEventListener('click', removeFunction);
 });
 
 function loadUsers() {
