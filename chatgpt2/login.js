@@ -8,7 +8,7 @@ document.getElementById("loginForm").addEventListener("submit", function (e) {
     fetch("data/usuarios.json")
         .then(res => res.json())
         .then(data => {
-            const usuario = data.usuarios.find(u => u.username === username && u.password === password);
+            const usuario = data.usuarios.find(u => u.usuario === username && u.contrasena === password);
             if (usuario) {
                 sessionStorage.setItem("usuario", JSON.stringify(usuario));
                 window.location.href = "menu.html";
