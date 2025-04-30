@@ -16,10 +16,10 @@ document.addEventListener("DOMContentLoaded", async () => {
   usuarios.forEach((u, idx) => {
     const row = document.createElement("tr");
     row.innerHTML = `
-      <td>${u.username}</td>
-      <td>${u.role}</td>
-      <td>${u.functions.join(", ")}</td>
-      <td>${u.team || "-"}</td>
+      <td>${u.usuario}</td>
+      <td>${u.rol}</td>
+      <td>${u.funciones.join(", ")}</td>
+      <td>${u.equipo || "-"}</td>
       <td><button onclick="eliminarUsuario(${idx})">Eliminar</button></td>
     `;
     tablaBody.appendChild(row);
