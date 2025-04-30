@@ -1,0 +1,26 @@
+[
+  {
+    "timestamp": "2023-04-10T09:15:00.000Z",
+    "user": "admin",
+    "action": "login",
+    "details": "Inicio de sesión del administrador"
+  },
+  {
+    "timestamp": "2023-04-10T10:30:00.000Z",
+    "user": "admin",
+    "action": "add_user",
+    "details": "Nuevo usuario creado: entrenador1"
+  },
+  {
+    "timestamp": "2023-04-15T16:20:00.000Z",
+    "user": "entrenador1",
+    "action": "login",
+    "details": "Inicio de sesión del entrenador1"
+  },
+  {
+    "timestamp": "2023-04-15T20:45:00.000Z",
+    "user": "entrenador1",
+    "action": "save_match",
+    "details": "Partido guardado: Equipo Verde vs Equipo Rojo"
+  }
+]

@@ -1,132 +1,95 @@
-// js/usuarios.js
+let usuarios = leerDesdeJSON("usuarios") || [];
+let funciones = leerDesdeJSON("funciones") || ["coordinador", "entrenador", "delegado"];
 
-let usuarios = [];
-let auditoria = [];
-let usuarioActual = JSON.parse(localStorage.getItem("usuario_actual")) || null;
-let funciones = usuarioActual?.funciones || [];
-let rol = usuarioActual?.rol || "";
+const listaUsuarios = document.getElementById("listaUsuarios");
+const formUsuario = document.getElementById("formUsuario");
+const funcionesSelect = document.getElementById("funciones");
+const listaFunciones = document.getElementById("listaFunciones");
 
-document.addEventListener("DOMContentLoaded", () => {
-  cargarUsuarios();
-  cargarAuditoria();
-  configurarInterfaz();
-  document.getElementById("crearUsuarioBtn").addEventListener("click", crearUsuario);
-});
+function renderFunciones() {
+    funcionesSelect.innerHTML = "";
+    funciones.forEach(func => {
+        const option = document.createElement("option");
+        option.value = func;
+        option.textContent = func;
+        funcionesSelect.appendChild(option);
+    });
 
-function cargarUsuarios() {
-  fetch('data/usuarios.json')
-    .then(response => response.json())
-    .then(data => {
-      usuarios = data;
-      mostrarUsuarios();
-    })
-    .catch(error => console.error('Error al cargar los usuarios:', error));
+    listaFunciones.innerHTML = "";
+    funciones.forEach(func => {
+        const li = document.createElement("li");
+        li.textContent = func;
+        const btn = document.createElement("button");
+        btn.textContent = "❌";
+        btn.onclick = () => {
+            funciones = funciones.filter(f => f !== func);
+            guardarEnJSON("funciones", funciones);
+            renderFunciones();
+        };
+        li.appendChild(btn);
+        listaFunciones.appendChild(li);
+    });
 }
 
-function guardarUsuarios() {
-  fetch('data/usuarios.json', {
-    method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(usuarios)
-  })
-  .then(response => response.json())
-  .then(() => console.log('Usuarios guardados correctamente'))
-  .catch(error => console.error('Error al guardar los usuarios:', error));
+function renderUsuarios() {
+    listaUsuarios.innerHTML = "";
+    usuarios.forEach((user, index) => {
+        const li = document.createElement("li");
+        li.textContent = `${user.usuario} (${user.rol}) - Equipo: ${user.equipo} - Funciones: ${user.funciones.join(", ")}`;
+        const btn = document.createElement("button");
+        btn.textContent = "❌";
+        btn.onclick = () => {
+            registrarAuditoria(obtenerUsuarioActual(), "Eliminar usuario", `Se eliminó a ${user.usuario}`);
+            usuarios.splice(index, 1);
+            guardarEnJSON("usuarios", usuarios);
+            renderUsuarios();
+        };
+        li.appendChild(btn);
+        listaUsuarios.appendChild(li);
+    });
 }
 
-function cargarAuditoria() {
-  fetch('data/auditoria.json')
-    .then(response => response.json())
-    .then(data => {
-      auditoria = data;
-    })
-    .catch(error => console.error('Error al cargar la auditoría:', error));
+formUsuario.onsubmit = e => {
+    e.preventDefault();
+    const usuario = document.getElementById("usuario").value.trim();
+    const contrasena = document.getElementById("contrasena").value.trim();
+    const rol = document.getElementById("rol").value;
+    const equipo = document.getElementById("equipo").value.trim();
+    const funcionesSeleccionadas = Array.from(funcionesSelect.selectedOptions).map(opt => opt.value);
+
+    if (!usuario || !contrasena || funcionesSeleccionadas.length === 0) {
+        mostrarAlerta("Todos los campos son obligatorios", "error");
+        return;
+    }
+
+    const existente = usuarios.find(u => u.usuario === usuario);
+    if (existente) {
+        Object.assign(existente, { contrasena, rol, equipo, funciones: funcionesSeleccionadas });
+        registrarAuditoria(obtenerUsuarioActual(), "Editar usuario", `Editado ${usuario}`);
+    } else {
+        usuarios.push({ usuario, contrasena, rol, equipo, funciones: funcionesSeleccionadas });
+        registrarAuditoria(obtenerUsuarioActual(), "Crear usuario", `Usuario ${usuario}`);
+    }
+
+    guardarEnJSON("usuarios", usuarios);
+    formUsuario.reset();
+    renderUsuarios();
+};
+
+document.getElementById("formFuncion").onsubmit = e => {
+    e.preventDefault();
+    const nueva = document.getElementById("nuevaFuncion").value.trim();
+    if (nueva && !funciones.includes(nueva)) {
+        funciones.push(nueva);
+        guardarEnJSON("funciones", funciones);
+        renderFunciones();
+        registrarAuditoria(obtenerUsuarioActual(), "Crear función", `Función añadida: ${nueva}`);
+    }
+};
+
+function obtenerUsuarioActual() {
+    return JSON.parse(sessionStorage.getItem("usuario")) || { usuario: "sistema", rol: "sistema", funciones: [] };
 }
 
-function guardarAuditoria() {
-  fetch('data/auditoria.json', {
-    method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(auditoria)
-  })
-  .then(response => response.json())
-  .then(() => console.log('Auditoría guardada correctamente'))
-  .catch(error => console.error('Error al guardar la auditoría:', error));
-}
-
-function configurarInterfaz() {
-  if (rol !== "administrador") {
-    document.getElementById("crearUsuarioBtn").style.display = "none";
-  }
-}
-
-function mostrarUsuarios() {
-  const contenedor = document.getElementById("usuariosContainer");
-  contenedor.innerHTML = "";
-  usuarios.forEach((usuario, index) => {
-    const div = document.createElement("div");
-    div.className = "usuario-card";
-    div.innerHTML = `
-      <h3>${usuario.nombre}</h3>
-      <p>Rol: ${usuario.rol}</p>
-      <p>Funciones: ${usuario.funciones.join(", ")}</p>
-      ${rol === "administrador" ? `
-        <button onclick="editarUsuario(${index})">Editar</button>
-        <button onclick="borrarUsuario(${index})">Borrar</button>
-      ` : ""}
-    `;
-    contenedor.appendChild(div);
-  });
-}
-
-function crearUsuario() {
-  const nombre = prompt("Introduce el nombre del nuevo usuario:");
-  const rol = prompt("Introduce el rol del nuevo usuario (administrador/usuario):");
-  const funciones = prompt("Introduce las funciones del usuario (separadas por coma):").split(",").map(f => f.trim());
-
-  if (nombre && rol && funciones.length > 0) {
-    usuarios.push({ nombre, rol, funciones });
-    guardarUsuarios();
-    mostrarUsuarios();
-    registrarAccion(`Creó el usuario ${nombre} con rol ${rol} y funciones ${funciones.join(", ")}`);
-  } else {
-    alert("Todos los campos son obligatorios.");
-  }
-}
-
-function editarUsuario(index) {
-  const usuario = usuarios[index];
-  const nombre = prompt("Editar nombre del usuario:", usuario.nombre);
-  const rol = prompt("Editar rol del usuario:", usuario.rol);
-  const funciones = prompt("Editar funciones del usuario (separadas por coma):", usuario.funciones.join(", ")).split(",").map(f => f.trim());
-
-  if (nombre && rol && funciones.length > 0) {
-    usuarios[index] = { nombre, rol, funciones };
-    guardarUsuarios();
-    mostrarUsuarios();
-    registrarAccion(`Editó el usuario ${nombre} con rol ${rol} y funciones ${funciones.join(", ")}`);
-  } else {
-    alert("Todos los campos son obligatorios.");
-  }
-}
-
-function borrarUsuario(index) {
-  const usuario = usuarios[index];
-  if (confirm(`¿Estás seguro de que deseas borrar al usuario ${usuario.nombre}?`)) {
-    usuarios.splice(index, 1);
-    guardarUsuarios();
-    mostrarUsuarios();
-    registrarAccion(`Borró al usuario ${usuario.nombre}`);
-  }
-}
-
-function registrarAccion(accion) {
-  const ahora = new Date();
-  auditoria.push({
-    usuario: usuarioActual?.nombre || "desconocido",
-    accion: accion,
-    fecha: ahora.toLocaleDateString(),
-    hora: ahora.toLocaleTimeString()
-  });
-  guardarAuditoria();
-}
+renderFunciones();
+renderUsuarios();

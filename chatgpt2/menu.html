@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Menú Principal</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="menu-container">
+        <h2>Menú Principal</h2>
+        <ul id="menuOpciones" class="menu-list"></ul>
+        <button onclick="cerrarSesion()">Cerrar sesión</button>
+    </div>
+
+    <script>
+        const usuario = JSON.parse(sessionStorage.getItem("usuario"));
+        const menuOpciones = document.getElementById("menuOpciones");
+
+        if (!usuario) {
+            window.location.href = "index.html";
+        }
+
+        const opciones = [
+            { nombre: "Configuración de usuarios", archivo: "usuarios.html", permiso: "administrador" },
+            { nombre: "Mantenimiento de equipos", archivo: "equipos.html", permiso: "usuario" },
+            { nombre: "Estadísticas del partido", archivo: "estadisticas.html", permiso: "usuario" },
+            { nombre: "Historial de partidos", archivo: "historial.html", permiso: "usuario" },
+            { nombre: "Auditoría", archivo: "auditoria.html", permiso: "administrador" },
+            { nombre: "Análisis de partidos", archivo: "analisis.html", permiso: "usuario" }
+        ];
+
+        opciones.forEach(opcion => {
+            if (
+                (usuario.rol === "administrador" && opcion.permiso === "administrador") ||
+                (opcion.permiso === "usuario")
+            ) {
+                const li = document.createElement("li");
+                const a = document.createElement("a");
+                a.href = opcion.archivo;
+                a.textContent = opcion.nombre;
+                li.appendChild(a);
+                menuOpciones.appendChild(li);
+            }
+        });
+
+        function cerrarSesion() {
+            sessionStorage.removeItem("usuario");
+            window.location.href = "index.html";
+        }
+    </script>
+</body>
+</html>

@@ -1,52 +1,44 @@
-document.addEventListener("DOMContentLoaded", async () => {
-  const nav = await fetch("nav.html");
-  document.getElementById("nav-placeholder").innerHTML = await nav.text();
-  mostrarAuditoria();
-});
+const auditoria = leerDesdeJSON("auditoria") || [];
 
-function mostrarAuditoria(filtro = null) {
-  const auditoria = JSON.parse(localStorage.getItem("auditoria")) || [];
-  const tbody = document.getElementById("tablaAuditoria");
-  tbody.innerHTML = "";
+const filtroUsuario = document.getElementById("filtroUsuario");
+const filtroAccion = document.getElementById("filtroAccion");
+const filtroFecha = document.getElementById("filtroFecha");
+const tabla = document.getElementById("tablaAuditoria");
+
+document.getElementById("btnFiltrar").onclick = () => renderTabla();
+document.getElementById("btnReset").onclick = () => {
+  filtroUsuario.value = "";
+  filtroAccion.value = "";
+  filtroFecha.value = "";
+  renderTabla();
+};
+
+function renderTabla() {
+  const usuario = filtroUsuario.value.toLowerCase();
+  const accion = filtroAccion.value.toLowerCase();
+  const fecha = filtroFecha.value;
+
+  tabla.innerHTML = "";
 
   auditoria
-    .filter(entry => {
-      if (!filtro) return true;
-      const u = filtro.usuario ? entry.usuario.includes(filtro.usuario) : true;
-      const e = filtro.equipo ? entry.equipo.includes(filtro.equipo) : true;
-      const f = filtro.fecha ? entry.fecha === filtro.fecha : true;
-      return u && e && f;
+    .filter(reg => {
+      const fechaRegistro = new Date(reg.fechaHora).toISOString().split("T")[0];
+      return (
+        (!usuario || reg.usuario.toLowerCase().includes(usuario)) &&
+        (!accion || reg.accion.toLowerCase().includes(accion)) &&
+        (!fecha || fecha === fechaRegistro)
+      );
     })
-    .forEach(entry => {
-      const tr = document.createElement("tr");
-      tr.innerHTML = `
-        <td>${entry.fecha}</td>
-        <td>${entry.hora}</td>
-        <td>${entry.usuario}</td>
-        <td>${entry.equipo}</td>
-        <td>${entry.accion}</td>
+    .forEach(reg => {
+      const row = document.createElement("tr");
+      row.innerHTML = `
+        <td>${reg.fechaHora}</td>
+        <td>${reg.usuario}</td>
+        <td>${reg.accion}</td>
+        <td>${reg.detalle}</td>
       `;
-      tbody.appendChild(tr);
+      tabla.appendChild(row);
     });
 }
 
-function filtrarAuditoria() {
-  const usuario = document.getElementById("usuarioFiltro").value;
-  const equipo = document.getElementById("equipoFiltro").value;
-  const fecha = document.getElementById("fechaFiltro").value;
-  mostrarAuditoria({ usuario, equipo, fecha });
-}
-
-function exportarExcel() {
-  const auditoria = JSON.parse(localStorage.getItem("auditoria")) || [];
-  let csv = "Fecha,Hora,Usuario,Equipo,Acción\n";
-  auditoria.forEach(a =>
-    csv += `${a.fecha},${a.hora},${a.usuario},${a.equipo},${a.accion}\n`
-  );
-
-  const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
-  const link = document.createElement("a");
-  link.href = URL.createObjectURL(blob);
-  link.download = "auditoria.csv";
-  link.click();
-}
+renderTabla();

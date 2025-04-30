@@ -1,177 +1,234 @@
-// history.js - Histórico de partidos
-document.addEventListener('DOMContentLoaded', function() {
-    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-    if (!currentUser) {
-        window.location.href = 'index.html';
-        return;
-    }
+// history.js - Gestión del histórico de partidos
+const MatchHistory = {
+    currentPage: 1,
+    itemsPerPage: 10,
+    filters: {
+        team: '',
+        dateFrom: '',
+        dateTo: '',
+        tournament: ''
+    },
 
-    // Cargar datos iniciales
-    loadTeamsFilter();
-    loadMatches();
+    init: function() {
+        if (!Auth.checkAuth()) {
+            window.location.href = 'index.html';
+            return;
+        }
 
-    // Event listeners
-    document.getElementById('applyFilter').addEventListener('click', loadMatches);
-    document.getElementById('closeDetails').addEventListener('click', closeMatchDetails);
-});
+        this.loadData();
+        this.setupEventListeners();
+        this.renderTeamFilter();
+        this.renderMatches();
+    },
 
-function loadTeamsFilter() {
-    const teams = JSON.parse(localStorage.getItem('teams')) || [];
-    const filterTeamSelect = document.getElementById('filterTeam');
-    
-    // Limpiar opciones excepto la primera
-    while (filterTeamSelect.options.length > 1) {
-        filterTeamSelect.remove(1);
-    }
-    
-    // Añadir equipos
-    teams.forEach(team => {
-        const option = document.createElement('option');
-        option.value = team.name;
-        option.textContent = team.name;
-        filterTeamSelect.appendChild(option);
-    });
-}
+    loadData: function() {
+        this.matches = DB.load('matches.json');
+        this.teams = DB.load('teams.json');
+    },
 
-function loadMatches() {
-    const teamFilter = document.getElementById('filterTeam').value;
-    const dateFrom = document.getElementById('filterDateFrom').value;
-    const dateTo = document.getElementById('filterDateTo').value;
-    
-    const matches = JSON.parse(localStorage.getItem('matches')) || [];
-    let filteredMatches = [...matches];
-    
-    // Aplicar filtros
-    if (teamFilter && teamFilter !== 'all') {
-        filteredMatches = filteredMatches.filter(m => 
-            m.localTeam === teamFilter || m.rivalTeam === teamFilter
-        );
-    }
-    
-    if (dateFrom) {
-        filteredMatches = filteredMatches.filter(m => m.date >= dateFrom);
-    }
-    
-    if (dateTo) {
-        filteredMatches = filteredMatches.filter(m => m.date <= dateTo);
-    }
-    
-    // Ordenar por fecha (más reciente primero)
-    filteredMatches.sort((a, b) => new Date(b.date + 'T' + b.time) - new Date(a.date + 'T' + a.time));
-    
-    // Mostrar resultados
-    renderMatchesTable(filteredMatches);
-}
-
-function renderMatchesTable(matches) {
-    const tbody = document.querySelector('#matchesTable tbody');
-    tbody.innerHTML = '';
-    
-    matches.forEach(match => {
-        const tr = document.createElement('tr');
-        tr.dataset.matchId = match.id;
-        tr.addEventListener('click', () => showMatchDetails(match.id));
-        
-        // Fecha
-        const tdDate = document.createElement('td');
-        tdDate.textContent = formatDate(match.date);
-        tr.appendChild(tdDate);
-        
-        // Local
-        const tdLocal = document.createElement('td');
-        tdLocal.textContent = match.localTeam;
-        tr.appendChild(tdLocal);
-        
-        // Visitante
-        const tdRival = document.createElement('td');
-        tdRival.textContent = match.rivalTeam;
-        tr.appendChild(tdRival);
-        
-        // Torneo
-        const tdTournament = document.createElement('td');
-        tdTournament.textContent = match.tournament || '-';
-        tr.appendChild(tdTournament);
-        
-        // Acciones
-        const tdActions = document.createElement('td');
-        const viewBtn = document.createElement('button');
-        viewBtn.textContent = 'Ver';
-        viewBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            showMatchDetails(match.id);
+    setupEventListeners: function() {
+        document.getElementById('filterForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            this.applyFilters();
         });
-        tdActions.appendChild(viewBtn);
-        tr.appendChild(tdActions);
+
+        document.getElementById('resetFilters').addEventListener('click', () => {
+            this.resetFilters();
+        });
+
+        document.getElementById('prevPage').addEventListener('click', () => {
+            if (this.currentPage > 1) {
+                this.currentPage--;
+                this.renderMatches();
+            }
+        });
+
+        document.getElementById('nextPage').addEventListener('click', () => {
+            const totalPages = Math.ceil(this.getFilteredMatches().length / this.itemsPerPage);
+            if (this.currentPage < totalPages) {
+                this.currentPage++;
+                this.renderMatches();
+            }
+        });
+    },
+
+    renderTeamFilter: function() {
+        const teamSelect = document.getElementById('filterTeam');
         
-        tbody.appendChild(tr);
+        // Opción para todos los equipos
+        const allOption = document.createElement('option');
+        allOption.value = '';
+        allOption.textContent = 'Todos los equipos';
+        teamSelect.appendChild(allOption);
+
+        // Opción para el equipo del usuario (si tiene uno)
+        if (Auth.currentUser.team) {
+            const userTeamOption = document.createElement('option');
+            userTeamOption.value = Auth.currentUser.team;
+            userTeamOption.textContent = `Mi equipo (${Auth.currentUser.team})`;
+            teamSelect.appendChild(userTeamOption);
+        }
+
+        // Resto de equipos
+        this.teams.forEach(team => {
+            const option = document.createElement('option');
+            option.value = team.name;
+            option.textContent = team.name;
+            teamSelect.appendChild(option);
+        });
+    },
+
+    applyFilters: function() {
+        this.filters = {
+            team: document.getElementById('filterTeam').value,
+            dateFrom: document.getElementById('filterDateFrom').value,
+            dateTo: document.getElementById('filterDateTo').value,
+            tournament: document.getElementById('filterTournament').value
+        };
+
+        this.currentPage = 1;
+        this.renderMatches();
+    },
+
+    resetFilters: function() {
+        document.getElementById('filterTeam').value = '';
+        document.getElementById('filterDateFrom').value = '';
+        document.getElementById('filterDateTo').value = '';
+        document.getElementById('filterTournament').value = '';
+
+        this.filters = {
+            team: '',
+            dateFrom: '',
+            dateTo: '',
+            tournament: ''
+        };
+
+        this.currentPage = 1;
+        this.renderMatches();
+    },
+
+    getFilteredMatches: function() {
+        return this.matches.filter(match => {
+            // Filtrar por equipo
+            if (this.filters.team) {
+                if (match.localTeam !== this.filters.team && match.rivalTeam !== this.filters.team) {
+                    return false;
+                }
+            }
+
+            // Filtrar por torneo
+            if (this.filters.tournament && !match.tournament.toLowerCase().includes(this.filters.tournament.toLowerCase())) {
+                return false;
+            }
+
+            // Filtrar por fecha
+            const matchDate = new Date(match.date);
+            
+            if (this.filters.dateFrom) {
+                const filterDate = new Date(this.filters.dateFrom);
+                if (matchDate < filterDate) {
+                    return false;
+                }
+            }
+
+            if (this.filters.dateTo) {
+                const filterDate = new Date(this.filters.dateTo);
+                if (matchDate > filterDate) {
+                    return false;
+                }
+            }
+
+            return true;
+        }).sort((a, b) => new Date(b.date) - new Date(a.date));
+    },
+
+    renderMatches: function() {
+        const filteredMatches = this.getFilteredMatches();
+        const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+        const paginatedMatches = filteredMatches.slice(startIndex, startIndex + this.itemsPerPage);
+
+        // Renderizar partidos
+        const matchesContainer = document.getElementById('matchesContainer');
+        matchesContainer.innerHTML = paginatedMatches.map(match => this.renderMatchCard(match)).join('');
+
+        // Actualizar controles de paginación
+        this.updatePaginationControls(filteredMatches.length);
+
+        // Actualizar contador de resultados
+        document.getElementById('resultsCount').textContent = `Mostrando ${startIndex + 1}-${Math.min(startIndex + this.itemsPerPage, filteredMatches.length)} de ${filteredMatches.length} partidos`;
+    },
+
+    renderMatchCard: function(match) {
+        const matchDate = new Date(match.date);
+        const formattedDate = matchDate.toLocaleDateString('es-ES', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+
+        // Calcular goles
+        const homeGoals = match.events.filter(e => e.type === 'Gol' && e.team === match.localTeam).length;
+        const awayGoals = match.events.filter(e => e.type === 'Gol' && e.team === match.rivalTeam).length;
+
+        // Verificar permisos para editar
+        const canEdit = Auth.hasRole('admin') || 
+                       Auth.hasFunction('coordinador') || 
+                       (Auth.hasFunction('entrenador') && Auth.currentUser.team === match.localTeam) || 
+                       (Auth.hasFunction('delegado') && Auth.currentUser.team === match.localTeam);
+
+        return `
+            <div class="match-card">
+                <div class="match-header">
+                    <h3>${match.tournament}</h3>
+                    <span class="match-date">${formattedDate}</span>
+                </div>
+                <div class="match-teams">
+                    <div class="team ${Auth.currentUser.team === match.localTeam ? 'user-team' : ''}">
+                        <span class="team-name">${match.localTeam}</span>
+                        <span class="team-score">${homeGoals}</span>
+                    </div>
+                    <div class="vs">vs</div>
+                    <div class="team ${Auth.currentUser.team === match.rivalTeam ? 'user-team' : ''}">
+                        <span class="team-score">${awayGoals}</span>
+                        <span class="team-name">${match.rivalTeam}</span>
+                    </div>
+                </div>
+                <div class="match-summary">
+                    ${match.summary || 'Sin resumen disponible'}
+                </div>
+                <div class="match-actions">
+                    <button class="btn view-match" data-matchid="${match.id}">Ver detalles</button>
+                    ${canEdit ? `<button class="btn edit-match" data-matchid="${match.id}">Editar</button>` : ''}
+                </div>
+            </div>
+        `;
+    },
+
+    updatePaginationControls: function(totalItems) {
+        const totalPages = Math.ceil(totalItems / this.itemsPerPage);
+        document.getElementById('currentPage').textContent = this.currentPage;
+        document.getElementById('totalPages').textContent = totalPages;
+
+        document.getElementById('prevPage').disabled = this.currentPage <= 1;
+        document.getElementById('nextPage').disabled = this.currentPage >= totalPages;
+    }
+};
+
+document.addEventListener('DOMContentLoaded', function() {
+    if (document.getElementById('matchesContainer')) {
+        MatchHistory.init();
+    }
+
+    // Delegación de eventos para los botones dinámicos
+    document.addEventListener('click', function(e) {
+        if (e.target.classList.contains('view-match')) {
+            const matchId = e.target.dataset.matchid;
+            window.location.href = `stats.html?match=${matchId}`;
+        }
+
+        if (e.target.classList.contains('edit-match')) {
+            const matchId = e.target.dataset.matchid;
+            window.location.href = `stats.html?edit=${matchId}`;
+        }
     });
-}
-
-function showMatchDetails(matchId) {
-    const matches = JSON.parse(localStorage.getItem('matches')) || [];
-    const match = matches.find(m => m.id === matchId);
-    
-    if (!match) return;
-    
-    // Mostrar información básica
-    document.getElementById('detailTeams').textContent = `${match.localTeam} vs ${match.rivalTeam}`;
-    document.getElementById('detailDate').textContent = `${formatDate(match.date)} a las ${match.time}`;
-    document.getElementById('detailTournament').textContent = `Torneo: ${match.tournament || 'No especificado'}`;
-    
-    // Mostrar estadísticas
-    const statsDiv = document.getElementById('detailStats');
-    statsDiv.innerHTML = '';
-    
-    // Tiempo total
-    const timeDiv = document.createElement('div');
-    timeDiv.innerHTML = `<strong>Tiempo total:</strong> ${formatTime(match.timerSeconds || 0)}`;
-    statsDiv.appendChild(timeDiv);
-    
-    // Eventos por equipo
-    const localEvents = match.events.filter(e => e.teamType === 'local');
-    const rivalEvents = match.events.filter(e => e.teamType === 'rival');
-    
-    const eventsDiv = document.createElement('div');
-    eventsDiv.innerHTML = `
-        <h4>Eventos</h4>
-        <p><strong>${match.localTeam}:</strong> ${localEvents.length} eventos</p>
-        <p><strong>${match.rivalTeam}:</strong> ${rivalEvents.length} eventos</p>
-    `;
-    statsDiv.appendChild(eventsDiv);
-    
-    // Jugadores alineados
-    const localPlayers = match.localPlayers.filter(p => p.aligned);
-    const rivalPlayers = match.rivalPlayers.filter(p => p.aligned);
-    
-    const playersDiv = document.createElement('div');
-    playersDiv.innerHTML = `
-        <h4>Jugadores alineados</h4>
-        <p><strong>${match.localTeam}:</strong> ${localPlayers.length} jugadores</p>
-        <p><strong>${match.rivalTeam}:</strong> ${rivalPlayers.length} jugadores</p>
-    `;
-    statsDiv.appendChild(playersDiv);
-    
-    // Mostrar resumen
-    document.getElementById('detailSummary').textContent = match.summary || 'No hay resumen disponible';
-    
-    // Mostrar sección de detalles
-    document.getElementById('matchDetails').style.display = 'block';
-    document.querySelector('.matches-section').style.display = 'none';
-}
-
-function closeMatchDetails() {
-    document.getElementById('matchDetails').style.display = 'none';
-    document.querySelector('.matches-section').style.display = 'block';
-}
-
-function formatDate(dateStr) {
-    if (!dateStr) return '';
-    const options = { year: 'numeric', month: 'long', day: 'numeric' };
-    return new Date(dateStr).toLocaleDateString('es-ES', options);
-}
-
-function formatTime(seconds) {
-    const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-}
+});

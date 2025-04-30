@@ -1,0 +1,38 @@
+[
+  {
+    "id": 1,
+    "username": "admin",
+    "password": "admin123",
+    "name": "Administrador",
+    "roles": ["admin"],
+    "functions": ["all"],
+    "team": null
+  },
+  {
+    "id": 2,
+    "username": "entrenador1",
+    "password": "entrenador123",
+    "name": "Juan Pérez",
+    "roles": ["user"],
+    "functions": ["entrenador"],
+    "team": "Equipo Verde"
+  },
+  {
+    "id": 3,
+    "username": "delegado1",
+    "password": "delegado123",
+    "name": "Ana Gómez",
+    "roles": ["user"],
+    "functions": ["delegado"],
+    "team": "Equipo Verde"
+  },
+  {
+    "id": 4,
+    "username": "coordinador1",
+    "password": "coordinador123",
+    "name": "Carlos Ruiz",
+    "roles": ["user"],
+    "functions": ["coordinador"],
+    "team": null
+  }
+]

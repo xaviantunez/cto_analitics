@@ -1,259 +1,221 @@
-// admin.js - Gestión de usuarios, roles y funciones
-document.addEventListener('DOMContentLoaded', function() {
-    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-    if (!currentUser || currentUser.role !== 'admin') {
-        window.location.href = 'index.html';
-        return;
-    }
+// admin.js - Panel de administración de usuarios y configuración
+const Admin = {
+    init: function() {
+        if (!Auth.checkAuth(['admin'])) {
+            window.location.href = 'index.html';
+            return;
+        }
 
-    // Cargar datos
-    loadUsers();
-    loadFunctions();
+        this.loadData();
+        this.setupEventListeners();
+        this.renderUserList();
+        this.renderRoleManagement();
+    },
 
-    // Event listeners
-    document.getElementById('addUserBtn').addEventListener('click', addUser);
-    document.getElementById('addFunctionBtn').addEventListener('click', addFunction);
-    //document.getElementById('removeEventType').addEventListener('click', removeFunction);
-});
+    loadData: function() {
+        this.users = JSON.parse(JSON.stringify(Auth.users));
+        this.teams = JSON.parse(localStorage.getItem('teams')) || [];
+        this.rolesConfig = JSON.parse(localStorage.getItem('roles_config')) || {
+            roles: ['admin', 'user'],
+            functions: ['coordinador', 'entrenador', 'delegado']
+        };
+    },
 
-function loadUsers() {
-    const users = JSON.parse(localStorage.getItem('users'));
-    const teams = JSON.parse(localStorage.getItem('teams')) || [];
-    const functions = JSON.parse(localStorage.getItem('functions'));
-    const tbody = document.querySelector('#usersTable tbody');
-    tbody.innerHTML = '';
+    setupEventListeners: function() {
+        document.getElementById('addUserForm').addEventListener('submit', this.handleAddUser.bind(this));
+        document.getElementById('saveRolesBtn').addEventListener('click', this.saveRoles.bind(this));
+        document.getElementById('addFunctionBtn').addEventListener('click', this.addFunction.bind(this));
+    },
 
-    if(users=="" || users==null) return;
-    users.forEach(user => {
-        const tr = document.createElement('tr');
-        
-        // Usuario
-        const tdUser = document.createElement('td');
-        tdUser.textContent = user.username;
-        tr.appendChild(tdUser);
-        
-        // Rol
-        const tdRole = document.createElement('td');
-        tdRole.textContent = user.role === 'admin' ? 'Administrador' : 'Usuario';
-        tr.appendChild(tdRole);
-        
-        // Equipo
-        const tdTeam = document.createElement('td');
-        const teamSelect = document.createElement('select');
-        teamSelect.className = 'team-select';
-        teamSelect.dataset.username = user.username;
-        
-        const emptyOption = document.createElement('option');
-        emptyOption.value = '';
-        emptyOption.textContent = 'Ninguno';
-        teamSelect.appendChild(emptyOption);
-        
-        teams.forEach(team => {
-            const option = document.createElement('option');
-            option.value = team.name;
-            option.textContent = team.name;
-            option.selected = user.team === team.name;
-            teamSelect.appendChild(option);
-        });
-        
-        teamSelect.addEventListener('change', updateUserTeam);
-        tdTeam.appendChild(teamSelect);
-        tr.appendChild(tdTeam);
-        
-        // Funciones
-        const tdFunctions = document.createElement('td');
-        const functionsDiv = document.createElement('div');
-        functionsDiv.className = 'user-functions';
-        
-        functions.forEach(func => {
-            const label = document.createElement('label');
-            const checkbox = document.createElement('input');
-            checkbox.type = 'checkbox';
-            checkbox.value = func;
-            checkbox.dataset.username = user.username;
-            checkbox.checked = user.functions && user.functions.includes(func);
-            checkbox.addEventListener('change', updateUserFunctions);
+    renderUserList: function() {
+        const tableBody = document.getElementById('usersTable').querySelector('tbody');
+        tableBody.innerHTML = '';
+
+        this.users.forEach(user => {
+            const row = document.createElement('tr');
             
-            label.appendChild(checkbox);
-            label.appendChild(document.createTextNode(func));
-            functionsDiv.appendChild(label);
+            row.innerHTML = `
+                <td>${user.username}</td>
+                <td>${user.name}</td>
+                <td>
+                    <select class="user-roles" multiple>
+                        ${this.rolesConfig.roles.map(role => `
+                            <option value="${role}" ${user.roles.includes(role) ? 'selected' : ''}>${role}</option>
+                        `).join('')}
+                    </select>
+                </td>
+                <td>
+                    <select class="user-functions" multiple>
+                        ${this.rolesConfig.functions.map(func => `
+                            <option value="${func}" ${user.functions.includes(func) ? 'selected' : ''}>${func}</option>
+                        `).join('')}
+                    </select>
+                </td>
+                <td>
+                    <select class="user-team">
+                        <option value="">Ninguno</option>
+                        ${this.teams.map(team => `
+                            <option value="${team.name}" ${user.team === team.name ? 'selected' : ''}>${team.name}</option>
+                        `).join('')}
+                    </select>
+                </td>
+                <td>
+                    <button class="btn save-user" data-userid="${user.id}">Guardar</button>
+                    <button class="btn danger delete-user" data-userid="${user.id}">Eliminar</button>
+                </td>
+            `;
+
+            // Event listeners para los selects
+            row.querySelector('.user-roles').addEventListener('change', (e) => {
+                user.roles = Array.from(e.target.selectedOptions).map(opt => opt.value);
+            });
+
+            row.querySelector('.user-functions').addEventListener('change', (e) => {
+                user.functions = Array.from(e.target.selectedOptions).map(opt => opt.value);
+            });
+
+            row.querySelector('.user-team').addEventListener('change', (e) => {
+                user.team = e.target.value;
+            });
+
+            // Botones de acción
+            row.querySelector('.save-user').addEventListener('click', () => this.saveUser(user.id));
+            row.querySelector('.delete-user').addEventListener('click', () => this.deleteUser(user.id));
+
+            tableBody.appendChild(row);
         });
-        
-        tdFunctions.appendChild(functionsDiv);
-        tr.appendChild(tdFunctions);
-        
-        // Acciones
-        const tdActions = document.createElement('td');
-        if (user.role !== 'admin') {
-            const deleteBtn = document.createElement('button');
-            deleteBtn.textContent = 'Eliminar';
-            deleteBtn.className = 'delete-btn';
-            deleteBtn.dataset.username = user.username;
-            deleteBtn.addEventListener('click', deleteUser);
-            tdActions.appendChild(deleteBtn);
-        }
-        tr.appendChild(tdActions);
-        
-        tbody.appendChild(tr);
-    });
-}
+    },
 
-function loadFunctions() {
-    const functions = JSON.parse(localStorage.getItem('functions'));
-    const ul = document.getElementById('functionsList');
-    ul.innerHTML = '';
-    if(functions=="" || functions==null) return;
-    functions.forEach(func => {
-        const li = document.createElement('li');
-        li.textContent = func;
-        ul.appendChild(li);
-    });
-}
+    renderRoleManagement: function() {
+        const rolesList = document.getElementById('rolesList');
+        const functionsList = document.getElementById('functionsList');
 
-function addUser() {
-    const username = document.getElementById('newUsername').value;
-    const password = document.getElementById('newPassword').value;
-    const role = document.getElementById('userRole').value;
-    
-    if (!username || !password) {
-        alert('Por favor, complete todos los campos');
-        return;
-    }
+        rolesList.innerHTML = this.rolesConfig.roles.map(role => `
+            <div class="role-item">
+                <span>${role}</span>
+                ${role !== 'admin' && role !== 'user' ? 
+                    `<button class="btn danger delete-role" data-role="${role}">Eliminar</button>` : ''}
+            </div>
+        `).join('');
 
-    const users = JSON.parse(localStorage.getItem('users'));
-    if(users!="" && users!=null){        
-        if (users.some(u => u.username === username)) {
-            alert('El usuario ya existe');
+        functionsList.innerHTML = this.rolesConfig.functions.map(func => `
+            <div class="function-item">
+                <span>${func}</span>
+                <button class="btn danger delete-function" data-function="${func}">Eliminar</button>
+            </div>
+        `).join('');
+
+        // Event listeners para eliminar roles y funciones
+        document.querySelectorAll('.delete-role').forEach(btn => {
+            btn.addEventListener('click', (e) => this.deleteRole(e.target.dataset.role));
+        });
+
+        document.querySelectorAll('.delete-function').forEach(btn => {
+            btn.addEventListener('click', (e) => this.deleteFunction(e.target.dataset.function));
+        });
+    },
+
+    handleAddUser: function(e) {
+        e.preventDefault();
+        
+        const username = document.getElementById('newUsername').value;
+        const password = document.getElementById('newPassword').value;
+        const name = document.getElementById('newName').value;
+
+        if (!username || !password || !name) {
+            alert('Todos los campos son obligatorios');
             return;
         }
-    }
-    
-    const newUser = {
-        username,
-        password,
-        role,
-        team: null,
-        functions: []
-    };
-    
-    users.push(newUser);
-    localStorage.setItem('users', JSON.stringify(users));
-    logAudit('add_user', `Nuevo usuario creado: ${username}`);
-    
-    // Limpiar campos
-    document.getElementById('newUsername').value = '';
-    document.getElementById('newPassword').value = '';
-    
-    // Recargar lista
-    loadUsers();
-}
 
-function deleteUser(e) {
-    const username = e.target.dataset.username;
-    if (confirm(`¿Está seguro de eliminar al usuario ${username}?`)) {
-        const users = JSON.parse(localStorage.getItem('users'));
-        const updatedUsers = users.filter(u => u.username !== username);
-        localStorage.setItem('users', JSON.stringify(updatedUsers));
-        logAudit('delete_user', `Usuario eliminado: ${username}`);
-        loadUsers();
-    }
-}
-
-function updateUserTeam(e) {
-    const username = e.target.dataset.username;
-    const team = e.target.value;
-    
-    const users = JSON.parse(localStorage.getItem('users'));
-    const user = users.find(u => u.username === username);
-    if (user) {
-        user.team = team;
-        localStorage.setItem('users', JSON.stringify(users));
-        logAudit('update_user_team', `Equipo actualizado para ${username}: ${team || 'Ninguno'}`, team);
-    }
-}
-
-function updateUserFunctions(e) {
-    const username = e.target.dataset.username;
-    const func = e.target.value;
-    const isChecked = e.target.checked;
-    
-    const users = JSON.parse(localStorage.getItem('users'));
-    const user = users.find(u => u.username === username);
-    if (user) {
-        if (!user.functions) user.functions = [];
-        
-        if (isChecked && !user.functions.includes(func)) {
-            user.functions.push(func);
-        } else if (!isChecked) {
-            user.functions = user.functions.filter(f => f !== func);
-        }
-        
-        localStorage.setItem('users', JSON.stringify(users));
-        logAudit('update_user_functions', `Funciones actualizadas para ${username}: ${user.functions.join(', ')}`, user.team);
-    }
-}
-
-function addFunction() {
-    const newFunc = document.getElementById('newFunction').value.trim();
-    if (!newFunc) {
-        alert('Por favor, ingrese un nombre para la nueva función');
-        return;
-    }
-
-    
-    const functions = JSON.parse(localStorage.getItem('functions'));
-    if(functions!="" && functions!=null){
-        if (functions.includes(newFunc)) {
-            alert('Esta función ya existe');
+        if (this.users.some(u => u.username === username)) {
+            alert('El nombre de usuario ya existe');
             return;
         }
-    }
-    
-    functions.push(newFunc);
-    localStorage.setItem('functions', JSON.stringify(functions));
-    logAudit('add_function', `Nueva función creada: ${newFunc}`);
-    
-    // Limpiar campo
-    document.getElementById('newFunction').value = '';
-    
-    // Recargar listas
-    loadFunctions();
-    loadUsers();
-}
 
-function removeFunction() {
-    const funcToRemove = document.getElementById('newFunction').value.trim();
-    if (!funcToRemove) {
-        alert('Por favor, ingrese el nombre de la función a eliminar');
-        return;
-    }
-    
-    const functions = JSON.parse(localStorage.getItem('functions'));
-    if (!functions.includes(funcToRemove)) {
-        alert('Esta función no existe');
-        return;
-    }
-    
-    if (confirm(`¿Está seguro de eliminar la función "${funcToRemove}"? Esto afectará a los usuarios que la tengan asignada.`)) {
-        const updatedFunctions = functions.filter(f => f !== funcToRemove);
-        localStorage.setItem('functions', JSON.stringify(updatedFunctions));
-        
-        // Actualizar usuarios que tenían esta función
-        const users = JSON.parse(localStorage.getItem('users'));
-        users.forEach(user => {
-            if (user.functions && user.functions.includes(funcToRemove)) {
-                user.functions = user.functions.filter(f => f !== funcToRemove);
+        const newUser = {
+            username,
+            password,
+            name,
+            roles: [],
+            functions: [],
+            team: null
+        };
+
+        if (Auth.addUser(newUser)) {
+            this.loadData();
+            this.renderUserList();
+            e.target.reset();
+        } else {
+            alert('No tienes permisos para realizar esta acción');
+        }
+    },
+
+    saveUser: function(userId) {
+        const user = this.users.find(u => u.id === userId);
+        if (!user) return;
+
+        if (Auth.updateUser(userId, user)) {
+            alert('Usuario actualizado correctamente');
+        } else {
+            alert('Error al actualizar el usuario');
+        }
+    },
+
+    deleteUser: function(userId) {
+        if (confirm('¿Estás seguro de eliminar este usuario?')) {
+            if (Auth.deleteUser(userId)) {
+                this.loadData();
+                this.renderUserList();
+            } else {
+                alert('No tienes permisos para realizar esta acción');
             }
-        });
-        localStorage.setItem('users', JSON.stringify(users));
-        
-        logAudit('remove_function', `Función eliminada: ${funcToRemove}`);
-        
-        // Limpiar campo
-        document.getElementById('newFunction').value = '';
-        
-        // Recargar listas
-        loadFunctions();
-        loadUsers();
+        }
+    },
+
+    saveRoles: function() {
+        const newRole = document.getElementById('newRole').value.trim();
+        if (newRole && !this.rolesConfig.roles.includes(newRole)) {
+            this.rolesConfig.roles.push(newRole);
+            document.getElementById('newRole').value = '';
+            this.renderRoleManagement();
+            localStorage.setItem('roles_config', JSON.stringify(this.rolesConfig));
+            Auth.logAction('update_roles', 'Roles actualizados');
+        }
+    },
+
+    addFunction: function() {
+        const newFunction = document.getElementById('newFunction').value.trim();
+        if (newFunction && !this.rolesConfig.functions.includes(newFunction)) {
+            this.rolesConfig.functions.push(newFunction);
+            document.getElementById('newFunction').value = '';
+            this.renderRoleManagement();
+            localStorage.setItem('roles_config', JSON.stringify(this.rolesConfig));
+            Auth.logAction('update_functions', 'Funciones actualizadas');
+        }
+    },
+
+    deleteRole: function(role) {
+        if (confirm(`¿Eliminar el rol "${role}"?`)) {
+            this.rolesConfig.roles = this.rolesConfig.roles.filter(r => r !== role);
+            this.renderRoleManagement();
+            localStorage.setItem('roles_config', JSON.stringify(this.rolesConfig));
+            Auth.logAction('delete_role', `Rol eliminado: ${role}`);
+        }
+    },
+
+    deleteFunction: function(func) {
+        if (confirm(`¿Eliminar la función "${func}"?`)) {
+            this.rolesConfig.functions = this.rolesConfig.functions.filter(f => f !== func);
+            this.renderRoleManagement();
+            localStorage.setItem('roles_config', JSON.stringify(this.rolesConfig));
+            Auth.logAction('delete_function', `Función eliminada: ${func}`);
+        }
     }
-}
+};
+
+// Inicializar la página de admin
+document.addEventListener('DOMContentLoaded', function() {
+    if (document.getElementById('usersTable')) {
+        Admin.init();
+    }
+});

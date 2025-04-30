@@ -1,164 +1,239 @@
-// audit.js - Registros de auditoría
+// audit.js - Registro y visualización de acciones de auditoría
+const Audit = {
+    currentPage: 1,
+    itemsPerPage: 20,
+    filters: {
+        user: '',
+        action: '',
+        team: '',
+        dateFrom: '',
+        dateTo: ''
+    },
+
+    init: function() {
+        if (!Auth.checkAuth(['admin'])) {
+            window.location.href = 'index.html';
+            return;
+        }
+
+        this.loadData();
+        this.setupEventListeners();
+        this.renderAuditLog();
+    },
+
+    loadData: function() {
+        this.auditLog = DB.load('audit_log.json');
+        this.teams = DB.load('teams.json');
+        this.users = DB.load('users.json');
+    },
+
+    setupEventListeners: function() {
+        document.getElementById('filterForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            this.applyFilters();
+        });
+
+        document.getElementById('resetFilters').addEventListener('click', () => {
+            this.resetFilters();
+        });
+
+        document.getElementById('prevPage').addEventListener('click', () => {
+            if (this.currentPage > 1) {
+                this.currentPage--;
+                this.renderAuditLog();
+            }
+        });
+
+        document.getElementById('nextPage').addEventListener('click', () => {
+            const totalPages = Math.ceil(this.getFilteredLog().length / this.itemsPerPage);
+            if (this.currentPage < totalPages) {
+                this.currentPage++;
+                this.renderAuditLog();
+            }
+        });
+
+        document.getElementById('exportAuditBtn').addEventListener('click', () => {
+            this.exportAuditLog();
+        });
+    },
+
+    applyFilters: function() {
+        this.filters = {
+            user: document.getElementById('filterUser').value,
+            action: document.getElementById('filterAction').value,
+            team: document.getElementById('filterTeam').value,
+            dateFrom: document.getElementById('filterDateFrom').value,
+            dateTo: document.getElementById('filterDateTo').value
+        };
+
+        this.currentPage = 1;
+        this.renderAuditLog();
+    },
+
+    resetFilters: function() {
+        document.getElementById('filterUser').value = '';
+        document.getElementById('filterAction').value = '';
+        document.getElementById('filterTeam').value = '';
+        document.getElementById('filterDateFrom').value = '';
+        document.getElementById('filterDateTo').value = '';
+
+        this.filters = {
+            user: '',
+            action: '',
+            team: '',
+            dateFrom: '',
+            dateTo: ''
+        };
+
+        this.currentPage = 1;
+        this.renderAuditLog();
+    },
+
+    getFilteredLog: function() {
+        return this.auditLog.filter(entry => {
+            // Filtrar por usuario
+            if (this.filters.user && !entry.user.toLowerCase().includes(this.filters.user.toLowerCase())) {
+                return false;
+            }
+
+            // Filtrar por acción
+            if (this.filters.action && !entry.action.toLowerCase().includes(this.filters.action.toLowerCase())) {
+                return false;
+            }
+
+            // Filtrar por equipo (si los detalles contienen el nombre del equipo)
+            if (this.filters.team) {
+                const team = this.teams.find(t => t.id === this.filters.team);
+                if (team && !entry.details.toLowerCase().includes(team.name.toLowerCase())) {
+                    return false;
+                }
+            }
+
+            // Filtrar por fecha
+            if (this.filters.dateFrom) {
+                const entryDate = new Date(entry.timestamp);
+                const filterDate = new Date(this.filters.dateFrom);
+                if (entryDate < filterDate) {
+                    return false;
+                }
+            }
+
+            if (this.filters.dateTo) {
+                const entryDate = new Date(entry.timestamp);
+                const filterDate = new Date(this.filters.dateTo);
+                if (entryDate > filterDate) {
+                    return false;
+                }
+            }
+
+            return true;
+        }).sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+    },
+
+    renderAuditLog: function() {
+        const filteredLog = this.getFilteredLog();
+        const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+        const paginatedLog = filteredLog.slice(startIndex, startIndex + this.itemsPerPage);
+
+        // Renderizar entradas
+        const logContainer = document.getElementById('auditLogContainer');
+        logContainer.innerHTML = paginatedLog.map(entry => this.renderAuditEntry(entry)).join('');
+
+        // Actualizar controles de paginación
+        this.updatePaginationControls(filteredLog.length);
+
+        // Actualizar contador de resultados
+        document.getElementById('resultsCount').textContent = `Mostrando ${startIndex + 1}-${Math.min(startIndex + this.itemsPerPage, filteredLog.length)} de ${filteredLog.length} registros`;
+    },
+
+    renderAuditEntry: function(entry) {
+        const date = new Date(entry.timestamp);
+        const formattedDate = date.toLocaleDateString('es-ES', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+
+        return `
+            <div class="audit-entry">
+                <div class="audit-header">
+                    <span class="audit-timestamp">${formattedDate}</span>
+                    <span class="audit-user">${entry.user}</span>
+                    <span class="audit-action">${this.formatAction(entry.action)}</span>
+                </div>
+                <div class="audit-details">${entry.details}</div>
+            </div>
+        `;
+    },
+
+    formatAction: function(action) {
+        const actionsMap = {
+            'login': 'Inicio de sesión',
+            'logout': 'Cierre de sesión',
+            'create_user': 'Creación de usuario',
+            'update_user': 'Actualización de usuario',
+            'delete_user': 'Eliminación de usuario',
+            'add_team': 'Creación de equipo',
+            'delete_team': 'Eliminación de equipo',
+            'rename_team': 'Renombrado de equipo',
+            'add_player': 'Añadir jugador',
+            'delete_player': 'Eliminar jugador',
+            'rename_player': 'Renombrar jugador',
+            'change_player_number': 'Cambiar número de jugador',
+            'save_match': 'Guardar partido',
+            'export_data': 'Exportar datos',
+            'add_event_type': 'Añadir tipo de evento',
+            'update_roles': 'Actualizar roles',
+            'update_functions': 'Actualizar funciones'
+        };
+
+        return actionsMap[action] || action;
+    },
+
+    updatePaginationControls: function(totalItems) {
+        const totalPages = Math.ceil(totalItems / this.itemsPerPage);
+        document.getElementById('currentPage').textContent = this.currentPage;
+        document.getElementById('totalPages').textContent = totalPages;
+
+        document.getElementById('prevPage').disabled = this.currentPage <= 1;
+        document.getElementById('nextPage').disabled = this.currentPage >= totalPages;
+    },
+
+    exportAuditLog: function() {
+        const filteredLog = this.getFilteredLog();
+        let csvContent = "Fecha,Usuario,Acción,Detalles\n";
+
+        filteredLog.forEach(entry => {
+            const date = new Date(entry.timestamp);
+            const formattedDate = date.toLocaleDateString('es-ES', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+
+            csvContent += `"${formattedDate}","${entry.user}","${this.formatAction(entry.action)}","${entry.details.replace(/"/g, '""')}"\n`;
+        });
+
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        const url = URL.createObjectURL(blob);
+        
+        link.setAttribute('href', url);
+        link.setAttribute('download', `auditoria_${new Date().toISOString().slice(0, 10)}.csv`);
+        link.style.visibility = 'hidden';
+        
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+};
+
 document.addEventListener('DOMContentLoaded', function() {
-    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-    if (!currentUser || currentUser.role !== 'admin') {
-        window.location.href = 'index.html';
-        return;
+    if (document.getElementById('auditLogContainer')) {
+        Audit.init();
     }
-
-    // Cargar filtros
-    loadUsersFilter();
-    loadTeamsFilter();
-    loadActionsFilter();
-    
-    // Cargar registros
-    loadAuditLogs();
-
-    // Event listeners
-    document.getElementById('applyAuditFilter').addEventListener('click', loadAuditLogs);
-    document.getElementById('exportAudit').addEventListener('click', exportAuditLogs);
 });
-
-function loadUsersFilter() {
-    const users = JSON.parse(localStorage.getItem('users')) || [];
-    const userSelect = document.getElementById('auditUser');
-    
-    // Limpiar opciones excepto la primera
-    while (userSelect.options.length > 1) {
-        userSelect.remove(1);
-    }
-    
-    // Añadir usuarios
-    users.forEach(user => {
-        const option = document.createElement('option');
-        option.value = user.username;
-        option.textContent = user.username;
-        userSelect.appendChild(option);
-    });
-}
-
-function loadTeamsFilter() {
-    const teams = JSON.parse(localStorage.getItem('teams')) || [];
-    const teamSelect = document.getElementById('auditTeam');
-    
-    // Limpiar opciones excepto la primera
-    while (teamSelect.options.length > 1) {
-        teamSelect.remove(1);
-    }
-    
-    // Añadir equipos
-    teams.forEach(team => {
-        const option = document.createElement('option');
-        option.value = team.name;
-        option.textContent = team.name;
-        teamSelect.appendChild(option);
-    });
-}
-
-function loadActionsFilter() {
-    const actions = ['login', 'login_failed', 'logout', 'add_user', 'delete_user', 
-                    'update_user_team', 'update_user_functions', 'add_function', 
-                    'remove_function', 'add_team', 'delete_team', 'add_player', 
-                    'delete_player', 'start_match', 'pause_match', 'reset_match', 
-                    'add_event', 'save_match'];
-    
-    const actionSelect = document.getElementById('auditAction');
-    
-    // Limpiar opciones excepto la primera
-    while (actionSelect.options.length > 1) {
-        actionSelect.remove(1);
-    }
-    
-    // Añadir acciones
-    actions.forEach(action => {
-        const option = document.createElement('option');
-        option.value = action;
-        option.textContent = action.replace('_', ' ');
-        actionSelect.appendChild(option);
-    });
-}
-
-function loadAuditLogs() {
-    const userFilter = document.getElementById('auditUser').value;
-    const actionFilter = document.getElementById('auditAction').value;
-    const teamFilter = document.getElementById('auditTeam').value;
-    const dateFrom = document.getElementById('auditDateFrom').value;
-    const dateTo = document.getElementById('auditDateTo').value;
-    
-    const logs = JSON.parse(localStorage.getItem('auditLog')) || [];
-    let filteredLogs = [...logs];
-    
-    // Aplicar filtros
-    if (userFilter && userFilter !== 'all') {
-        filteredLogs = filteredLogs.filter(log => log.username === userFilter);
-    }
-    
-    if (actionFilter && actionFilter !== 'all') {
-        filteredLogs = filteredLogs.filter(log => log.action === actionFilter);
-    }
-    
-    if (teamFilter && teamFilter !== 'all') {
-        filteredLogs = filteredLogs.filter(log => log.team === teamFilter);
-    }
-    
-    if (dateFrom) {
-        filteredLogs = filteredLogs.filter(log => log.timestamp.split('T')[0] >= dateFrom);
-    }
-    
-    if (dateTo) {
-        filteredLogs = filteredLogs.filter(log => log.timestamp.split('T')[0] <= dateTo);
-    }
-    
-    // Ordenar por fecha (más reciente primero)
-    filteredLogs.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-    
-    // Mostrar resultados
-    renderAuditTable(filteredLogs);
-}
-
-function renderAuditTable(logs) {
-    const tbody = document.querySelector('#auditTable tbody');
-    tbody.innerHTML = '';
-    
-    logs.forEach(log => {
-        const tr = document.createElement('tr');
-        
-        // Fecha/Hora
-        const tdTimestamp = document.createElement('td');
-        tdTimestamp.textContent = formatDateTime(log.timestamp);
-        tr.appendChild(tdTimestamp);
-        
-        // Usuario
-        const tdUser = document.createElement('td');
-        tdUser.textContent = log.username;
-        tr.appendChild(tdUser);
-        
-        // Acción
-        const tdAction = document.createElement('td');
-        tdAction.textContent = log.action.replace('_', ' ');
-        tr.appendChild(tdAction);
-        
-        // Detalles
-        const tdDetails = document.createElement('td');
-        tdDetails.textContent = log.details;
-        tr.appendChild(tdDetails);
-        
-        // Equipo
-        const tdTeam = document.createElement('td');
-        tdTeam.textContent = log.team || '-';
-        tr.appendChild(tdTeam);
-        
-        tbody.appendChild(tr);
-    });
-}
-
-function exportAuditLogs() {
-    // Implementar exportación a Excel
-    alert('Funcionalidad de exportación a Excel se implementará aquí');
-}
-
-function formatDateTime(timestamp) {
-    if (!timestamp) return '';
-    const date = new Date(timestamp);
-    return date.toLocaleString('es-ES');
-}

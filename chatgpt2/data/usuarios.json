@@ -1,23 +1,16 @@
 [
-  {
-    "usuario": "admin",
-    "clave": "admin123",
-    "rol": "administrador",
-    "equipo": "todos",
-    "funciones": ["coordinador", "entrenador", "delegado"]
-  },
-  {
-    "usuario": "carlos",
-    "clave": "carlos123",
-    "rol": "usuario",
-    "equipo": "Tiburones",
-    "funciones": ["entrenador"]
-  },
-  {
-    "usuario": "laura",
-    "clave": "laura123",
-    "rol": "usuario",
-    "equipo": "Estrellas",
-    "funciones": ["delegado"]
-  }
+    {
+        "usuario": "admin",
+        "contrasena": "admin123",
+        "rol": "administrador",
+        "equipo": "",
+        "funciones": ["coordinador"]
+    },
+    {
+        "usuario": "entrenador1",
+        "contrasena": "pass123",
+        "rol": "usuario",
+        "equipo": "Juveniles",
+        "funciones": ["entrenador"]
+    }
 ]

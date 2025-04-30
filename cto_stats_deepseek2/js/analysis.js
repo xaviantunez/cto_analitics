@@ -1,300 +1,344 @@
-// analysis.js - Análisis de datos
-document.addEventListener('DOMContentLoaded', function() {
-    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-    if (!currentUser) {
-        window.location.href = 'index.html';
-        return;
-    }
-
-    // Cargar filtros
-    loadTeamsFilter();
-    loadPlayersFilter();
-    loadEventsFilter();
-    
-    // Cargar datos iniciales
-    loadAnalysis();
-
-    // Event listeners
-    document.getElementById('applyAnalysis').addEventListener('click', loadAnalysis);
-    document.getElementById('exportAnalysis').addEventListener('click', exportAnalysis);
-});
-
-function loadTeamsFilter() {
-    const teams = JSON.parse(localStorage.getItem('teams')) || [];
-    const teamSelect = document.getElementById('analysisTeam');
-    
-    // Limpiar opciones excepto la primera
-    while (teamSelect.options.length > 1) {
-        teamSelect.remove(1);
-    }
-    
-    // Añadir equipos
-    teams.forEach(team => {
-        const option = document.createElement('option');
-        option.value = team.name;
-        option.textContent = team.name;
-        teamSelect.appendChild(option);
-    });
-}
-
-function loadPlayersFilter() {
-    const teams = JSON.parse(localStorage.getItem('teams')) || [];
-    const playerSelect = document.getElementById('analysisPlayer');
-    
-    // Limpiar opciones excepto la primera
-    playerSelect.innerHTML = '';
-    
-    const emptyOption = document.createElement('option');
-    emptyOption.value = 'all';
-    emptyOption.textContent = 'Todos los jugadores';
-    playerSelect.appendChild(emptyOption);
-    
-    // Añadir jugadores de todos los equipos
-    teams.forEach(team => {
-        team.players.forEach(player => {
-            const option = document.createElement('option');
-            option.value = player;
-            option.textContent = `${player} (${team.name})`;
-            playerSelect.appendChild(option);
-        });
-    });
-}
-
-function loadEventsFilter() {
-    const events = JSON.parse(localStorage.getItem('events')) || ['Gol', 'Tarjeta amarilla', 'Tarjeta roja', 'Falta', 'Tiro a puerta', 'Corner'];
-    const eventSelect = document.getElementById('analysisEvent');
-    
-    // Limpiar opciones excepto la primera
-    while (eventSelect.options.length > 1) {
-        eventSelect.remove(1);
-    }
-    
-    // Añadir eventos
-    events.forEach(event => {
-        const option = document.createElement('option');
-        option.value = event;
-        option.textContent = event;
-        eventSelect.appendChild(option);
-    });
-}
-
-function loadAnalysis() {
-    const teamFilter = document.getElementById('analysisTeam').value;
-    const playerFilter = document.getElementById('analysisPlayer').value;
-    const eventFilter = document.getElementById('analysisEvent').value;
-    const dateFrom = document.getElementById('analysisDateFrom').value;
-    const dateTo = document.getElementById('analysisDateTo').value;
-    
-    const matches = JSON.parse(localStorage.getItem('matches')) || [];
-    let filteredMatches = [...matches];
-    
-    // Aplicar filtros de fecha
-    if (dateFrom) {
-        filteredMatches = filteredMatches.filter(m => m.date >= dateFrom);
-    }
-    
-    if (dateTo) {
-        filteredMatches = filteredMatches.filter(m => m.date <= dateTo);
-    }
-    
-    // Procesar datos
-    const stats = {
-        totalMatches: 0,
-        wins: 0,
-        losses: 0,
-        draws: 0,
-        players: {},
-        events: {},
-        positions: {}
-    };
-    
-    filteredMatches.forEach(match => {
-        // Solo considerar partidos del equipo filtrado
-        if (teamFilter && teamFilter !== 'all' && match.localTeam !== teamFilter) {
+// analysis.js - Análisis de estadísticas y generación de gráficos
+const Analysis = {
+    init: function() {
+        if (!Auth.checkAuth()) {
+            window.location.href = 'index.html';
             return;
         }
         
-        stats.totalMatches++;
+        this.loadData();
+        this.setupEventListeners();
+        this.renderTeamSelector();
+        this.renderAnalysis();
+    },
+    
+    loadData: function() {
+        this.matches = DB.load('matches.json');
+        this.teams = DB.load('teams.json');
+        this.users = DB.load('users.json');
+    },
+    
+    setupEventListeners: function() {
+        document.getElementById('teamSelector').addEventListener('change', this.renderAnalysis.bind(this));
+        document.getElementById('timeRange').addEventListener('change', this.renderAnalysis.bind(this));
+        document.getElementById('exportAnalysisBtn').addEventListener('click', this.exportAnalysis.bind(this));
+    },
+    
+    renderTeamSelector: function() {
+        const selector = document.getElementById('teamSelector');
+        selector.innerHTML = '';
         
-        // Determinar resultado (victoria, derrota o empate)
-        const localGoals = match.events.filter(e => 
-            e.teamType === 'local' && e.type === 'Gol' && e.value > 0
-        ).length;
+        const allOption = document.createElement('option');
+        allOption.value = 'all';
+        allOption.textContent = 'Todos los equipos';
+        selector.appendChild(allOption);
         
-        const rivalGoals = match.events.filter(e => 
-            e.teamType === 'rival' && e.type === 'Gol' && e.value > 0
-        ).length;
+        this.teams.forEach(team => {
+            const option = document.createElement('option');
+            option.value = team.id;
+            option.textContent = team.name;
+            selector.appendChild(option);
+        });
+    },
+    
+    renderAnalysis: function() {
+        const teamId = document.getElementById('teamSelector').value;
+        const timeRange = document.getElementById('timeRange').value;
         
-        if (localGoals > rivalGoals) stats.wins++;
-        else if (localGoals < rivalGoals) stats.losses++;
-        else stats.draws++;
+        let filteredMatches = [...this.matches];
         
-        // Procesar jugadores
-        match.localPlayers.forEach(player => {
-            if (playerFilter !== 'all' && player.name !== playerFilter) {
-                return;
+        // Filtrar por equipo
+        if (teamId !== 'all') {
+            const team = this.teams.find(t => t.id === teamId);
+            if (team) {
+                filteredMatches = filteredMatches.filter(m => 
+                    m.localTeam === team.name || m.rivalTeam === team.name
+                );
             }
-            
-            if (!stats.players[player.name]) {
-                stats.players[player.name] = {
-                    name: player.name,
-                    timePlayed: 0,
-                    matchesPlayed: 0,
-                    starts: 0,
-                    positions: {},
-                    events: {}
-                };
-            }
-            
-            // Tiempo jugado
-            if (player.aligned) {
-                stats.players[player.name].timePlayed += match.timerSeconds || 0;
-                stats.players[player.name].matchesPlayed++;
-                
-                // Contar como titular si jugó más de la mitad del partido
-                if ((match.timerSeconds || 0) > 45 * 60 / 2) {
-                    stats.players[player.name].starts++;
-                }
-            }
-            
-            // Posiciones
-            if (player.position) {
-                if (!stats.players[player.name].positions[player.position]) {
-                    stats.players[player.name].positions[player.position] = 0;
-                }
-                stats.players[player.name].positions[player.position] += match.timerSeconds || 0;
-            }
+        }
+        
+        // Filtrar por rango de tiempo
+        const now = new Date();
+        let startDate = new Date(0);
+        
+        if (timeRange === 'last-month') {
+            startDate = new Date(now.setMonth(now.getMonth() - 1));
+        } else if (timeRange === 'last-year') {
+            startDate = new Date(now.setFullYear(now.getFullYear() - 1));
+        }
+        
+        filteredMatches = filteredMatches.filter(m => {
+            return new Date(m.createdAt) >= startDate;
         });
         
-        // Procesar eventos
-        match.events.forEach(event => {
-            if (eventFilter !== 'all' && event.type !== eventFilter) {
-                return;
-            }
-            
-            // Eventos por jugador
-            if (stats.players[event.player]) {
-                if (!stats.players[event.player].events[event.type]) {
-                    stats.players[event.player].events[event.type] = 0;
-                }
-                stats.players[event.player].events[event.type] += event.value;
-            }
-            
-            // Eventos generales
-            if (!stats.events[event.type]) {
-                stats.events[event.type] = 0;
-            }
-            stats.events[event.type] += event.value;
-        });
-    });
+        // Renderizar resultados
+        this.renderStatsSummary(filteredMatches, teamId);
+        this.renderPlayerStats(filteredMatches, teamId);
+        this.renderCharts(filteredMatches, teamId);
+    },
     
-    // Mostrar resultados
-    renderStatsSummary(stats);
-    renderCharts(stats);
-}
-
-function renderStatsSummary(stats) {
-    const summaryDiv = document.getElementById('statsSummary');
-    summaryDiv.innerHTML = '';
-    
-    // Resumen general
-    const generalDiv = document.createElement('div');
-    generalDiv.innerHTML = `
-        <h3>Resumen General</h3>
-        <p><strong>Partidos jugados:</strong> ${stats.totalMatches}</p>
-        <p><strong>Victorias:</strong> ${stats.wins} (${stats.totalMatches ? Math.round(stats.wins/stats.totalMatches*100) : 0}%)</p>
-        <p><strong>Derrotas:</strong> ${stats.losses} (${stats.totalMatches ? Math.round(stats.losses/stats.totalMatches*100) : 0}%)</p>
-        <p><strong>Empates:</strong> ${stats.draws} (${stats.totalMatches ? Math.round(stats.draws/stats.totalMatches*100) : 0}%)</p>
-    `;
-    summaryDiv.appendChild(generalDiv);
-    
-    // Eventos
-    const eventsDiv = document.createElement('div');
-    eventsDiv.innerHTML = '<h3>Eventos</h3>';
-    
-    for (const [event, count] of Object.entries(stats.events)) {
-        const p = document.createElement('p');
-        p.innerHTML = `<strong>${event}:</strong> ${count}`;
-        eventsDiv.appendChild(p);
-    }
-    
-    summaryDiv.appendChild(eventsDiv);
-    
-    // Jugadores (solo si hay filtro de jugador o no hay filtro de equipo)
-    const teamFilter = document.getElementById('analysisTeam').value;
-    const playerFilter = document.getElementById('analysisPlayer').value;
-    
-    if (playerFilter !== 'all' || (teamFilter === 'all' && Object.keys(stats.players).length <= 10)) {
-        const playersDiv = document.createElement('div');
-        playersDiv.innerHTML = '<h3>Jugadores</h3>';
+    renderStatsSummary: function(matches, teamId) {
+        const statsContainer = document.getElementById('statsSummary');
         
-        for (const player of Object.values(stats.players)) {
-            const playerDiv = document.createElement('div');
-            playerDiv.className = 'player-stats';
-            playerDiv.innerHTML = `
-                <h4>${player.name}</h4>
-                <p><strong>Partidos jugados:</strong> ${player.matchesPlayed}</p>
-                <p><strong>Titularidades:</strong> ${player.starts}</p>
-                <p><strong>Tiempo jugado:</strong> ${formatTime(player.timePlayed)}</p>
+        if (teamId === 'all') {
+            statsContainer.innerHTML = `
+                <div class="stat-card">
+                    <h3>Partidos registrados</h3>
+                    <div class="stat-value">${matches.length}</div>
+                </div>
             `;
-            
-            // Eventos del jugador
-            if (Object.keys(player.events).length > 0) {
-                const eventsP = document.createElement('p');
-                eventsP.innerHTML = '<strong>Eventos:</strong>';
-                playerDiv.appendChild(eventsP);
-                
-                const eventsList = document.createElement('ul');
-                for (const [event, count] of Object.entries(player.events)) {
-                    const li = document.createElement('li');
-                    li.textContent = `${event}: ${count}`;
-                    eventsList.appendChild(li);
-                }
-                playerDiv.appendChild(eventsList);
-            }
-            
-            playersDiv.appendChild(playerDiv);
+            return;
         }
         
-        summaryDiv.appendChild(playersDiv);
-    }
-}
-
-function renderCharts(stats) {
-    // Gráfico de resultados
-    const winsLossesCtx = document.getElementById('winsLossesChart').getContext('2d');
-    new Chart(winsLossesCtx, {
-        type: 'pie',
-        data: {
-            labels: ['Victorias', 'Derrotas', 'Empates'],
-            datasets: [{
-                data: [stats.wins, stats.losses, stats.draws],
-                backgroundColor: ['#4CAF50', '#F44336', '#FFC107']
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                title: {
-                    display: true,
-                    text: 'Distribución de resultados'
-                }
-            }
-        }
-    });
+        const team = this.teams.find(t => t.id === teamId);
+        if (!team) return;
+        
+        const stats = Utils.calculateStats(matches, team.name);
+        
+        statsContainer.innerHTML = `
+            <div class="stat-card">
+                <h3>Partidos jugados</h3>
+                <div class="stat-value">${stats.played}</div>
+            </div>
+            <div class="stat-card">
+                <h3>Victorias</h3>
+                <div class="stat-value">${stats.wins}</div>
+                <div class="stat-label">${stats.played > 0 ? Math.round((stats.wins / stats.played) * 100) : 0}%</div>
+            </div>
+            <div class="stat-card">
+                <h3>Empates</h3>
+                <div class="stat-value">${stats.draws}</div>
+                <div class="stat-label">${stats.played > 0 ? Math.round((stats.draws / stats.played) * 100) : 0}%</div>
+            </div>
+            <div class="stat-card">
+                <h3>Derrotas</h3>
+                <div class="stat-value">${stats.losses}</div>
+                <div class="stat-label">${stats.played > 0 ? Math.round((stats.losses / stats.played) * 100) : 0}%</div>
+            </div>
+            <div class="stat-card">
+                <h3>Goles a favor</h3>
+                <div class="stat-value">${stats.goalsFor}</div>
+                <div class="stat-label">${stats.played > 0 ? (stats.goalsFor / stats.played).toFixed(1) : 0} por partido</div>
+            </div>
+            <div class="stat-card">
+                <h3>Goles en contra</h3>
+                <div class="stat-value">${stats.goalsAgainst}</div>
+                <div class="stat-label">${stats.played > 0 ? (stats.goalsAgainst / stats.played).toFixed(1) : 0} por partido</div>
+            </div>
+            <div class="stat-card">
+                <h3>Vallas invictas</h3>
+                <div class="stat-value">${stats.cleanSheets}</div>
+                <div class="stat-label">${stats.played > 0 ? Math.round((stats.cleanSheets / stats.played) * 100) : 0}%</div>
+            </div>
+        `;
+    },
     
-    // Gráfico de tiempo jugado por jugador
-    const players = Object.values(stats.players);
-    if (players.length > 0) {
-        const playingTimeCtx = document.getElementById('playingTimeChart').getContext('2d');
-        new Chart(playingTimeCtx, {
-            type: 'bar',
+    renderPlayerStats: function(matches, teamId) {
+        const container = document.getElementById('playerStats');
+        
+        if (teamId === 'all') {
+            container.innerHTML = '<p>Selecciona un equipo para ver estadísticas de jugadores</p>';
+            return;
+        }
+        
+        const team = this.teams.find(t => t.id === teamId);
+        if (!team) return;
+        
+        // Calcular estadísticas por jugador
+        const playerStats = {};
+        
+        team.players.forEach(player => {
+            playerStats[player.id] = {
+                name: player.name,
+                number: player.number,
+                matchesPlayed: 0,
+                matchesStarted: 0,
+                minutesPlayed: 0,
+                goals: 0,
+                yellowCards: 0,
+                redCards: 0,
+                positions: {}
+            };
+        });
+        
+        matches.forEach(match => {
+            if (match.localTeam === team.name || match.rivalTeam === team.name) {
+                const isHome = match.localTeam === team.name;
+                
+                // Procesar alineaciones
+                match.lineups.forEach(lineup => {
+                    const player = playerStats[lineup.playerId];
+                    if (player) {
+                        player.matchesPlayed++;
+                        if (lineup.startTime === 0) player.matchesStarted++;
+                        
+                        const endTime = lineup.endTime || match.elapsedTime;
+                        player.minutesPlayed += (endTime - lineup.startTime) / 60;
+                        
+                        if (lineup.position) {
+                            player.positions[lineup.position] = (player.positions[lineup.position] || 0) + 
+                                ((endTime - lineup.startTime) / 60);
+                        }
+                    }
+                });
+                
+                // Procesar eventos
+                match.events.forEach(event => {
+                    if ((isHome && event.team === match.localTeam) || 
+                        (!isHome && event.team === match.rivalTeam)) {
+                        const player = playerStats[event.playerId];
+                        if (player) {
+                            switch(event.type) {
+                                case 'Gol':
+                                    player.goals++;
+                                    break;
+                                case 'Tarjeta amarilla':
+                                    player.yellowCards++;
+                                    break;
+                                case 'Tarjeta roja':
+                                    player.redCards++;
+                                    break;
+                            }
+                        }
+                    }
+                });
+            }
+        });
+        
+        // Convertir a array y ordenar
+        const statsArray = Object.values(playerStats).map(player => ({
+            ...player,
+            mainPosition: this.getMainPosition(player.positions),
+            goalsPerMatch: player.matchesPlayed > 0 ? (player.goals / player.matchesPlayed).toFixed(2) : 0,
+            minutesPerMatch: player.matchesPlayed > 0 ? (player.minutesPlayed / player.matchesPlayed).toFixed(1) : 0
+        }));
+        
+        // Ordenar por minutos jugados
+        statsArray.sort((a, b) => b.minutesPlayed - a.minutesPlayed);
+        
+        // Renderizar tabla
+        container.innerHTML = `
+            <table class="player-stats">
+                <thead>
+                    <tr>
+                        <th>Jugador</th>
+                        <th>Partidos</th>
+                        <th>Titular</th>
+                        <th>Minutos</th>
+                        <th>Min/Partido</th>
+                        <th>Goles</th>
+                        <th>Gol/Partido</th>
+                        <th>TA</th>
+                        <th>TR</th>
+                        <th>Posición</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${statsArray.map(player => `
+                        <tr>
+                            <td>${player.number}. ${player.name}</td>
+                            <td>${player.matchesPlayed}</td>
+                            <td>${player.matchesStarted}</td>
+                            <td>${Math.round(player.minutesPlayed)}</td>
+                            <td>${player.minutesPerMatch}</td>
+                            <td>${player.goals}</td>
+                            <td>${player.goalsPerMatch}</td>
+                            <td>${player.yellowCards}</td>
+                            <td>${player.redCards}</td>
+                            <td>${this.formatPosition(player.mainPosition)}</td>
+                        </tr>
+                    `).join('')}
+                </tbody>
+            </table>
+        `;
+    },
+    
+    getMainPosition: function(positions) {
+        if (Object.keys(positions).length === 0) return '';
+        
+        return Object.entries(positions).reduce((a, b) => 
+            a[1] > b[1] ? a : b
+        )[0];
+    },
+    
+    formatPosition: function(position) {
+        if (!position) return '';
+        
+        const positionsMap = {
+            'portero': 'POR',
+            'defensa derecho': 'DFD',
+            'defensa izquierdo': 'DFI',
+            'banda derecha': 'LD',
+            'banda izquierda': 'LI',
+            'medio centro': 'MC',
+            'pivote': 'PIV',
+            'medio ofensivo': 'MCO',
+            'delantero': 'DEL'
+        };
+        
+        return positionsMap[position] || position;
+    },
+    
+    renderCharts: function(matches, teamId) {
+        if (typeof Chart === 'undefined') {
+            console.warn('Chart.js no está cargado - los gráficos no se mostrarán');
+            return;
+        }
+        
+        this.renderResultsChart(matches, teamId);
+        this.renderGoalsChart(matches, teamId);
+        this.renderPlayerPerformanceChart(matches, teamId);
+    },
+    
+    renderResultsChart: function(matches, teamId) {
+        const ctx = document.getElementById('resultsChart').getContext('2d');
+        
+        if (teamId === 'all') {
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Partidos registrados'],
+                    datasets: [{
+                        label: 'Total',
+                        data: [matches.length],
+                        backgroundColor: 'rgba(54, 162, 235, 0.5)'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Partidos registrados'
+                        }
+                    }
+                }
+            });
+            return;
+        }
+        
+        const team = this.teams.find(t => t.id === teamId);
+        if (!team) return;
+        
+        const stats = Utils.calculateStats(matches, team.name);
+        
+        new Chart(ctx, {
+            type: 'doughnut',
             data: {
-                labels: players.map(p => p.name),
+                labels: ['Victorias', 'Empates', 'Derrotas'],
                 datasets: [{
-                    label: 'Minutos jugados',
-                    data: players.map(p => Math.round(p.timePlayed / 60)),
-                    backgroundColor: '#2196F3'
+                    data: [stats.wins, stats.draws, stats.losses],
+                    backgroundColor: [
+                        'rgba(75, 192, 192, 0.5)',
+                        'rgba(255, 206, 86, 0.5)',
+                        'rgba(255, 99, 132, 0.5)'
+                    ],
+                    borderColor: [
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(255, 99, 132, 1)'
+                    ],
+                    borderWidth: 1
                 }]
             },
             options: {
@@ -302,7 +346,111 @@ function renderCharts(stats) {
                 plugins: {
                     title: {
                         display: true,
-                        text: 'Tiempo jugado por jugador (minutos)'
+                        text: 'Resultados del equipo'
+                    }
+                }
+            }
+        });
+    },
+    
+    renderGoalsChart: function(matches, teamId) {
+        const ctx = document.getElementById('goalsChart').getContext('2d');
+        
+        if (teamId === 'all' || !this.teams.find(t => t.id === teamId)) {
+            // Gráfico general para todos los equipos
+            const goalsData = {};
+            
+            matches.forEach(match => {
+                const homeGoals = match.events.filter(e => 
+                    e.type === 'Gol' && e.team === match.localTeam
+                ).length;
+                
+                const awayGoals = match.events.filter(e => 
+                    e.type === 'Gol' && e.team === match.rivalTeam
+                ).length;
+                
+                goalsData[match.localTeam] = (goalsData[match.localTeam] || 0) + homeGoals;
+                goalsData[match.rivalTeam] = (goalsData[match.rivalTeam] || 0) + awayGoals;
+            });
+            
+            const teams = Object.keys(goalsData);
+            const goals = Object.values(goalsData);
+            
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: teams,
+                    datasets: [{
+                        label: 'Goles marcados',
+                        data: goals,
+                        backgroundColor: 'rgba(54, 162, 235, 0.5)'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Goles por equipo'
+                        }
+                    }
+                }
+            });
+            return;
+        }
+        
+        // Gráfico específico para un equipo
+        const team = this.teams.find(t => t.id === teamId);
+        const goalsFor = [];
+        const goalsAgainst = [];
+        const matchLabels = [];
+        
+        matches
+            .filter(m => m.localTeam === team.name || m.rivalTeam === team.name)
+            .sort((a, b) => new Date(a.date) - new Date(b.date))
+            .forEach(match => {
+                const isHome = match.localTeam === team.name;
+                
+                const homeGoals = match.events.filter(e => 
+                    e.type === 'Gol' && e.team === match.localTeam
+                ).length;
+                
+                const awayGoals = match.events.filter(e => 
+                    e.type === 'Gol' && e.team === match.rivalTeam
+                ).length;
+                
+                goalsFor.push(isHome ? homeGoals : awayGoals);
+                goalsAgainst.push(isHome ? awayGoals : homeGoals);
+                matchLabels.push(`${match.localTeam} vs ${match.rivalTeam} (${Utils.formatDate(match.date)})`);
+            });
+        
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: matchLabels,
+                datasets: [
+                    {
+                        label: 'Goles a favor',
+                        data: goalsFor,
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        backgroundColor: 'rgba(75, 192, 192, 0.1)',
+                        tension: 0.1
+                    },
+                    {
+                        label: 'Goles en contra',
+                        data: goalsAgainst,
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        backgroundColor: 'rgba(255, 99, 132, 0.1)',
+                        tension: 0.1
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Evolución de goles'
                     }
                 },
                 scales: {
@@ -312,50 +460,118 @@ function renderCharts(stats) {
                 }
             }
         });
-    }
+    },
     
-    // Gráfico de posiciones (para un jugador específico)
-    const playerFilter = document.getElementById('analysisPlayer').value;
-    if (playerFilter !== 'all' && stats.players[playerFilter]) {
-        const player = stats.players[playerFilter];
-        const positions = Object.entries(player.positions)
-            .sort((a, b) => b[1] - a[1])
-            .slice(0, 5);
+    renderPlayerPerformanceChart: function(matches, teamId) {
+        const ctx = document.getElementById('playerPerformanceChart').getContext('2d');
         
-        if (positions.length > 0) {
-            const positionsCtx = document.getElementById('positionsChart').getContext('2d');
-            new Chart(positionsCtx, {
-                type: 'doughnut',
-                data: {
-                    labels: positions.map(p => p[0]),
-                    datasets: [{
-                        data: positions.map(p => Math.round(p[1] / 60)),
-                        backgroundColor: [
-                            '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF'
-                        ]
-                    }]
+        if (teamId === 'all') {
+            document.getElementById('playerPerformanceChart').style.display = 'none';
+            return;
+        }
+        
+        document.getElementById('playerPerformanceChart').style.display = 'block';
+        const team = this.teams.find(t => t.id === teamId);
+        if (!team || team.players.length === 0) return;
+        
+        // Calcular rendimiento de jugadores (simplificado)
+        const playerPerformance = team.players.map(player => {
+            const goals = matches.reduce((total, match) => {
+                return total + match.events.filter(e => 
+                    e.playerId === player.id && e.type === 'Gol' && 
+                    (e.team === match.localTeam || e.team === match.rivalTeam)
+                ).length;
+            }, 0);
+            
+            const minutes = matches.reduce((total, match) => {
+                const lineup = match.lineups.find(l => l.playerId === player.id);
+                if (!lineup) return total;
+                
+                const endTime = lineup.endTime || match.elapsedTime;
+                return total + (endTime - lineup.startTime) / 60;
+            }, 0);
+            
+            return {
+                name: player.name,
+                goals,
+                minutes,
+                efficiency: minutes > 0 ? (goals / minutes * 90).toFixed(2) : 0
+            };
+        });
+        
+        // Ordenar por eficiencia
+        playerPerformance.sort((a, b) => b.efficiency - a.efficiency);
+        
+        // Tomar los top 10
+        const topPlayers = playerPerformance.slice(0, 10);
+        
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: topPlayers.map(p => p.name),
+                datasets: [{
+                    label: 'Goles por cada 90 minutos',
+                    data: topPlayers.map(p => p.efficiency),
+                    backgroundColor: 'rgba(153, 102, 255, 0.5)'
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Rendimiento de jugadores (top 10)'
+                    }
                 },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        title: {
-                            display: true,
-                            text: `Posiciones de ${player.name} (minutos)`
-                        }
+                scales: {
+                    y: {
+                        beginAtZero: true
                     }
                 }
+            }
+        });
+    },
+    
+    exportAnalysis: function() {
+        const teamId = document.getElementById('teamSelector').value;
+        const teamName = teamId === 'all' ? 'todos' : this.teams.find(t => t.id === teamId)?.name || 'desconocido';
+        
+        let csvContent = "Análisis de estadísticas\n\n";
+        
+        // Resumen
+        csvContent += "RESUMEN\n";
+        if (teamId === 'all') {
+            csvContent += `Partidos registrados,${this.matches.length}\n`;
+        } else {
+            const stats = Utils.calculateStats(this.matches, teamName);
+            csvContent += `Partidos jugados,${stats.played}\n`;
+            csvContent += `Victorias,${stats.wins}\n`;
+            csvContent += `Empates,${stats.draws}\n`;
+            csvContent += `Derrotas,${stats.losses}\n`;
+            csvContent += `Goles a favor,${stats.goalsFor}\n`;
+            csvContent += `Goles en contra,${stats.goalsAgainst}\n`;
+            csvContent += `Vallas invictas,${stats.cleanSheets}\n`;
+        }
+        
+        // Estadísticas de jugadores
+        if (teamId !== 'all') {
+            csvContent += "\nJUGADORES\n";
+            csvContent += "Nombre,Partidos,Titular,Minutos,Min/Partido,Goles,Gol/Partido,TA,TR,Posición\n";
+            
+            const tableRows = document.querySelectorAll('.player-stats tbody tr');
+            tableRows.forEach(row => {
+                const cells = row.querySelectorAll('td');
+                const rowData = Array.from(cells).map(cell => cell.textContent).join(',');
+                csvContent += `${rowData}\n`;
             });
         }
+        
+        Utils.downloadFile(csvContent, `analisis_${teamName}.csv`, 'text/csv');
     }
-}
+};
 
-function exportAnalysis() {
-    // Implementar exportación a Excel
-    alert('Funcionalidad de exportación a Excel se implementará aquí');
-}
-
-function formatTime(seconds) {
-    const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-}
+document.addEventListener('DOMContentLoaded', function() {
+    if (document.getElementById('teamSelector')) {
+        Analysis.init();
+    }
+});

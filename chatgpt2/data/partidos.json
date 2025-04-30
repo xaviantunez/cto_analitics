@@ -1,37 +1,11 @@
 [
   {
-    "id": "2024-04-01_1230_Tiburones_Estrellas",
-    "fecha": "2024-04-01",
-    "hora": "12:30",
-    "equipoLocal": "Tiburones",
-    "equipoVisitante": "Estrellas",
-    "torneo": "Torneo Primavera",
-    "resumen": "Buen desempeño general.",
-    "estadisticas": {
-      "golesFavor": 3,
-      "golesContra": 2
-    },
-    "jugadores": [
-      {
-        "nombre": "Juan Pérez",
-        "tiempo": 40,
-        "posicion": "defensa derecho"
-      },
-      {
-        "nombre": "Luis Ramírez",
-        "tiempo": 50,
-        "posicion": "medio centro"
-      }
-    ],
-    "eventos": [
-      {
-        "minuto": 12,
-        "descripcion": "Gol de Luis Ramírez"
-      },
-      {
-        "minuto": 38,
-        "descripcion": "Gol en contra"
-      }
-    ]
+    "equipoLocal": "Juveniles",
+    "equipoRival": "Los Rojos",
+    "fechaHora": "2025-04-30T18:00",
+    "torneo": "Copa Primavera",
+    "resumen": "Partido reñido con buena actuación del medio campo.",
+    "eventos": ["00:00 - Inicio", "15:20 - Gol de Juan"],
+    "tiempoTotal": 1800
   }
 ]

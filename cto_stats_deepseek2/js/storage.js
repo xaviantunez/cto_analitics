@@ -1,77 +1,115 @@
-// storage.js - Funciones compartidas para el almacenamiento
-
-// Función para inicializar los datos de un nuevo partido
-function resetMatchData() {
-    const currentMatch = {
-        id: generateId(),
-        localTeam: '',
-        rivalTeam: '',
-        date: '',
-        time: '',
-        tournament: '',
-        timerSeconds: 0,
-        timerInterval: null,
-        isRunning: false,
-        localPlayers: [],
-        rivalPlayers: [],
-        events: [],
-        summary: '',
-        createdAt: new Date().toISOString()
-    };
+// storage.js - Manejo de almacenamiento con archivos JSON simulados
+const DB = {
+    // Cargar datos de un archivo JSON
+    load: function(file) {
+        try {
+            const data = localStorage.getItem(`db_${file}`);
+            if (data) {
+                return JSON.parse(data);
+            }
+            
+            // Datos iniciales si el archivo no existe
+            switch(file) {
+                case 'users.json':
+                    return [{
+                        id: 1,
+                        username: 'admin',
+                        password: 'admin123',
+                        name: 'Administrador',
+                        roles: ['admin'],
+                        functions: ['all'],
+                        team: null
+                    }];
+                case 'teams.json':
+                    return [{
+                        id: 1,
+                        name: 'Equipo Verde',
+                        players: [
+                            {id: 1, name: 'Jugador 1', number: 10},
+                            {id: 2, name: 'Jugador 2', number: 5}
+                        ]
+                    }];
+                case 'matches.json':
+                    return [];
+                case 'events.json':
+                    return ['Gol', 'Tarjeta amarilla', 'Tarjeta roja', 'Falta', 'Cambio', 'Lesión'];
+                case 'roles.json':
+                    return {
+                        roles: ['admin', 'user'],
+                        functions: ['coordinador', 'entrenador', 'delegado']
+                    };
+                case 'audit_log.json':
+                    return [];
+                default:
+                    return [];
+            }
+        } catch (e) {
+            console.error(`Error loading ${file}:`, e);
+            return [];
+        }
+    },
     
-    localStorage.setItem('currentMatch', JSON.stringify(currentMatch));
-    return currentMatch;
-}
-
-// Función para guardar el partido actual en el histórico
-function saveCurrentMatchToHistory() {
-    const currentMatch = JSON.parse(localStorage.getItem('currentMatch'));
-    if (!currentMatch) return;
+    // Guardar datos en un archivo JSON
+    save: function(file, data) {
+        try {
+            localStorage.setItem(`db_${file}`, JSON.stringify(data));
+            return true;
+        } catch (e) {
+            console.error(`Error saving ${file}:`, e);
+            return false;
+        }
+    },
     
-    const matches = JSON.parse(localStorage.getItem('matches')) || [];
-    matches.push(currentMatch);
-    localStorage.setItem('matches', JSON.stringify(matches));
+    // Exportar todos los datos a un archivo JSON
+    exportAllData: function() {
+        const data = {
+            users: this.load('users.json'),
+            teams: this.load('teams.json'),
+            matches: this.load('matches.json'),
+            events: this.load('events.json'),
+            roles: this.load('roles.json'),
+            audit_log: this.load('audit_log.json')
+        };
+        
+        const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'football_stats_backup.json';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    },
     
-    logAudit('save_match', `Partido guardado: ${currentMatch.localTeam} vs ${currentMatch.rivalTeam}`, currentMatch.localTeam);
-    
-    // Resetear el partido actual
-    resetMatchData();
-}
+    // Importar datos desde un archivo JSON
+    importData: function(file, callback) {
+        const reader = new FileReader();
+        
+        reader.onload = (e) => {
+            try {
+                const data = JSON.parse(e.target.result);
+                
+                if (data.users) this.save('users.json', data.users);
+                if (data.teams) this.save('teams.json', data.teams);
+                if (data.matches) this.save('matches.json', data.matches);
+                if (data.events) this.save('events.json', data.events);
+                if (data.roles) this.save('roles.json', data.roles);
+                if (data.audit_log) this.save('audit_log.json', data.audit_log);
+                
+                callback(true);
+            } catch (error) {
+                console.error('Error importing data:', error);
+                callback(false, error);
+            }
+        };
+        
+        reader.readAsText(file);
+    }
+};
 
-// Función para generar un ID único
-function generateId() {
-    return Date.now().toString(36) + Math.random().toString(36).substr(2);
-}
-
-// Función para formatear el tiempo (mm:ss)
-function formatTime(seconds) {
-    const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-}
-
-// Función para formatear fecha
-function formatDate(dateStr) {
-    if (!dateStr) return '';
-    const options = { year: 'numeric', month: 'long', day: 'numeric' };
-    return new Date(dateStr).toLocaleDateString('es-ES', options);
-}
-
-// Función para formatear fecha y hora
-function formatDateTime(timestamp) {
-    if (!timestamp) return '';
-    const date = new Date(timestamp);
-    return date.toLocaleString('es-ES');
-}
-
-// Exportar para usar en otros archivos
+// Exportar para módulos
 if (typeof module !== 'undefined' && module.exports) {
-    module.exports = {
-        resetMatchData,
-        saveCurrentMatchToHistory,
-        generateId,
-        formatTime,
-        formatDate,
-        formatDateTime
-    };
+    module.exports = DB;
 }

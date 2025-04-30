@@ -3,39 +3,25 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Historial de Partidos</title>
-  <link rel="stylesheet" href="style.css" />
-  <script defer src="historico.js"></script>
+  <title>Histórico de Partidos</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script src="utils.js"></script>
+  <script src="menu.js"></script>
+  <script src="historico.js" defer></script>
 </head>
 <body>
   <header>
-    <h1>Historial de Partidos</h1>
+    <h1>Histórico de Partidos</h1>
+    <nav><ul id="menuOpciones"></ul></nav>
   </header>
-  <div id="nav-placeholder"></div>
+
   <main>
-    <section class="filtros">
-      <label for="equipoFiltro">Filtrar por equipo:</label>
-      <select id="equipoFiltro">
-        <option value="todos">Todos</option>
-      </select>
-    </section>
-    <section class="lista-partidos">
-      <table>
-        <thead>
-          <tr>
-            <th>Fecha</th>
-            <th>Hora</th>
-            <th>Equipo Local</th>
-            <th>Equipo Rival</th>
-            <th>Acciones</th>
-          </tr>
-        </thead>
-        <tbody id="tablaPartidos"></tbody>
-      </table>
-    </section>
-    <section>
-      <button id="exportarHistoricoExcel">Exportar a Excel</button>
-    </section>
+    <label for="equipoFiltro">Filtrar por equipo:</label>
+    <select id="equipoFiltro">
+      <option value="todos">Todos</option>
+    </select>
+
+    <ul id="listaPartidos"></ul>
   </main>
 </body>
 </html>

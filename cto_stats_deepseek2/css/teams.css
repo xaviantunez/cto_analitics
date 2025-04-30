@@ -1,0 +1,88 @@
+/* teams.css - Estilos para la página de gestión de equipos */
+.teams-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 2rem;
+}
+
+.team-card {
+    background-color: var(--surface);
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.team-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--primary-color);
+}
+
+.team-header h3 {
+    margin-bottom: 0;
+    padding: 0.25rem 0.5rem;
+}
+
+.team-header h3:focus {
+    outline: 2px solid var(--primary-light);
+    border-radius: 4px;
+}
+
+.players-list {
+    margin-top: 1rem;
+}
+
+.players-list ul {
+    list-style: none;
+    margin-bottom: 1rem;
+}
+
+.players-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #eee;
+}
+
+.players-list li span {
+    padding: 0.25rem 0.5rem;
+}
+
+.players-list li span:first-child {
+    flex-grow: 1;
+}
+
+.players-list li span:focus {
+    outline: 2px solid var(--primary-light);
+    border-radius: 4px;
+}
+
+.add-player-form {
+    display: grid;
+    grid-template-columns: 2fr 1fr auto;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+.add-player-form input {
+    margin-bottom: 0;
+}
+
+.add-player-btn {
+    padding: 0.25rem;
+}
+
+.delete-player-btn {
+    padding: 0.1rem 0.3rem;
+    font-size: 0.7rem;
+}
+
+.team-actions {
+    margin-top: 2rem;
+    display: flex;
+    justify-content: flex-end;
+}

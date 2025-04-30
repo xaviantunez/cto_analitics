@@ -5,84 +5,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Administración - Estadísticas Fútbol</title>
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/admin.css">
 </head>
 <body>
     <header>
-        <div class="logo">
-            <img src="img/logo.png" alt="Logo Estadísticas Fútbol">
-        </div>
+        <h1>Panel de Administración</h1>
         <nav>
-            <ul>
-                <li><a href="stats.html">Estadísticas</a></li>
-                <li><a href="teams.html">Equipos</a></li>
-                <li><a href="history.html">Historial</a></li>
-                <li><a href="audit.html">Auditoría</a></li>
-                <li><a href="analysis.html">Análisis</a></li>
-                <li><a href="#" id="logout">Cerrar Sesión</a></li>
-            </ul>
+            <button id="logoutBtn">Cerrar sesión</button>
         </nav>
     </header>
-
+    
     <main>
-        <h1>Administración del Sistema</h1>
-        
         <section id="userManagement">
             <h2>Gestión de Usuarios</h2>
-            <div class="form-group">
-                <label for="newUsername">Nombre de usuario:</label>
-                <input type="text" id="newUsername">
-            </div>
-            <div class="form-group">
-                <label for="newPassword">Contraseña:</label>
-                <input type="password" id="newPassword">
-            </div>
-            <div class="form-group">
-                <label for="userRole">Rol:</label>
-                <select id="userRole">
-                    <option value="admin">Administrador</option>
-                    <option value="user">Usuario</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="userTeam">Equipo:</label>
-                <select id="userTeam"></select>
-            </div>
-            <div class="form-group">
-                <label>Funciones:</label>
-                <div id="functionsContainer"></div>
-                <button type="button" id="addFunctionBtn">Añadir Función</button>
-            </div>
-            <button type="button" id="addUserBtn">Añadir Usuario</button>
-            
-            <h3>Lista de Usuarios</h3>
-            <table id="usersTable">
-                <thead>
-                    <tr>
-                        <th>Usuario</th>
-                        <th>Rol</th>
-                        <th>Equipo</th>
-                        <th>Funciones</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
+            <!-- Formulario para agregar/editar usuarios -->
         </section>
         
-        <section id="functionsManagement">
-            <h2>Gestión de Funciones</h2>
-            <div class="form-group">
-                <label for="newFunction">Nueva Función:</label>
-                <input type="text" id="newFunction">
-                <button type="button" id="addNewFunctionBtn">Añadir</button>
-            </div>
-            <h3>Funciones Existentes</h3>
-            <ul id="functionsList"></ul>
+        <section id="roleManagement">
+            <h2>Gestión de Roles y Funciones</h2>
+            <!-- Configuración de roles y funciones -->
         </section>
     </main>
 
+    <script src="js/storage.js"></script>
     <script src="js/auth.js"></script>
-    <script src="js/common.js"></script>
     <script src="js/admin.js"></script>
 </body>
 </html>
