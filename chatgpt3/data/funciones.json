@@ -1,0 +1,38 @@
+{
+  "funciones": [
+    {
+      "nombre": "coordinador",
+      "descripcion": "Responsable de la gestión y organización del equipo, supervisa la logística y coordinación entre jugadores y entrenadores.",
+      "permisos": [
+        "verHistorico",
+        "gestionarPartidos",
+        "configurarEquipo",
+        "gestionarJugadores"
+      ]
+    },
+    {
+      "nombre": "delegado",
+      "descripcion": "Encargado de gestionar la documentación del equipo y coordinar el equipo en los partidos.",
+      "permisos": [
+        "gestionarPartidos",
+        "verHistorico"
+      ]
+    },
+    {
+      "nombre": "entrenador",
+      "descripcion": "Responsable de la preparación física y técnica de los jugadores, así como de la planificación y desarrollo de las tácticas del equipo.",
+      "permisos": [
+        "gestionarPartidos",
+        "verHistorico",
+        "gestionarJugadores"
+      ]
+    },
+    {
+      "nombre": "usuario",
+      "descripcion": "Usuario estándar sin permisos administrativos.",
+      "permisos": [
+        "verHistorico"
+      ]
+    }
+  ]
+}
