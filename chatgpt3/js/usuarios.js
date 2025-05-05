@@ -3,7 +3,7 @@
 // Función para cargar la lista de usuarios desde el archivo usuarios.json
 async function cargarUsuarios() {
   try {
-    const respuesta = await fetch('usuarios.json'); // Obtener el archivo usuarios.json
+    const respuesta = await fetch('data/usuarios.json'); // Obtener el archivo usuarios.json
     if (!respuesta.ok) {
       throw new Error('No se pudo cargar el archivo de usuarios');
     }
@@ -63,7 +63,7 @@ async function eliminarUsuario(usuario) {
 // Función para actualizar el archivo usuarios.json (esto se hace en un servidor real, no directamente en el navegador)
 async function actualizarUsuarios(usuarios) {
   try {
-    const respuesta = await fetch('usuarios.json', {
+    const respuesta = await fetch('data/usuarios.json', {
       method: 'PUT', // Método HTTP para actualizar el archivo
       headers: {
         'Content-Type': 'application/json'
