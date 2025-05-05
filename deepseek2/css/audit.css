@@ -1,0 +1,51 @@
+/* audit.css - Estilos para la página de auditoría */
+.audit-filters {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.audit-log {
+    margin-top: 2rem;
+}
+
+.audit-entry {
+    padding: 1rem;
+    margin-bottom: 1rem;
+    background-color: var(--surface);
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.audit-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+}
+
+.audit-timestamp {
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.audit-user {
+    color: var(--primary-color);
+}
+
+.audit-action {
+    color: var(--secondary-dark);
+}
+
+.audit-details {
+    font-size: 0.9rem;
+    color: #444;
+}
+
+.audit-pagination {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 2rem;
+}

@@ -1,0 +1,95 @@
+/* teams.css - Estilos para la gestión de equipos */
+
+.teams-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.team-card {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    padding: 1.5rem;
+}
+
+.team-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid var(--primary-color);
+}
+
+.team-header h3 {
+    margin: 0;
+    padding: 0.5rem;
+    flex-grow: 1;
+}
+
+.team-header h3:focus {
+    outline: 2px solid var(--primary-light);
+    border-radius: 4px;
+}
+
+.players-list {
+    margin-top: 1rem;
+}
+
+.players-list table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 1rem;
+}
+
+.players-list th, .players-list td {
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+.players-list th {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.players-list tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.players-list td[contenteditable="true"]:focus {
+    outline: 2px solid var(--primary-light);
+    background-color: #fff;
+}
+
+.add-player-form {
+    display: grid;
+    grid-template-columns: 2fr 1fr auto;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+.add-player-form input {
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.team-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .teams-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .add-player-form {
+        grid-template-columns: 1fr;
+    }
+}

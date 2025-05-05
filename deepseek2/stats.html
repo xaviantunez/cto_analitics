@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estadísticas Partido - Fútbol</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/stats.css">
+</head>
+<body>
+    <header>
+        <h1>Estadísticas del Partido</h1>
+        <nav>
+            <a href="admin.html" class="nav-link">Admin</a>
+            <a href="teams.html" class="nav-link">Equipos</a>
+            <a href="history.html" class="nav-link">Historial</a>
+            <button id="logoutBtn" class="btn danger">Cerrar sesión</button>
+        </nav>
+    </header>
+
+    <main class="container">
+        <section class="card match-info">
+            <h2>Información del Partido</h2>
+            <div class="grid">
+                <div class="form-group">
+                    <label for="localTeam">Equipo Local</label>
+                    <select id="localTeam" required>
+                        <option value="">Seleccionar equipo</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="rivalTeam">Equipo Rival</label>
+                    <select id="rivalTeam" required>
+                        <option value="">Seleccionar equipo</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="tournament">Torneo</label>
+                    <input type="text" id="tournament" placeholder="Nombre del torneo">
+                </div>
+                <div class="form-group">
+                    <label for="matchDate">Fecha</label>
+                    <input type="date" id="matchDate" required>
+                </div>
+                <div class="form-group">
+                    <label for="matchTime">Hora</label>
+                    <input type="time" id="matchTime" required>
+                </div>
+            </div>
+        </section>
+
+        <section class="card timer-section">
+            <h2>Temporizador</h2>
+            <div class="timer-display" id="timerDisplay">00:00</div>
+            <div class="timer-controls">
+                <button id="startTimerBtn" class="btn">Iniciar</button>
+                <button id="pauseTimerBtn" class="btn secondary">Pausar</button>
+                <button id="resetTimerBtn" class="btn danger">Reiniciar</button>
+            </div>
+        </section>
+
+        <section class="card lineups-section">
+            <div class="grid">
+                <div class="team-lineup" id="localPlayers">
+                    <h3>Alineación Local</h3>
+                    <!-- Jugadores se cargarán aquí -->
+                </div>
+                <div class="team-lineup" id="rivalPlayers">
+                    <h3>Alineación Rival</h3>
+                    <!-- Jugadores se cargarán aquí -->
+                </div>
+            </div>
+        </section>
+
+        <section class="card event-log-section">
+            <h2>Registro de Eventos</h2>
+            <div id="eventLog" class="event-log">
+                <!-- Eventos se mostrarán aquí -->
+            </div>
+        </section>
+
+        <section class="card match-summary">
+            <h2>Resumen del Partido</h2>
+            <textarea id="matchSummary" placeholder="Escribe un resumen del partido..."></textarea>
+            <div class="match-actions">
+                <button id="saveMatchBtn" class="btn">Guardar Partido</button>
+                <button id="exportExcelBtn" class="btn secondary">Exportar a Excel</button>
+            </div>
+        </section>
+    </main>
+
+    <script src="js/storage.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/stats.js"></script>
+</body>
+</html>

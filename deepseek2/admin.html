@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Estadísticas Fútbol</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+    <header>
+        <h1>Panel de Administración</h1>
+        <nav>
+            <a href="stats.html" class="nav-link">Estadísticas</a>
+            <a href="teams.html" class="nav-link">Equipos</a>
+            <a href="history.html" class="nav-link">Historial</a>
+            <a href="audit.html" class="nav-link">Auditoría</a>
+            <button id="logoutBtn" class="btn danger">Cerrar sesión</button>
+        </nav>
+    </header>
+
+    <main class="container">
+        <section class="card">
+            <h2>Gestión de Usuarios</h2>
+            
+            <form id="addUserForm" class="user-form">
+                <div class="form-group">
+                    <label for="newUsername">Usuario</label>
+                    <input type="text" id="newUsername" required>
+                </div>
+                <div class="form-group">
+                    <label for="newPassword">Contraseña</label>
+                    <input type="password" id="newPassword" required>
+                </div>
+                <div class="form-group">
+                    <label for="newName">Nombre completo</label>
+                    <input type="text" id="newName" required>
+                </div>
+                <button type="submit" class="btn">Añadir Usuario</button>
+            </form>
+
+            <div class="table-responsive">
+                <table id="usersTable">
+                    <thead>
+                        <tr>
+                            <th>Usuario</th>
+                            <th>Nombre</th>
+                            <th>Roles</th>
+                            <th>Funciones</th>
+                            <th>Equipo</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="card">
+            <h2>Configuración del Sistema</h2>
+            
+            <div class="grid">
+                <div class="role-management">
+                    <h3>Roles</h3>
+                    <div class="flex">
+                        <input type="text" id="newRole" placeholder="Nuevo rol">
+                        <button id="saveRolesBtn" class="btn">Añadir</button>
+                    </div>
+                    <div id="rolesList" class="list"></div>
+                </div>
+
+                <div class="function-management">
+                    <h3>Funciones</h3>
+                    <div class="flex">
+                        <input type="text" id="newFunction" placeholder="Nueva función">
+                        <button id="addFunctionBtn" class="btn">Añadir</button>
+                    </div>
+                    <div id="functionsList" class="list"></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="card">
+            <h2>Respaldar/Restaurar Datos</h2>
+            <div class="flex">
+                <button id="exportDataBtn" class="btn">Exportar Datos</button>
+                <input type="file" id="importDataFile" accept=".json" style="display: none;">
+                <button id="importDataBtn" class="btn secondary">Importar Datos</button>
+            </div>
+        </section>
+    </main>
+
+    <script src="js/storage.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/admin.js"></script>
+</body>
+</html>
