@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Histórico de Partidos</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <header>
+    <h2>Histórico de Partidos</h2>
+    <button onclick="cerrarSesion()">Cerrar Sesión</button>
+  </header>
+
+  <main>
+    <section id="filtroHistorico">
+      <h3>Filtrar por Equipo</h3>
+      <select id="equipoFiltro">
+        <!-- Equipos del usuario -->
+      </select>
+    </section>
+
+    <section id="listaPartidos">
+      <h3>Listado de Partidos</h3>
+      <table id="tablaPartidos">
+        <thead>
+          <tr>
+            <th>Fecha</th>
+            <th>Hora</th>
+            <th>Equipo Local</th>
+            <th>Rival</th>
+            <th>Torneo</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Partidos cargados dinámicamente -->
+        </tbody>
+      </table>
+    </section>
+  </main>
+
+  <script src="js/auth.js"></script>
+  <script src="js/roles.js"></script>
+  <script src="js/historico.js"></script>
+</body>
+</html>

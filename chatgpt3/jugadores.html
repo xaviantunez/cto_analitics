@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mantenimiento de Jugadores</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <header>
+    <h2>Mantenimiento de Jugadores</h2>
+    <button onclick="cerrarSesion()">Cerrar Sesión</button>
+  </header>
+
+  <main>
+    <section>
+      <h3>Filtrar Jugadores</h3>
+      <input type="text" id="filtroNombre" placeholder="Nombre o Apellidos" />
+      <input type="number" id="filtroAnio" placeholder="Año de nacimiento" />
+      <button onclick="filtrarJugadores()">Filtrar</button>
+    </section>
+
+    <section>
+      <h3>Listado de Jugadores</h3>
+      <table id="tablaJugadores">
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Apellidos</th>
+            <th>Año Nac.</th>
+            <th>Teléfono</th>
+            <th>Contacto</th>
+            <th>Observaciones</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Jugadores cargados dinámicamente -->
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h3>Añadir / Editar Jugador</h3>
+      <form id="formJugador">
+        <input type="text" id="nombreJugador" placeholder="Nombre" required />
+        <input type="text" id="apellidosJugador" placeholder="Apellidos" required />
+        <input type="number" id="anioNacimientoJugador" placeholder="Año de nacimiento" required />
+        <input type="tel" id="telefonoJugador" placeholder="Teléfono de contacto" />
+        <input type="text" id="contactoJugador" placeholder="Persona de contacto" />
+        <textarea id="observacionesJugador" placeholder="Observaciones"></textarea>
+        <button type="submit">Guardar Jugador</button>
+      </form>
+    </section>
+  </main>
+
+  <script src="js/auth.js"></script>
+  <script src="js/roles.js"></script>
+  <script src="js/jugadores.js"></script>
+</body>
+</html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Análisis de Partidos</title>
+  <link rel="stylesheet" href="css/styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <header>
+    <h2>Análisis de Partidos</h2>
+    <button onclick="cerrarSesion()">Cerrar Sesión</button>
+  </header>
+
+  <main>
+    <section id="seleccionPartidos">
+      <h3>Seleccionar Partidos</h3>
+      <label>Equipos:
+        <select id="equiposAnalisis" multiple>
+          <!-- Equipos disponibles -->
+        </select>
+      </label>
+      <button onclick="cargarPartidos()">Cargar Partidos</button>
+    </section>
+
+    <section id="graficoEstadisticas">
+      <h3>Gráficos de Estadísticas</h3>
+      <canvas id="graficoVictoriasDerrotas" width="400" height="200"></canvas>
+      <canvas id="graficoTiempoJugado" width="400" height="200"></canvas>
+      <canvas id="graficoTitularidad" width="400" height="200"></canvas>
+    </section>
+
+    <section id="sumariosEventos">
+      <h3>Sumarios de Eventos por Jugador</h3>
+      <table id="tablaEventosJugador">
+        <thead>
+          <tr>
+            <th>Jugador</th>
+            <th>Eventos Totales</th>
+            <th>Victorias</th>
+            <th>Derrotas</th>
+            <th>Tiempo Jugado</th>
+            <th>Titularidades</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Sumarios de eventos por jugador cargados dinámicamente -->
+        </tbody>
+      </table>
+    </section>
+  </main>
+
+  <script src="js/auth.js"></script>
+  <script src="js/roles.js"></script>
+  <script src="js/analisis.js"></script>
+</body>
+</html>

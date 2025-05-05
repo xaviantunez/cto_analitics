@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mantenimiento de Equipos</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <header>
+    <h2>Mantenimiento de Equipos</h2>
+    <button onclick="cerrarSesion()">Cerrar Sesión</button>
+  </header>
+
+  <main>
+    <section id="listaEquipos">
+      <h3>Listado de Equipos</h3>
+      <ul id="equiposUl">
+        <!-- Lista de equipos cargada dinámicamente -->
+      </ul>
+    </section>
+
+    <section id="formularioEquipo">
+      <h3>Agregar / Renombrar Equipo</h3>
+      <form id="equipoForm">
+        <input type="text" id="nombreEquipo" placeholder="Nombre del equipo" required>
+
+        <select id="tipoCompeticion" required>
+          <option value="" disabled selected>Tipo de competición</option>
+          <option value="Futbol 11">Fútbol 11</option>
+          <option value="Futbol 8">Fútbol 8</option>
+        </select>
+
+        <input type="number" id="anioMin" placeholder="Año nacimiento mínimo" required>
+        <input type="number" id="anioMax" placeholder="Año nacimiento máximo" required>
+
+        <button type="submit">Guardar Equipo</button>
+      </form>
+    </section>
+  </main>
+
+  <script src="js/auth.js"></script>
+  <script src="js/roles.js"></script>
+  <script src="js/equipos.js"></script>
+</body>
+</html>

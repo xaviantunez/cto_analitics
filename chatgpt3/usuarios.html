@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mantenimiento de Usuarios</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <header>
+    <h2>Mantenimiento de Usuarios</h2>
+    <button onclick="cerrarSesion()">Cerrar Sesión</button>
+  </header>
+
+  <main id="usuariosSection">
+    <table id="tablaUsuarios">
+      <thead>
+        <tr>
+          <th>Usuario</th>
+          <th>Rol</th>
+          <th>Función</th>
+          <th>Equipo</th>
+          <th>Permisos</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Usuarios cargados dinámicamente -->
+      </tbody>
+    </table>
+
+    <section>
+      <h3>Añadir / Editar Usuario</h3>
+      <form id="formUsuario">
+        <input type="text" id="nuevoUsuario" placeholder="Nombre de usuario" required>
+        <input type="password" id="nuevaPassword" placeholder="Contraseña" required>
+        
+        <select id="nuevoRol">
+          <option value="administrador">Administrador</option>
+          <option value="usuario">Usuario</option>
+        </select>
+
+        <select id="nuevaFuncion">
+          <!-- Funciones dinámicas -->
+        </select>
+
+        <select id="nuevoEquipo">
+          <!-- Equipos disponibles -->
+        </select>
+
+        <fieldset>
+          <legend>Permisos en Historial</legend>
+          <label><input type="checkbox" id="permisoVer"> Ver</label>
+          <label><input type="checkbox" id="permisoLeer"> Leer</label>
+          <label><input type="checkbox" id="permisoEscribir"> Escribir</label>
+        </fieldset>
+
+        <button type="submit">Guardar Usuario</button>
+      </form>
+    </section>
+  </main>
+
+  <script src="js/auth.js"></script>
+  <script src="js/roles.js"></script>
+  <script src="js/usuarios.js"></script>
+</body>
+</html>

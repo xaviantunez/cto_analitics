@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Estadísticas del Partido</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <header>
+    <h2>Estadísticas del Partido</h2>
+    <button onclick="cerrarSesion()">Cerrar Sesión</button>
+  </header>
+
+  <main>
+    <section id="configuracionPartido">
+      <h3>Información del Partido</h3>
+      <label>Equipo Local:
+        <select id="equipoLocalSelect"></select>
+      </label>
+      <label>Equipo Rival:
+        <input type="text" id="equipoRival" placeholder="Nombre del rival" />
+      </label>
+      <label>Fecha:
+        <input type="date" id="fechaPartido" />
+      </label>
+      <label>Hora:
+        <input type="time" id="horaPartido" />
+      </label>
+      <label>Torneo:
+        <input type="text" id="torneoPartido" placeholder="Nombre del torneo" />
+      </label>
+      <div class="logo-equipo">
+        <img src="img/camiseta-verde-blanca.png" alt="Camiseta" />
+      </div>
+    </section>
+
+    <section id="eventosGlobales">
+      <h3>Eventos Generales</h3>
+      <div id="listaEventos">
+        <!-- Eventos dinámicos -->
+      </div>
+      <button onclick="agregarEventoGlobal()">+ Añadir Evento</button>
+    </section>
+
+    <section id="resumenPartido">
+      <h3>Resumen del Partido</h3>
+      <textarea id="textoResumen" placeholder="Resumen del partido..."></textarea>
+    </section>
+
+    <section id="cronometro">
+      <h3>Tiempo Total</h3>
+      <div id="displayTiempo">00:00</div>
+      <button onclick="iniciarTiempo()">Iniciar</button>
+      <button onclick="pausarTiempo()">Pausar</button>
+      <button onclick="reiniciarTiempo()">Resetear</button>
+    </section>
+
+    <section id="jugadoresAlineados">
+      <h3>Jugadores Alineados</h3>
+      <table id="tablaAlineacion">
+        <thead>
+          <tr>
+            <th>Jugador</th>
+            <th>Posición</th>
+            <th>Tiempo</th>
+            <th>Eventos</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Jugadores del equipo cargados dinámicamente -->
+        </tbody>
+      </table>
+    </section>
+
+    <section id="registroEventos">
+      <h3>Registro de Eventos</h3>
+      <ul id="listaRegistro">
+        <!-- Acciones con timestamp -->
+      </ul>
+      <button onclick="exportarEventosExcel()">Exportar a Excel</button>
+      <button onclick="guardarPartido()">Guardar Partido</button>
+    </section>
+  </main>
+
+  <script src="js/auth.js"></script>
+  <script src="js/roles.js"></script>
+  <script src="js/estadisticas.js"></script>
+</body>
+</html>

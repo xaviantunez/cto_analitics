@@ -1,0 +1,27 @@
+[
+  {
+    "usuario": "admin",
+    "contraseña": "admin123",
+    "rol": "administrador"
+  },
+  {
+    "usuario": "coordinador",
+    "contraseña": "coordinador123",
+    "rol": "coordinador"
+  },
+  {
+    "usuario": "delegado",
+    "contraseña": "delegado123",
+    "rol": "delegado"
+  },
+  {
+    "usuario": "entrenador",
+    "contraseña": "entrenador123",
+    "rol": "entrenador"
+  },
+  {
+    "usuario": "usuario",
+    "contraseña": "usuario123",
+    "rol": "usuario"
+  }
+]

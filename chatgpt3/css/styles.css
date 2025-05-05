@@ -1,0 +1,171 @@
+/* Estilos generales */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+  color: #333;
+  padding: 20px;
+}
+
+header {
+  background-color: #007bff;
+  color: white;
+  padding: 10px;
+  text-align: center;
+}
+
+h2 {
+  font-size: 24px;
+}
+
+button {
+  background-color: #007bff;
+  color: white;
+  padding: 10px;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  font-size: 16px;
+  margin-top: 10px;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+input, select, textarea {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+th, td {
+  padding: 10px;
+  border: 1px solid #ddd;
+  text-align: center;
+}
+
+th {
+  background-color: #007bff;
+  color: white;
+}
+
+tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+/* Estilos de la página de eventos */
+#configuracionPartido {
+  background-color: #fff;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+#eventosGlobales, #resumenPartido, #cronometro, #jugadoresAlineados {
+  background-color: #fff;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+textarea {
+  height: 150px;
+  resize: vertical;
+}
+
+#registroEventos {
+  background-color: #fff;
+  padding: 15px;
+  border-radius: 8px;
+  margin-top: 20px;
+}
+
+#listaRegistro {
+  list-style-type: none;
+}
+
+#tablaAlineacion td, #tablaAlineacion th {
+  text-align: left;
+}
+
+#tablaAlineacion {
+  width: 100%;
+  margin-top: 20px;
+}
+
+/* Estilos para la página de auditoría */
+#filtrosAuditoria, #tablaAuditoria {
+  background-color: #fff;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+#cuerpoAuditoria {
+  text-align: center;
+}
+
+/* Estilos para la página de análisis */
+#graficoEstadisticas canvas {
+  margin-top: 20px;
+  width: 100%;
+}
+
+#sumariosEventos {
+  background-color: #fff;
+  padding: 15px;
+  border-radius: 8px;
+  margin-top: 20px;
+}
+
+/* Diseño responsivo */
+@media (max-width: 768px) {
+  body {
+    padding: 10px;
+  }
+
+  header {
+    font-size: 18px;
+  }
+
+  h2 {
+    font-size: 20px;
+  }
+
+  button {
+    width: 100%;
+  }
+
+  input, select, textarea {
+    width: 100%;
+  }
+
+  table {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  h2 {
+    font-size: 18px;
+  }
+
+  button {
+    font-size: 14px;
+  }
+}
