@@ -3,7 +3,7 @@
 // Función para cargar la lista de roles desde el archivo usuarios.json
 async function cargarRoles() {
   try {
-    const respuesta = await fetch('usuarios.json');
+    const respuesta = await fetch('data/usuarios.json');
     if (!respuesta.ok) {
       throw new Error('No se pudo cargar el archivo de usuarios');
     }
@@ -36,7 +36,7 @@ async function asignarFuncion(usuario, funcion) {
 // Función para actualizar el archivo de usuarios con las funciones
 async function actualizarRoles(usuarios) {
   try {
-    const respuesta = await fetch('usuarios.json', {
+    const respuesta = await fetch('data/usuarios.json', {
       method: 'PUT', // Método HTTP para actualizar el archivo
       headers: {
         'Content-Type': 'application/json'
