@@ -1,4 +1,0 @@
-{
-    "roles": ["admin", "user"],
-    "functions": ["coordinador", "entrenador", "delegado"]
-}
