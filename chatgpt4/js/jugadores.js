@@ -2,7 +2,7 @@ let jugadores = [];
 const usuarioActual = JSON.parse(localStorage.getItem("usuario"));
 
 async function cargarJugadores() {
-  const res = await fetch("data/jugadores.json");
+  const res = await fetch("../data/jugadores.json");
   jugadores = await res.json();
   mostrarJugadores(jugadores);
 }

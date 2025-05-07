@@ -5,7 +5,7 @@ let equipoSeleccionado = null;
 const usuarioActual = JSON.parse(localStorage.getItem('usuario'));
 
 async function cargarEquipos() {
-  const res = await fetch('data/equipos.json');
+  const res = await fetch('../data/equipos.json');
   equipos = await res.json();
   filtrarEquipos();
 }
