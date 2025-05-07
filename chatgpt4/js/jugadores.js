@@ -86,12 +86,36 @@ function limpiarFormulario() {
 }
 
 function guardarJSON() {
-  const blob = new Blob([JSON.stringify(jugadores, null, 2)], { type: "application/json" });
+  /*const blob = new Blob([JSON.stringify(jugadores, null, 2)], { type: "application/json" });
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
   a.download = "jugadores.json";
-  a.click();
+  a.click();*/
+  try {
+    // Solicitar permiso para guardar archivo
+    const handle = await window.showSaveFilePicker({
+      suggestedName: '../data/jugadores.json',
+      types: [{
+        description: 'Archivos JSON',
+        accept: { 'application/json': ['.json'] }
+      }]
+    });
+    
+    // Crear stream de escritura
+    const writable = await handle.createWritable();
+    
+    // Escribir datos
+    await writable.write(JSON.stringify(jugadores, null, 2));
+    await writable.close();
+    
+    console.log('Archivo guardado con éxito');
+  } catch (error) {
+    if (error.name !== 'AbortError') {
+      console.error('Error:', error);
+    }
+  }
+}
 }
 
 function registrarAuditoria(accion) {
