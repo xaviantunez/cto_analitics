@@ -11,12 +11,12 @@ async function cargarEquipos() {
 }
 
 async function cargarJugadores() {
-  const res = await fetch('data/jugadores.json');
+  const res = await fetch('../data/jugadores.json');
   jugadores = await res.json();
 }
 
 async function cargarTemporadas() {
-  const res = await fetch('data/temporadas.json');
+  const res = await fetch('../data/temporadas.json');
   temporadas = await res.json();
   const select = document.getElementById('temporadaFiltro');
   select.innerHTML = '<option value="">-- Todas --</option>';
