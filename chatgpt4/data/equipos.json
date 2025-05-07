@@ -2,16 +2,13 @@
   {
     "nombre": "Equipo A",
     "temporada": "2024-2025",
-    "anioMaximo": 2010
+    "anioNacimientoMaximo": 2010,
+    "jugadores": [1, 2]
   },
   {
     "nombre": "Equipo B",
     "temporada": "2024-2025",
-    "anioMaximo": 2012
-  },
-  {
-    "nombre": "Equipo Juvenil",
-    "temporada": "2023-2024",
-    "anioMaximo": 2006
+    "anioNacimientoMaximo": 2012,
+    "jugadores": []
   }
 ]

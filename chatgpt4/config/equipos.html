@@ -3,57 +3,36 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Gestión de Equipos</title>
-  <link rel="stylesheet" href="../css/styles.css" />
+  <title>Mantenimiento de Equipos</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script src="scripts/auth.js"></script>
+  <script src="scripts/permisos.js"></script>
 </head>
-<body>
-  <header class="main-header">
-    <h2>Gestión de Equipos</h2>
-    <button onclick="logout()">Cerrar sesión</button>
+<body onload="verificarAcceso(['administrador','coordinador']); cargarTemporadas(); cargarEquipos(); cargarJugadores();">
+  <header>
+    <h1>Equipos</h1>
+    <a href="menu.html" class="volver">← Volver al menú</a>
   </header>
 
-  <main>
-    <section class="form-section">
-      <h3>Agregar Nuevo Equipo</h3>
-      <form id="equipoForm">
-        <input type="text" id="nombreEquipo" placeholder="Nombre del Equipo" required />
-        <select id="temporadaEquipo" required>
-          <option value="">Seleccionar Temporada</option>
-        </select>
-        <input type="number" id="anioMaximo" placeholder="Año de nacimiento máximo" required />
-        <button type="submit">Guardar Equipo</button>
-      </form>
-    </section>
+  <section>
+    <label for="temporadaFiltro">Filtrar por temporada:</label>
+    <select id="temporadaFiltro" onchange="filtrarEquipos()"></select>
+  </section>
 
-    <section>
-      <h3>Listado de Equipos por Temporada</h3>
-      <label for="filtroTemporada">Filtrar por temporada:</label>
-      <select id="filtroTemporada">
-        <option value="">Todas</option>
-      </select>
+  <section>
+    <h2>Listado de Equipos</h2>
+    <ul id="listaEquipos"></ul>
+  </section>
 
-      <table id="tablaEquipos">
-        <thead>
-          <tr>
-            <th>Nombre</th>
-            <th>Temporada</th>
-            <th>Año Máx.</th>
-            <th>Jugadores</th>
-            <th>Acciones</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
-    </section>
+  <section id="gestionEquipo" style="display:none;">
+    <h3>Gestión del Equipo: <span id="nombreEquipoSeleccionado"></span></h3>
+    <p><strong>Año nacimiento máximo:</strong> <span id="anioMaximo"></span></p>
+    <h4>Jugadores disponibles:</h4>
+    <ul id="listaJugadoresDisponibles"></ul>
+    <h4>Jugadores en el equipo:</h4>
+    <ul id="listaJugadoresEquipo"></ul>
+  </section>
 
-    <section>
-      <h3>Jugadores del Equipo</h3>
-      <ul id="listaJugadores"></ul>
-    </section>
-  </main>
-
-  <script src="../js/auth.js"></script>
-  <script src="../js/permisos.js"></script>
-  <script src="../js/equipos.js"></script>
+  <script src="scripts/equipos.js"></script>
 </body>
 </html>

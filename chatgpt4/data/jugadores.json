@@ -1,18 +1,20 @@
 [
   {
-    "nombre": "Carlos",
-    "apellidos": "Ramírez López",
-    "anioNacimiento": 2011,
+    "id": 1,
+    "nombre": "Juan",
+    "apellidos": "Pérez",
+    "anioNacimiento": 2009,
     "numero": 10,
-    "telefono": "612345678",
-    "observaciones": "Capitán del equipo"
+    "telefono": "123456789",
+    "observaciones": "Capitán"
   },
   {
-    "nombre": "Lucía",
-    "apellidos": "Fernández Ruiz",
-    "anioNacimiento": 2012,
+    "id": 2,
+    "nombre": "Luis",
+    "apellidos": "Gómez",
+    "anioNacimiento": 2010,
     "numero": 7,
-    "telefono": "678123456",
-    "observaciones": "Extremo rápido"
+    "telefono": "987654321",
+    "observaciones": ""
   }
 ]
