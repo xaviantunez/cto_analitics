@@ -4,14 +4,15 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Mantenimiento de Equipos</title>
-  <link rel="stylesheet" href="css/styles.css" />
-  <script src="js/auth.js"></script>
-  <script src="js/permisos.js"></script>
+  <link rel="stylesheet" href="../css/styles.css" />
+  <script src="../js/auth.js"></script>
+  <script src="../js/permisos.js"></script>
 </head>
 <body onload="verificarAcceso(['administrador','coordinador']); cargarTemporadas(); cargarEquipos(); cargarJugadores();">
-  <header>
-    <h1>Equipos</h1>
-    <a href="../menu.html" class="volver">← Volver al menú</a>
+  <header class="main-header">
+    <h2>Mantenimiento de Equipos</h2>    
+    <a href="../menu.html" class="volver">← Volver al menú</a>  
+    <button onclick="logout()">Cerrar sesión</button>
   </header>
 
   <section>
@@ -33,6 +34,6 @@
     <ul id="listaJugadoresEquipo"></ul>
   </section>
 
-  <script src="js/equipos.js"></script>
+  <script src="../js/equipos.js"></script>
 </body>
 </html>
