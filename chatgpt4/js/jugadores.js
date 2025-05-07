@@ -91,31 +91,59 @@ function guardarJSON() {
   const a = document.createElement("a");
   a.href = url;
   a.download = "jugadores.json";
-  a.click();*/
-  try {
-    // Solicitar permiso para guardar archivo
-    const handle = await window.showSaveFilePicker({
-      suggestedName: '../data/jugadores.json',
-      types: [{
-        description: 'Archivos JSON',
-        accept: { 'application/json': ['.json'] }
-      }]
-    });
-    
-    // Crear stream de escritura
-    const writable = await handle.createWritable();
-    
-    // Escribir datos
-    await writable.write(JSON.stringify(jugadores, null, 2));
-    await writable.close();
-    
-    console.log('Archivo guardado con éxito');
-  } catch (error) {
-    if (error.name !== 'AbortError') {
-      console.error('Error:', error);
-    }
-  }
+  a.click();*/ 
+  
 }
+async function guardarEnGitHub(datos) {
+  const token = 'TU_TOKEN_DE_ACCESO'; // Necesitas generar un token personal
+  const usuario = 'xaviantunez';
+  const repo = 'ctoanalitics';
+  const rutaArchivo = 'chatgpt4/data/jugadores.json';
+  const mensajeCommit = 'Actualización de datos';
+  
+  const contenido = JSON.stringify(jugadores, null, 2);
+  const contenidoBase64 = btoa(unescape(encodeURIComponent(contenido)));
+  
+  try {
+    // Primero obtén el SHA del archivo existente (si existe)
+    const respuestaExistente = await fetch(
+      `https://api.github.com/repos/${usuario}/${repo}/contents/${rutaArchivo}`,
+      {
+        headers: { Authorization: `token ${token}` }
+      }
+    );
+    
+    let sha;
+    if (respuestaExistente.ok) {
+      const datosExistente = await respuestaExistente.json();
+      sha = datosExistente.sha;
+    }
+    
+    // Crea o actualiza el archivo
+    const respuesta = await fetch(
+      `https://api.github.com/repos/${usuario}/${repo}/contents/${rutaArchivo}`,
+      {
+        method: 'PUT',
+        headers: {
+          Authorization: `token ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          message: mensajeCommit,
+          content: contenidoBase64,
+          sha: sha // Solo necesario para actualizar
+        })
+      }
+    );
+    
+    if (respuesta.ok) {
+      console.log('Archivo guardado en GitHub');
+    } else {
+      console.error('Error al guardar:', await respuesta.json());
+    }
+  } catch (error) {
+    console.error('Error:', error);
+  }
 }
 
 function registrarAuditoria(accion) {
