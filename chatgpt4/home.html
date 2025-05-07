@@ -1,23 +1,51 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Menú - ClubFutbolApp</title>
-  <link rel="stylesheet" href="css/styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Inicio - ClubFutbolApp</title>
+  <link rel="stylesheet" href="css/styles.css" />
 </head>
 <body>
   <header class="main-header">
-    <h2>Bienvenido a ClubFutbolApp</h2>
+    <h2>Inicio - ClubFutbolApp</h2>
     <button onclick="logout()">Cerrar sesión</button>
   </header>
 
-  <nav id="menuContainer" class="menu-container">
-    <!-- Menú generado dinámicamente -->
-  </nav>
+  <main class="inicio-contenido">
+    <h3>Bienvenido/a, <span id="nombreUsuario"></span></h3>
+    <p>Desde este panel puedes acceder a todas las funciones del sistema según tu rol y función.</p>
+
+    <div class="info-boxes">
+      <div class="info-box">
+        <h4>Configuración</h4>
+        <ul>
+          <li>Mantenimiento de usuarios</li>
+          <li>Mantenimiento de equipos</li>
+          <li>Mantenimiento de jugadores</li>
+          <li>Auditoría</li>
+        </ul>
+      </div>
+
+      <div class="info-box">
+        <h4>Gestión</h4>
+        <ul>
+          <li>Estadísticas de partidos</li>
+          <li>Histórico de partidos</li>
+          <li>Análisis de datos</li>
+        </ul>
+      </div>
+    </div>
+  </main>
 
   <script src="js/auth.js"></script>
-  <script src="js/permisos.js"></script>
-  <script src="js/menu.js"></script>
+  <script>
+    const usuario = JSON.parse(sessionStorage.getItem('usuario'));
+    if (!usuario) {
+      window.location.href = 'index.html';
+    } else {
+      document.getElementById('nombreUsuario').textContent = usuario.usuario;
+    }
+  </script>
 </body>
 </html>
