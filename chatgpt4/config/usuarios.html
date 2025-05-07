@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Mantenimiento de Usuarios</title>
-  <link rel="stylesheet" href="../css/styles.css">
+  <link rel="stylesheet" href="../css/styles.css" />
 </head>
 <body>
   <header class="main-header">
@@ -16,17 +16,26 @@
     <section class="form-section">
       <h3>Agregar Nuevo Usuario</h3>
       <form id="usuarioForm">
-        <input type="text" id="nuevoUsuario" placeholder="Usuario" required>
-        <input type="password" id="nuevaContrasena" placeholder="Contraseña" required>
-        <select id="nuevoRol">
+        <input type="text" id="nuevoUsuario" placeholder="Usuario" required />
+        <input type="password" id="nuevaContrasena" placeholder="Contraseña" required />
+
+        <select id="nuevoRol" required>
+          <option value="">Seleccionar Rol</option>
           <option value="administrador">Administrador</option>
           <option value="usuario">Usuario</option>
         </select>
-        <select id="nuevaFuncion">
+
+        <select id="nuevaFuncion" required>
+          <option value="">Seleccionar Función</option>
           <option value="coordinador">Coordinador</option>
           <option value="delegado">Delegado</option>
           <option value="entrenador">Entrenador</option>
         </select>
+
+        <select id="nuevoEquipo" required>
+          <option value="">Seleccionar Equipo</option>
+        </select>
+
         <button type="submit">Guardar</button>
       </form>
     </section>
@@ -39,6 +48,7 @@
             <th>Usuario</th>
             <th>Rol</th>
             <th>Función</th>
+            <th>Equipo</th>
             <th>Acciones</th>
           </tr>
         </thead>
@@ -49,54 +59,6 @@
 
   <script src="../js/auth.js"></script>
   <script src="../js/permisos.js"></script>
-  <script>
-    verificarAcceso(['administrador']);
-
-    async function cargarUsuarios() {
-      const response = await fetch('../data/usuarios.json');
-      const usuarios = await response.json();
-      const tbody = document.querySelector('#tablaUsuarios tbody');
-      tbody.innerHTML = '';
-      usuarios.forEach((u, index) => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td>${u.usuario}</td>
-          <td>${u.rol}</td>
-          <td>${u.funcion}</td>
-          <td><button onclick="eliminarUsuario(${index})">Eliminar</button></td>
-        `;
-        tbody.appendChild(tr);
-      });
-    }
-
-    async function guardarUsuario(e) {
-      e.preventDefault();
-      const usuario = document.getElementById('nuevoUsuario').value.trim();
-      const contrasena = document.getElementById('nuevaContrasena').value;
-      const rol = document.getElementById('nuevoRol').value;
-      const funcion = document.getElementById('nuevaFuncion').value;
-
-      const response = await fetch('../data/usuarios.json');
-      const usuarios = await response.json();
-      usuarios.push({ usuario, contrasena, rol, funcion });
-
-      const blob = new Blob([JSON.stringify(usuarios, null, 2)], { type: 'application/json' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'usuarios.json';
-      a.click();
-
-      alert('Usuario guardado. Descarga y reemplaza manualmente el archivo usuarios.json.');
-      location.reload();
-    }
-
-    function eliminarUsuario(index) {
-      alert('La eliminación debe hacerse manualmente en el archivo usuarios.json.');
-    }
-
-    document.getElementById('usuarioForm').addEventListener('submit', guardarUsuario);
-    cargarUsuarios();
-  </script>
+  <script src="../js/usuarios.js"></script>
 </body>
 </html>

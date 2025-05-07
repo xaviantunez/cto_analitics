@@ -1,0 +1,17 @@
+[
+  {
+    "nombre": "Equipo A",
+    "temporada": "2024-2025",
+    "anioMaximo": 2010
+  },
+  {
+    "nombre": "Equipo B",
+    "temporada": "2024-2025",
+    "anioMaximo": 2012
+  },
+  {
+    "nombre": "Equipo Juvenil",
+    "temporada": "2023-2024",
+    "anioMaximo": 2006
+  }
+]

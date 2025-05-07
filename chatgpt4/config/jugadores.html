@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Gestión de Jugadores</title>
+  <link rel="stylesheet" href="../css/styles.css" />
+</head>
+<body>
+  <header class="main-header">
+    <h2>Gestión de Jugadores</h2>
+    <button onclick="logout()">Cerrar sesión</button>
+  </header>
+
+  <main>
+    <section class="form-section">
+      <h3>Agregar Jugador</h3>
+      <form id="formJugador">
+        <input type="text" id="nombre" placeholder="Nombre" required />
+        <input type="text" id="apellidos" placeholder="Apellidos" required />
+        <input type="number" id="anioNacimiento" placeholder="Año de nacimiento" required />
+        <input type="number" id="numero" placeholder="Número de camiseta" required />
+        <input type="text" id="telefono" placeholder="Teléfono de contacto" />
+        <textarea id="observaciones" placeholder="Observaciones"></textarea>
+        <button type="submit">Guardar</button>
+      </form>
+    </section>
+
+    <section>
+      <h3>Listado de Jugadores</h3>
+      <input type="text" id="filtroNombre" placeholder="Filtrar por nombre" />
+      <input type="text" id="filtroApellidos" placeholder="Filtrar por apellidos" />
+      <input type="number" id="filtroAnio" placeholder="Filtrar por año de nacimiento" />
+      <table id="tablaJugadores">
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Apellidos</th>
+            <th>Año Nac.</th>
+            <th>Número</th>
+            <th>Teléfono</th>
+            <th>Observaciones</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </section>
+  </main>
+
+  <script src="../js/auth.js"></script>
+  <script src="../js/permisos.js"></script>
+  <script src="../js/jugadores.js"></script>
+</body>
+</html>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Gestión de Equipos</title>
+  <link rel="stylesheet" href="../css/styles.css" />
+</head>
+<body>
+  <header class="main-header">
+    <h2>Gestión de Equipos</h2>
+    <button onclick="logout()">Cerrar sesión</button>
+  </header>
+
+  <main>
+    <section class="form-section">
+      <h3>Agregar Nuevo Equipo</h3>
+      <form id="equipoForm">
+        <input type="text" id="nombreEquipo" placeholder="Nombre del Equipo" required />
+        <select id="temporadaEquipo" required>
+          <option value="">Seleccionar Temporada</option>
+        </select>
+        <input type="number" id="anioMaximo" placeholder="Año de nacimiento máximo" required />
+        <button type="submit">Guardar Equipo</button>
+      </form>
+    </section>
+
+    <section>
+      <h3>Listado de Equipos por Temporada</h3>
+      <label for="filtroTemporada">Filtrar por temporada:</label>
+      <select id="filtroTemporada">
+        <option value="">Todas</option>
+      </select>
+
+      <table id="tablaEquipos">
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Temporada</th>
+            <th>Año Máx.</th>
+            <th>Jugadores</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </section>
+
+    <section>
+      <h3>Jugadores del Equipo</h3>
+      <ul id="listaJugadores"></ul>
+    </section>
+  </main>
+
+  <script src="../js/auth.js"></script>
+  <script src="../js/permisos.js"></script>
+  <script src="../js/equipos.js"></script>
+</body>
+</html>

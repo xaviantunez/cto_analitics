@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Gestión de Temporadas</title>
+  <link rel="stylesheet" href="../css/styles.css" />
+</head>
+<body>
+  <header class="main-header">
+    <h2>Mantenimiento de Temporadas</h2>
+    <button onclick="logout()">Cerrar sesión</button>
+  </header>
+
+  <main>
+    <section class="form-section">
+      <h3>Agregar Temporada</h3>
+      <form id="formTemporada">
+        <input type="text" id="nuevaTemporada" placeholder="Ej: 2024-2025" required />
+        <button type="submit">Guardar</button>
+      </form>
+    </section>
+
+    <section>
+      <h3>Temporadas Registradas</h3>
+      <ul id="listaTemporadas"></ul>
+    </section>
+  </main>
+
+  <script src="../js/auth.js"></script>
+  <script src="../js/permisos.js"></script>
+  <script src="../js/temporadas.js"></script>
+</body>
+</html>

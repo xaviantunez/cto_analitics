@@ -1,0 +1,18 @@
+[
+  {
+    "nombre": "Carlos",
+    "apellidos": "Ramírez López",
+    "anioNacimiento": 2011,
+    "numero": 10,
+    "telefono": "612345678",
+    "observaciones": "Capitán del equipo"
+  },
+  {
+    "nombre": "Lucía",
+    "apellidos": "Fernández Ruiz",
+    "anioNacimiento": 2012,
+    "numero": 7,
+    "telefono": "678123456",
+    "observaciones": "Extremo rápido"
+  }
+]

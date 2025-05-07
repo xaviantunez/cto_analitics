@@ -3,18 +3,14 @@
     "usuario": "admin",
     "contrasena": "admin123",
     "rol": "administrador",
-    "funcion": "coordinador"
+    "funcion": "coordinador",
+    "equipo": "Equipo A"
   },
   {
-    "usuario": "juan",
-    "contrasena": "juan123",
+    "usuario": "usuario1",
+    "contrasena": "clave1",
     "rol": "usuario",
-    "funcion": "entrenador"
-  },
-  {
-    "usuario": "ana",
-    "contrasena": "ana123",
-    "rol": "usuario",
-    "funcion": "coordinador"
+    "funcion": "delegado",
+    "equipo": "Equipo B"
   }
 ]
