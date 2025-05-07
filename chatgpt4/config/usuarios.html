@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mantenimiento de Usuarios</title>
+  <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+  <header class="main-header">
+    <h2>Mantenimiento de Usuarios</h2>
+    <button onclick="logout()">Cerrar sesión</button>
+  </header>
+
+  <main>
+    <section class="form-section">
+      <h3>Agregar Nuevo Usuario</h3>
+      <form id="usuarioForm">
+        <input type="text" id="nuevoUsuario" placeholder="Usuario" required>
+        <input type="password" id="nuevaContrasena" placeholder="Contraseña" required>
+        <select id="nuevoRol">
+          <option value="administrador">Administrador</option>
+          <option value="usuario">Usuario</option>
+        </select>
+        <select id="nuevaFuncion">
+          <option value="coordinador">Coordinador</option>
+          <option value="delegado">Delegado</option>
+          <option value="entrenador">Entrenador</option>
+        </select>
+        <button type="submit">Guardar</button>
+      </form>
+    </section>
+
+    <section>
+      <h3>Listado de Usuarios</h3>
+      <table id="tablaUsuarios">
+        <thead>
+          <tr>
+            <th>Usuario</th>
+            <th>Rol</th>
+            <th>Función</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </section>
+  </main>
+
+  <script src="../js/auth.js"></script>
+  <script src="../js/permisos.js"></script>
+  <script>
+    verificarAcceso(['administrador']);
+
+    async function cargarUsuarios() {
+      const response = await fetch('../data/usuarios.json');
+      const usuarios = await response.json();
+      const tbody = document.querySelector('#tablaUsuarios tbody');
+      tbody.innerHTML = '';
+      usuarios.forEach((u, index) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${u.usuario}</td>
+          <td>${u.rol}</td>
+          <td>${u.funcion}</td>
+          <td><button onclick="eliminarUsuario(${index})">Eliminar</button></td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    async function guardarUsuario(e) {
+      e.preventDefault();
+      const usuario = document.getElementById('nuevoUsuario').value.trim();
+      const contrasena = document.getElementById('nuevaContrasena').value;
+      const rol = document.getElementById('nuevoRol').value;
+      const funcion = document.getElementById('nuevaFuncion').value;
+
+      const response = await fetch('../data/usuarios.json');
+      const usuarios = await response.json();
+      usuarios.push({ usuario, contrasena, rol, funcion });
+
+      const blob = new Blob([JSON.stringify(usuarios, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'usuarios.json';
+      a.click();
+
+      alert('Usuario guardado. Descarga y reemplaza manualmente el archivo usuarios.json.');
+      location.reload();
+    }
+
+    function eliminarUsuario(index) {
+      alert('La eliminación debe hacerse manualmente en el archivo usuarios.json.');
+    }
+
+    document.getElementById('usuarioForm').addEventListener('submit', guardarUsuario);
+    cargarUsuarios();
+  </script>
+</body>
+</html>
