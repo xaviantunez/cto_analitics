@@ -656,10 +656,12 @@ $(document).ready(function() {
             checkboxp.attr("class", "checkboxportero");
             checkboxp.attr("id", "pcheck" + nombresCronometros[i]);
             checkboxp.text("portero");
+            checkboxp.attr("class","spanjugador");
             var spanpuerta = $("<span>");
             spanpuerta.attr("class", "spanportero");
             spanpuerta.attr("id", "puerta" + nombresCronometros[i]);
             spanpuerta.text('Portero');
+            spanpuerta.attr("class","spanjugador");
         //checkbox.attr("onclick", "comprobarcheckbox()");
 
             spanfaltas.attr("id", "spfaltas" + nombresCronometros[i]);
@@ -678,6 +680,7 @@ $(document).ready(function() {
 
             spanjugador.attr("id", "name" + nombresCronometros[i]);
             spanjugador.text(nombresCronometros[i]);
+            spanjugador.attr("class","spanjugador");
             spantiempo.attr("id", "time" + nombresCronometros[i]);
             const minutos = Math.floor(tiempos[nombresCronometros[i]] / 60);
             const segundos = tiempos[nombresCronometros[i]] % 60;
