@@ -26,7 +26,7 @@ $(document).ready(function() {
 
     equips.forEach(function(nombre, index) {
         //alert(nombre);
-        $("#equipos").append("<option value='"+nombre+"'>"+nombre+"</option>");
+        //$("#equipos").append("<option value='"+nombre+"'>"+nombre+"</option>");
     });
 
 
