@@ -24,21 +24,16 @@ $(document).ready(function() {
     var capitan="";
     var equipotitular=[];
 
+    equips.forEach(function(nombre, index) {
+        //alert(nombre);
+        $("#equipos").append("<option value='"+nombre+"'>"+nombre+"</option>");
+    });
 
-    const alevinB = [
-        'Aleix', 'Alexis', 'ArnauGE', 'Carles', 'Dario',
-        'Gabriel', 'Hector', 'Joan','Jordi','Júlia',
-        'Maia', 'Marc','Oscar', 'Andreu', 'ArnauGLL', 'Brais', 'Carlos',
-        'Guillem', 'Ivor', 'Leo',
-        'Mateo', 'Miguel',
-        'Victor'];
-    var alevinA = [
-        'Pablo','Ianis','DaniL', 'DaniO','Cristian','Maxim', 'Ruben','Andreu', 'Brais',
-        'Hugo', 'Manel', 'Marc', 'Mateo', 'Guillem', 'Leo', 'ArnauGLL','Carlos','Victor'
-    ];
+
+    //const { prebenjaminA, benjaminB, benjaminA, alevinF, alevinB, alevinA, infantilA, cadeteF, cadeteA, juevenilA  } = require('./equipos.js');
 
    
-    var arrayestadisticas=["rematesFuera","rematesPorteria","paradasPortero","cornersFavor","fuerasJuego","faltasCometidas"];
+    var arrayestadisticas=["rematesFuera","rematesPorteria","paradasPortero","cornersFavor","fuerasJuego","faltasCometidas","tarjetasAmarillas","tarjetasRojas"];
     // Intentamos cargar los datos de tiempos desde localStorage si existen
     if (localStorage.getItem('tiempos')) {
         //esconder el select de e3quipos
@@ -118,6 +113,8 @@ $(document).ready(function() {
             $('.checkboxportero').hide();
             $('.spanportero').hide();
             $('.spantitulos').hide();
+
+
             localStorage.setItem('equipotitular',JSON.stringify(equipotitular));
             localStorage.setItem('resulAdv', JSON.stringify(0));
             localStorage.setItem('resulCto', JSON.stringify(0));
@@ -142,8 +139,8 @@ $(document).ready(function() {
                     $("#GO"+jugador).hide();
                     $("#RF"+jugador).hide();
                     $("#RD"+jugador).hide();
-                    $("#TGA"+jugador).show();
-                    $("#TGR"+jugador).show();
+                    $("#TA"+jugador).show();
+                    $("#TR"+jugador).show();
                     $('.spantitulos').show();
 
                 }
@@ -155,8 +152,8 @@ $(document).ready(function() {
                 $("#GO"+jugador).show();
                 $("#RF"+jugador).show();
                 $("#RD"+jugador).show();
-                $("#TGA"+jugador).show();
-                $("#TGR"+jugador).show();
+                $("#TA"+jugador).show();
+                $("#TR"+jugador).show();
                 $("#TP"+jugador).hide();
                 $("#PA"+jugador).hide();
                 $("#SP"+jugador).hide();
@@ -523,11 +520,11 @@ $(document).ready(function() {
             var texto = "Remate Fuera: "+nombre+" min "+minutosTotales+"";
             updateVarLocalStorage('rematesFueraleft','rematesFueraLeft');
         }
-        if(accion=="TGA"){
+        if(accion=="TA"){
             var texto = "Tarjeta Amarilla: "+nombre+" min "+minutosTotales+"";
-            updateVarLocalStorage('tarjetasAmarillaleft','tarjetasAmarillaLeft');
+            updateVarLocalStorage('tarjetasAmarillasleft','tarjetasAmarillasLeft');
         }
-        if(accion=="TGR"){
+        if(accion=="TR"){
             var texto = "Tarjeta Roja: "+nombre+" min "+minutosTotales+"";
             updateVarLocalStorage('tarjetasRojasleft','tarjetasRojasLeft');
         }
@@ -596,7 +593,7 @@ $(document).ready(function() {
 			buttonF.attr("id","FH"+nombresCronometros[i]);
             //FALTA RECIBIDA
             var buttonFR =$("<button>")
-			buttonFR.text("RECIBE");
+			buttonFR.text("SUFRE");
 			buttonFR.attr("class","buttonaccion");
 			buttonFR.attr("id","FR"+nombresCronometros[i]);
             //ASISTENCIA
@@ -631,16 +628,16 @@ $(document).ready(function() {
 			buttonTP.attr("id","TP"+nombresCronometros[i]);
 			buttonTP.hide();
 
-            var buttonTGA =$("<button>")
-            buttonTGA.text("AMARILLA");
-            buttonTGA.attr("class","buttonaccion");
-            buttonTGA.attr("id","TGA"+nombresCronometros[i]);
+            var buttonTA =$("<button>")
+            buttonTA.text("AMA");
+            buttonTA.attr("class","buttonaccion amarillo");
+            buttonTA.attr("id","TA"+nombresCronometros[i]);
 
 
-            var buttonTGR =$("<button>")
-            buttonTGR.text("ROJA");
-            buttonTGR.attr("class","buttonaccion");
-            buttonTGR.attr("id","TGR"+nombresCronometros[i]);
+            var buttonTR =$("<button>")
+            buttonTR.text("ROJ");
+            buttonTR.attr("class","buttonaccion rojo");
+            buttonTR.attr("id","TR"+nombresCronometros[i]);
 
 
             checkbox.attr("type", "checkbox");
@@ -722,8 +719,8 @@ $(document).ready(function() {
                 spanbotones.attr("id", "spbotones");
                 //alert(spanfaltas.innerHTML);
                 spanbotones.append(spantarjetas);
-                spanbotones.append(buttonTGA);
-                spanbotones.append(buttonTGR);
+                spanbotones.append(buttonTA);
+                spanbotones.append(buttonTR);
                 span2.append(spanbotones);
 
                 midiv.append(span2);
@@ -810,8 +807,8 @@ $(document).ready(function() {
             $("#GO"+jugadorEnJuego).show();
             $("#RF"+jugadorEnJuego).show();
             $("#RD"+jugadorEnJuego).show();
-            $("#TGA"+jugadorEnJuego).show();
-            $("#TGR"+jugadorEnJuego).show();
+            $("#TA"+jugadorEnJuego).show();
+            $("#TR"+jugadorEnJuego).show();
             $("#SP"+jugadorEnJuego).hide();
 
             $("#cronometros").append($("#"+jugadorEnJuego));
@@ -839,12 +836,12 @@ $(document).ready(function() {
                         $("#GO"+jugadorFueraJuego).hide();
                         $("#RF"+jugadorFueraJuego).hide();
                         $("#RD"+jugadorFueraJuego).hide();
-                        $("#TGA"+jugadorFueraJuego).show();
-                        $("#TGR"+jugadorFueraJuego).show();
+                        $("#TA"+jugadorFueraJuego).show();
+                        $("#TR"+jugadorFueraJuego).show();
                         $('.spantitulos').hide();
                     }
                 }
-            } 
+            }
             crearIntervalo(jugadorFueraJuego);
             $("#cronometros").prepend($("#"+jugadorFueraJuego));
         }
@@ -862,8 +859,8 @@ $(document).ready(function() {
                 $("#GO"+jugador).show();
                 $("#RF"+jugador).show();
                 $("#RD"+jugador).show();
-                $("#TGA"+jugador).show();
-                $("#TGR"+jugador).show();
+                $("#TA"+jugador).show();
+                $("#TR"+jugador).show();
                 $("#SP"+jugador).hide();
             }
         }          
@@ -1033,8 +1030,22 @@ $(document).ready(function() {
         switch(equipoElegido) {
             //case "BenjaminA":nombresCronometros=benjaminA;break;
             //case "BenjaminB":nombresCronometros=benjaminB;break;
-            case "AlevinA":nombresCronometros=alevinA;break;
-            case "AlevinB":nombresCronometros=alevinB;break;
+            case "alevinA":nombresCronometros=alevinA;break;
+            case "alevinB":nombresCronometros=alevinB;break;
+            case "alevinF":nombresCronometros=alevinF;break;
+            case "benjaminB":nombresCronometros=benjaminB;break;
+            case "benjaminA":nombresCronometros=benjaminA;break;
+            case "prebenjaminA":nombresCronometros=prebenjaminA;break;
+            case "prebenjaminB":nombresCronometros=prebenjaminB;break;
+            case "infantilA":nombresCronometros=infantilA;break;
+            case "infantilB":nombresCronometros=infantilB;break;
+            case "infantilF":nombresCronometros=infantilF;break;
+            case "cadeteA":nombresCronometros=cadeteA;break;
+            case "cadeteB":nombresCronometros=cadeteB;break;
+            case "cadeteF":nombresCronometros=cadeteF;break;
+            case "JuvenilA":nombresCronometros=JuvenilA;break;
+            case "JuvenilB":nombresCronometros=JuvenilB;break;
+            case "JuvenilF":nombresCronometros=JuvenilB;break;
         }
         //alert('');
         localStorage.setItem('equipoelegido', JSON.stringify(equipoElegido));

@@ -7,6 +7,7 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
          <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
          <script src="cto_analitics.js"></script>
+         <script src="equipos.js"></script>
         <!--css-->
         <style>
         .spannombre { text-align:right; display: inline-block; width: 100px; font-size: 20px; }
@@ -265,16 +266,23 @@
         }
         .spanaccion{
             display: block; /* Asegura que el botón ocupe toda la línea disponible */
-            margin: 5px auto 5px; /* Agrega espacio encima y centra horizontalmente */
+            margin: 2px auto 2px; /* Agrega espacio encima y centra horizontalmente */
             
         }
         #spbotones{
             display: inline-block; /* Asegura que el botón ocupe toda la línea disponible */
-            padding:5px;
+            padding:2px;
         }
         .spantarjetas,.spanremates,.spanfaltas{
             font-size: 12px !important;
-            margin-left: 5px;
+            margin-left: 2px;
+            border:1px solid #bbbbbb;
+            background:#e0e0e0;
+        }.spanremates{
+            font-size: 12px !important;
+            margin-left: 2px;
+            border:1px solid #bbbbbb;
+            background:#dddddd;
         }
 
 		.buttonaccion{
@@ -283,6 +291,13 @@
             height:30px;
             width:auto;
         }
+        .buttonaccion{
+            margin-left: 2px; /* Agrega espacio encima y centra horizontalmente */
+            font-size: 8px !important;
+            height:30px;
+            width:auto;
+        }
+
         #divnewplayer{
             width: 30%;
             display: inline-block;
@@ -302,6 +317,10 @@
             background-color: #00cc00 !important;
             color: transparent; !important
         }
+        .amarillo{
+            background-color: #fff350 !important;
+            color: transparent; !important
+        }
         /*fin estilo div checkbox jugadores*/
        #salir-cambio,#salir-gol,#salir-gol-adv, #cancel-capitan{background-color: #1a1a19;}
     
@@ -312,8 +331,7 @@
         <div id="divequipos">
             <label for="equipos">Seleccione Equipo</label>
             <select id="equipos">
-                <option value="AlevinA">Alevin A</option>
-                <option value="AlevinB">Alevin B</option>
+                <option value="">SELECCIONAR</option>
                 <!--<option value="BenjaminA">Benjamin A</option>
                 <option value="BenjaminB">Benjamin B</option>-->
             </select>
@@ -465,6 +483,23 @@
                         <div class="estadisticas"><button class="increment-right">+</button></div>
                     </div>
                     <div class="numestadisticasright" id="faltasRight">0</div>
+                </div>
+                <div class="sectionestadistica">
+                    <div class="numestadisticasleft" id="tarjetasSmarillasLeft">0</div>
+                    <div class="grupdivestadisticas">
+                        <div class="estadisticas"><button class="increment-left">+</button></div>
+                        <div class="estadisticas"><span span id="tarjetasAmarillas">Tarjetas Amarillas</span></div>
+                        <div class="estadisticas"><button class="increment-right">+</button></div>
+                    </div>
+                    <div class="numestadisticasright" id="tarjetasAmarillasRight">0</div>
+                </div><div class="sectionestadistica">
+                    <div class="numestadisticasleft" id="tarjetasRojasLeft">0</div>
+                    <div class="grupdivestadisticas">
+                        <div class="estadisticas"><button class="increment-left">+</button></div>
+                        <div class="estadisticas"><span span id="tarjetasRojas">Tarjetas Rojas</span></div>
+                        <div class="estadisticas"><button class="increment-right">+</button></div>
+                    </div>
+                    <div class="numestadisticasright" id="tarjetasRojasRight">0</div>
                 </div>
             </div>
             <div id="button-guardar-excel">
