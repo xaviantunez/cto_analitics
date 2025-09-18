@@ -101,7 +101,7 @@ $(document).ready(function() {
 
     function iniciar(){
         var texto="";
-        if(totaljugadoresencampo<8){
+        if(totaljugadoresencampo<7){
             alert('SOLO TIENES '+totaljugadoresencampo+" JUGADORES SELECCIONADOS\n\nPOR FAVOR REVISALO");
             return
         }
