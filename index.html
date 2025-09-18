@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!--Javascript-->
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+         <script src="cto_analitics.js"></script>
+        <!--css-->
+        <style>
+        .spannombre { text-align:right; display: inline-block; width: 100px; font-size: 20px; }
+        #iniciar-todos, #parar-todos, #guardar-pdf, #guardar-excel, #cambiar-estado,#salir-cambio,#salir-gol, #reiniciar-todos, #add-new-player, #tryCapitan, #help{
+            color: white; /* Texto blanco */
+            padding: 15px 32px; /* Espaciado */
+            text-align: center; /* Centrado */
+            text-decoration: none; /* Sin subrayado */
+            display: inline-block; /* Estilo en línea */
+            font-size: 16px; /* Tamaño de fuente */
+            margin: 4px 2px; /* Margen */
+            border: none; /* Sin borde */
+            border-radius: 5px; /* Bordes redondeados */
+            transition: background-color 0.3s; /* Transición suave */
+        }
+        button#showgrafics{
+            padding: 10px;
+        }
+        #reiniciar-todos, #add-new-player {background-color: #1a1a19;}
+        #iniciar-todos, #cambiar-estado{ background-color: #107c41;}
+        #parar-todos, #tryCapitan { background-color: #4d55b9;}
+        #help { background-color: #CC0000;color:#ffffff;}
+        #guardar-pdf {background-color: red;}
+        #guardar-excel {background-color: #107c41;}
+        span {font-size: 16px;font-weight: bold;}
+        body { 
+            text-align: center; 
+            font-family: Arial, sans-serif; 
+            background-color: #f4f4f4; 
+            margin: 0; 
+            padding: 20px; 
+        }
+        .cronometro, .noconvocados, #suplentes div, #banquillo{ 
+            margin: 10px; 
+            padding: 10px; 
+            background-color: white; 
+            border-radius: 8px; 
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1); 
+        }
+        #banquillo{
+            background-color: black; 
+            color: white;
+        }
+        #divjugjugando p{
+            max-height: 10px;
+        }
+        #divjugjugando{
+            width: 60%;
+            max-height: 200px;
+            display: inline-block;
+            margin: 0px;
+            padding: 1px 0;
+            color: white;
+            font-weight: bold;
+             background-color: grey; 
+            border-radius: 8px; 
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1); 
+        }
+        .cronometro {
+            color: #4b4040;
+         }
+        .spannombre { 
+            text-align:right; 
+            display: inline-block; 
+            width: 100px; 
+            font-size: 16px; 
+        }
+        .button { 
+            background-color: #007BFF; 
+            color: white; 
+            border: none; 
+            border-radius: 5px; 
+            padding: 10px 15px; 
+            margin: 5px; 
+            transition: background-color 0.3s; 
+        }
+        .button:hover { 
+            background-color: #0056b3; 
+        }
+        #jugadores-modal, #goleador-modal, #goleador-adv-modal,#adversario-modal, #delete-cookies-modal,#new-player-modal, #capitan-modal, #ayuda-modal{
+            position: fixed; 
+            top: 50%; 
+            left: 50%; 
+            transform: translate(-50%, -50%); 
+            background: white; 
+            padding: 40px;
+            font-size: 14px; 
+            border: 1px solid #ccc; 
+            border-radius: 8px; 
+            z-index: 1000; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            display: none; 
+        }
+        #ayuda-modal{
+            padding: 10px;
+        }
+        #delete-cookies-modal{
+            text-align: center;
+        }
+        select { 
+            width: 100%; 
+            padding: 10px; 
+            margin: 10px 0; 
+            border-radius: 5px; 
+            border: 1px solid #ccc; 
+            min-width: 190px;
+        }
+        #jugadores-en-juego, #jugadores-fuera-juego { 
+            margin-bottom: 20px; 
+        }
+        #cambiar-jugadores,  #save-gol-adv { 
+            background-color: #107c41; /* Verde */
+            color: white; /* Texto blanco */
+            padding: 10px; /* Espaciado */
+            text-align: center; /* Centrado */
+            text-decoration: none; /* Sin subrayado */
+            display: inline-block; /* Estilo en línea */
+            font-size: 16px; /* Tamaño de fuente */
+            margin: 4px 2px; /* Margen */       
+            border: none; /* Sin borde */
+            border-radius: 5px; /* Bordes redondeados */
+            transition: background-color 0.3s; /* Transición suave */
+        }
+              #add-gol-cto, #save-gol,#salir-gol,#salir-gol-adv, #save-capitan, #cancel-capitan{
+            background-color: #107c41;
+            padding: 10px;
+        
+            color: white; /* Texto blanco */
+            border-radius: 5px; /* Bordes redondeados */
+            text-align: center;
+            min-width: 90px;
+            display: block;
+            font-size: 16px;
+        }
+        #add-gol-adv{
+            background-color: #830909;
+            padding:10px;
+            margin:7px auto;
+            color: white; /* Texto blanco */
+            border-radius: 5px; /* Bordes redondeados */
+            text-align: center;
+            min-width: 90px;
+            display: block;
+        }
+
+        #cambiar-jugadores:hover { 
+            background-color: #138496; 
+        }        
+        #marcador-partido td{
+            border-top: 1px solid #a9a1a1;
+            padding: 14px;
+            width: 160px;
+            font-size: 16px;
+        }
+        #marcador-partido th#id1, th#id2{
+            padding: 14px;
+            color: #4b4040;
+        }
+        input#goleador-adversario {
+            padding: 13px;
+        }
+        #spannombreTotal{  
+            padding: 10px;
+            width: 250px;
+            text-align: center;
+        }
+        span#time0 {
+            display: block;
+        }
+        #tablaMarcador{
+            width: 100%;
+        }
+        .sectionestadistica{
+            padding: 15px 0;
+            border-top: 1px solid;
+            border-color: #a9a1a1;
+        }
+        .estadisticas{
+            display: inline-block;
+            border: none;
+            padding: 0 5px;
+        }
+        .numestadisticasleft{   
+            display: inline-block;
+            text-align: left;
+        }
+        .numestadisticasright{
+            display: inline-block;
+            text-align: right;
+        }
+        .numestadisticas{
+             display: inline-block;
+        }
+        .grupdivestadisticas{
+            display: inline-block;
+            width: 70%;
+        }
+        #add-rival, #saveadversario{
+            background-color: grey;
+            color: white; /* Texto blanco */
+            padding: 15px 32px; /* Espaciado */
+            text-align: center; /* Centrado */
+            text-decoration: none; /* Sin subrayado */
+            display: inline-block; /* Estilo en línea */
+            font-size: 16px; /* Tamaño de fuente */
+            margin: 8px 2px; /* Margen */
+
+            border: none; /* Sin borde */
+            border-radius: 5px; /* Bordes redondeados */
+            transition: background-color 0.3s; /* Transición suave */
+        }
+        input#textadversario {
+            padding: 8px 5px;
+        }
+        .increment-right, .increment-left,.sectionestadistica span{
+            font-size: 18px;
+            font-weight: 100;
+        }
+        #cronometroTotal{
+          background-color: white;
+          color: grey;
+        }
+        .custom-disabled-checked:disabled:checked {
+            background-color: blue;  /* Fondo verde claro cuando está marcado */
+            border: 1px solid #75b57a;  /* Borde verde */
+        }
+        #delete-cookies-modal{
+            text-align: center;
+        }
+        button#continuarsesion, button#eliminarsesion {
+            padding: 10px;
+            color: white;
+        }
+        button#continuarsesion{
+            background-color: #830909;
+        }
+        button#eliminarsesion {
+            background-color: #107c41;
+        }
+        button.player-button{
+            padding: 10px;
+            background-color: #1a1a19;
+            color: white;
+            display: inline-block;
+            width: 99px;
+        }
+        button#save-new-player{
+            background-color: #107c41;
+        }
+        input#text-player {
+            margin: 12px;
+            padding: 9px;
+        }
+        .buttondelete{
+            margin-left:10px;
+        }
+        .spanaccion{
+            display: block; /* Asegura que el botón ocupe toda la línea disponible */
+            margin: 10px auto 10px; /* Agrega espacio encima y centra horizontalmente */
+            
+        }
+        #spbotones{
+            display: inline-block; /* Asegura que el botón ocupe toda la línea disponible */
+            padding:5px;
+        }
+        .spantarjetas,.spanremates,.spanfaltas{
+            font-size: 12px !important;
+            margin-left: 10px;
+        }
+
+		.buttonaccion{
+            margin-left: 5px; /* Agrega espacio encima y centra horizontalmente */
+            font-size: 8px !important;
+            height:30px;
+            width:auto;
+        }
+        #divnewplayer{
+            width: 30%;
+            display: inline-block;
+            vertical-align: top;
+            font-size: 15px;
+        }
+        .naranja{
+            background-color: #ffcc00 !important;
+            color: transparent; !important
+        }
+        .rojo{
+            /*background-color: #ffdfd4 !important;*/
+            background-color: #ff0000 !important;
+            color: transparent; !important
+        }
+        .verde{
+            background-color: #00cc00 !important;
+            color: transparent; !important
+        }
+        /*fin estilo div checkbox jugadores*/
+       #salir-cambio,#salir-gol,#salir-gol-adv, #cancel-capitan{background-color: #1a1a19;}
+    
+        </style>
+    <!--Fin css-->
+    </head>
+    <body>
+        <div id="divequipos">
+            <label for="equipos">Seleccione Equipo</label>
+            <select id="equipos">
+                <option value="AlevinA">Alevin A</option>
+                <option value="AlevinB">Alevin B</option>
+                <!--<option value="BenjaminA">Benjamin A</option>
+                <option value="BenjaminB">Benjamin B</option>-->
+            </select>
+        </div>
+        <div id="add-rival-div">
+            <button id="add-rival">A&nacute;adir rival</button>
+        </div>
+        <div id="cronometros"></div>
+        <div>
+            <div id="divjugjugando">
+
+                <p id="jugjug">JUGADORES JUGANDO</p>
+                <p id="jugjugando">0</p>  
+            </div>
+        <!---->
+            <div id="divnewplayer">
+                <button id="add-new-player">Nuevo jugador</button>
+                
+            </div>
+        </div>
+            <div id="new-player-modal">
+                <label>Nuevo Jugador</label>
+                <input type="text" id="text-player">
+                <button class="player-button" id="save-new-player">Guardar</button>
+                <button class="player-button" id="close-new-player">Cancelar</button>
+            </div>
+            <div class="cronometro" id="cronometroTotal">
+                <span class="spannombre" id="spannombreTotal">Total minutos</span>
+                <span id="time0">0:00</span>
+            </div>
+            <div class="button-controls">
+                <button id="tryCapitan">Escoge capitan</button>
+                <button id="iniciar-todos">Empezar tiempo</button>
+                <button id="parar-todos">Parar tiempo</button>
+                <button id="help">?</button>
+            </div>
+            <div id="banquillo">
+                <label>BANQUILLO</label>
+            </div>
+            <div id="suplentes"></div>
+            <div id="adversario-modal" style="display:none;">
+                <h4>Adversario</h4>
+                <input id="textadversario" type="text">
+                <button id="saveadversario">A&nacute;adir</button>
+            </div>
+            <div id="capitan-modal" style="display: none;">
+                <h4>Escoge un capitan</h4>
+                <select id="jugadoresSeleccionados" size="1"></select>
+                <div style="display:inline-block;">
+                    <button id="save-capitan">Guardar</button>
+                    <button id="cancel-capitan">Cerrar</button>        
+                </div>
+            </div>
+            <div id="jugadores-modal" style="display:none;">
+                <h4>Sale del campo</h4>
+                <select id="jugadores-en-juego" size="1"></select>
+                <h4>Entra al campo</h4>
+                <select id="jugadores-fuera-juego" size="1"></select>    
+                <button id="cambiar-estado">Cambio</button>
+                <button id="salir-cambio">Cerrar</button>
+            </div>
+            <div id="ayuda-modal" style="display:none;">
+                <h4 style="text-align: left;"><strong>FH</strong> --> HACE FALTA</h4>
+                <h4 style="text-align: left;"><strong>FR</strong> --> RECIBE FALTA</h4>
+                <h4 style="text-align: left;"><strong>RD</strong> --> REMATA DENTRO</h4>
+                <h4 style="text-align: left;"><strong>RF</strong> --> REMATA FUERA</h4>
+                <h4 style="text-align: left;"><strong>AS</strong> --> ASISTE</h4>
+                <h4 style="text-align: left;"><strong>GO</strong> --> GOL</h4>
+                <h4 style="text-align: left;"><strong>PA</strong> --> PARADA</h4>
+                <button id="salir-ayuda" style="display: inline-block; ">Cerrar</button>
+
+            </div>
+            <div id="goleador-modal" style="display:none;">
+                <h4>Goleador</h4>
+                <select id="goleador-en-juego" size="1"></select>
+                <h4>Asistencia</h4>
+                <select id="asistencia-en-juego" size="1"></select>
+                <button id="save-gol" style="display: inline-block; ">A&nacute;adir Gol</button>
+                <button id="salir-gol" style="display: inline-block; ">Cerrar</button>
+            </div>
+            <!--opcion para añadir goleador adversario-->
+            <div id="goleador-adv-modal" style="display:none;">
+                <button id="save-gol-adv">A&nacute;adir Gol</button>
+                <button id="salir-gol-adv" style="display: inline-block; ">Cerrar</button>
+            </div>
+            <div id="marcador-partido">
+                <table id="tablaMarcador">
+                    <tr>
+                        <th id="id1"><span>CTO</span><button id="add-gol-cto">+ Gol</button></th>
+                        <th id="id2"><span>Adversario</span><button id="add-gol-adv">+ Gol</button></th>
+                    </tr>
+                    <tr>
+                        <td id="resulCto">0</td>
+                        <td id="resulAdv">0</td>
+                    </tr>
+                </table>
+            </div>
+            <div id="divestadisticas">
+                <div class="sectionestadistica">
+                    <div class="numestadisticasleft" id="rematesFueraLeft">0</div>
+                    <div class="grupdivestadisticas">
+                        <div class="estadisticas"><button class="increment-left">+</button></div>
+                        <div class="estadisticas"><span id="rematesFuera">Remates Fuera</span></div>
+                        <div class="estadisticas"><button class="increment-right">+</button></div>
+                    </div>
+                    <div class="numestadisticasright" id="rematesFueraRight">0</div>
+                </div>
+                <div class="sectionestadistica">
+                    <div class="numestadisticasleft" id="rematesPorteriaLeft">0</div>
+                    <div class="grupdivestadisticas">
+                        <div class="estadisticas"><button class="increment-left">+</button></div>
+                        <div class="estadisticas"><span span id="rematesPorteria">Remates Dentro</span></div>
+                        <div class="estadisticas"><button class="increment-right">+</button></div>
+                    </div>
+                    <div class="numestadisticasright" id="rematesPorteriaRight">0</div>
+                </div>
+                <div class="sectionestadistica">
+                    <div class="numestadisticasleft" id="paradasPorteroLeft">0</div>
+                    <div class="grupdivestadisticas" >
+                        <div class="estadisticas"><button class="increment-left">+</button></div>
+                        <div class="estadisticas"><span span id="paradasPortero">Paradas portero</span></div>
+                        <div class="estadisticas"><button class="increment-right">+</button></div>
+                    </div>
+                    <div class="numestadisticasright" id="paradasPorteroRight">0</div>
+                </div>
+                <div class="sectionestadistica">
+                    <div class="numestadisticasleft" id="cornerLeft">0</div>
+                    <div class="grupdivestadisticas">
+                        <div class="estadisticas"><button class="increment-left">+</button></div>
+                        <div class="estadisticas"><span span id="cornersFavor">Corners</span></div>
+                        <div class="estadisticas"><button class="increment-right">+</button></div>
+                    </div>
+                    <div class="numestadisticasright" id="cornerRight">0</div>
+                </div>
+                <div class="sectionestadistica">
+                    <div class="numestadisticasleft" id="outsideLeft">0</div>
+                    <div class="grupdivestadisticas">
+                        <div class="estadisticas"><button class="increment-left">+</button></div>
+                        <div class="estadisticas"><span span id="fuerasJuego">Fueras de juego</span></div>
+                        <div class="estadisticas"><button class="increment-right">+</button></div>
+                    </div>
+                    <div class="numestadisticasright" id="outsideRight">0</div>
+                </div>
+                <div class="sectionestadistica">
+                    <div class="numestadisticasleft" id="faltasLeft">0</div>
+                    <div class="grupdivestadisticas">
+                        <div class="estadisticas"><button class="increment-left">+</button></div>
+                        <div class="estadisticas"><span span id="faltasCometidas">Faltas cometidas</span></div>
+                        <div class="estadisticas"><button class="increment-right">+</button></div>
+                    </div>
+                    <div class="numestadisticasright" id="faltasRight">0</div>
+                </div>
+            </div>
+            <div id="button-guardar-excel">
+                <button id="guardar-excel">Guardar Excel</button>
+            </div>
+            <div id="button-reiniciar-todos">
+                <button id="reiniciar-todos">Reiniciar cronometros</button>
+            </div>
+            <div id="delete-cookies-modal" style="display:none;">
+                <h4>ELIMINAR SESION</h4>
+                <button id="eliminarsesion">Si</button>
+                <button id="continuarsesion">No</button>
+            </div>
+            <div id="divgraficos">
+                <button id="showgrafics">Mostrar Graficos</button> 
+            </div>
+            <canvas id="myBarChart" width="400" height="400"></canvas>
+    </body>
+</html>
