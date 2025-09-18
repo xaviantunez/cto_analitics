@@ -12,7 +12,7 @@ const alevinA = [
 
 const benjaminA = [
 ];
-const benjaminB = ["Adomas Volskis", "Saul_Costa", "Sergi_Climent", "Mario_Mas", "Oliver_Mas", "Leo_Barreres", "Marti_Veiguela",
+const benjaminB = ["Adomas_Volskis", "Saul_Costa", "Sergi_Climent", "Mario_Mas", "Oliver_Mas", "Leo_Barreres", "Marti_Veiguela",
      "Joan_Barber","Marco_Gomez","Edu_Mena","Aritz_Salinas","Leo_Perez"
 ];
 const alevinF = [
