@@ -741,29 +741,34 @@ $(document).ready(function() {
                 midiv.append(spanpuerta);
 
                 var spanbotones = $("<span>");
-                spanbotones.attr("id", "spbotones");
+                spanbotones.attr("id", "spbtn1"+nombresCronometros[i]);
+                spanbotones.attr("class", "spbotones");
                 //alert(spanfaltas.innerHTML);
                 spanbotones.append(spanfaltas);
                 spanbotones.append(buttonF);
                 spanbotones.append(buttonFR);
-
+                spanbotones.hide();
                 span2.append(spanbotones);
                 var spanbotones = $("<span>");
-                spanbotones.attr("id", "spbotones");
+                spanbotones.attr("id", "spbtn2"+nombresCronometros[i]);
+                spanbotones.attr("class", "spbotones");
                 spanbotones.append(spanremates);
                 spanbotones.append(buttonR);
                 spanbotones.append(buttonRF);
                 spanbotones.append(buttonA);
                 spanbotones.append(buttonG);
                 spanbotones.append(buttonP);
+                spanbotones.hide();
                 span2.append(spanbotones);
 
                 var spanbotones = $("<span>");
-                spanbotones.attr("id", "spbotones");
+                spanbotones.attr("id", "spbtn3"+nombresCronometros[i]);
+                spanbotones.attr("class", "spbotones");
                 //alert(spanfaltas.innerHTML);
                 spanbotones.append(spantarjetas);
                 spanbotones.append(buttonTA);
                 spanbotones.append(buttonTR);
+                spanbotones.hide();
                 span2.append(spanbotones);
 
                 midiv.append(span2);
@@ -1143,6 +1148,12 @@ $(document).ready(function() {
 
     $('#showgrafics').click(function() {
         creargrafico();
+    });
+    $('.cronometro').click(function() {
+
+        $("#spbtn1"+this.id).toggle();
+        $("#spbtn2"+this.id).toggle();
+        $("#spbtn3"+this.id).toggle();
     });
     function creargrafico() {
         console.log("Show graficos "+tiempos)
