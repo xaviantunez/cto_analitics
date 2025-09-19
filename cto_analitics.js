@@ -532,7 +532,12 @@ $(document).ready(function() {
         }
         if(accion=="RF"){
             var texto = "Remate Fuera: "+nombre+" min "+minutosTotales+"";
-            updateVarLocalStorage('rematesFueraleft','rematesFueraLeft');
+            if (portero==nombre){
+                var texto = "Remate Fuera Equipo Rival min "+minutosTotales+"";
+                updateVarLocalStorage('rematesFueraRight','rematesFueraRight');
+            }
+            else updateVarLocalStorage('rematesFueraleft','rematesFueraLeft');
+
         }
         if(accion=="TA"){
             var texto = "Tarjeta Amarilla: "+nombre+" min "+minutosTotales+"";
@@ -770,6 +775,10 @@ $(document).ready(function() {
                 spanbotones.append(buttonTR);
                 spanbotones.hide();
                 span2.append(spanbotones);
+                span11.text("PULSA PARA ABRIR EL MENU");
+                span11.attr("class","leyenda");
+                span11.attr("id","sp11"+nombresCronometros[i]);
+                span2.append(span11);
 
                 midiv.append(span2);
             $("#cronometros").append(midiv);
@@ -1151,6 +1160,7 @@ $(document).ready(function() {
     });
     $('.cronometro').click(function() {
 
+        $("#sp11"+this.id).toggle();
         $("#spbtn1"+this.id).toggle();
         $("#spbtn2"+this.id).toggle();
         $("#spbtn3"+this.id).toggle();
