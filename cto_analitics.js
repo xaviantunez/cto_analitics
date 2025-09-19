@@ -677,7 +677,7 @@ $(document).ready(function() {
             checkbox.attr("type", "checkbox");
             checkbox.attr("class", "checkboxplayers");
             checkbox.attr("id", "check" + nombresCronometros[i]);
-            if(expulsados.length>0) {
+            if(expulsados!==null) {
                 if (expulsados.includes(nombresCronometros[i])) {
                     checkbox.hide();
                     maxJugagores -= 1;

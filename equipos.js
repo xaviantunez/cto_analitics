@@ -15,7 +15,7 @@ const benjaminA = ["Oscar_Moreno","Erik_Utrilla","Jordi_Oltra","Alex_Lledo","Dan
 const benjaminB = ["Adomas_Volskis", "Saul_Costa", "Sergi_Climent", "Mario_Mas", "Oliver_Mas", "Leo_Barreres", "Marti_Veiguela",
      "Joan_Barber","Marco_Gomez","Edu_Mena","Aritz_Salinas","Leo_Perez"
 ];
-const alevinF = ["Carlota_Esteve","Martina_Ciscar","Julieta_Robles","Ana_Lleches","Julia_García","Carmen_Ferrando",
+const alevinF = ["Carlota_Esteve","Martina_Ciscar","Julieta_Robles","Ana_Lleches","Julia_Garcia","Carmen_Ferrando",
     "Emma_Vicens","Mya_Mas","Anna_Iturriaga","Lola_Iturriaga","Martina_Benet","Neus_Mestre","Sofia_Escriva",
     "Aitana_Campos","Ambar_Cinquemani","Francesca_Meriano"
 ];
