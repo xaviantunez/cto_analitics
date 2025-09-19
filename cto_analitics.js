@@ -34,7 +34,7 @@ $(document).ready(function() {
 
     equips.forEach(function(nombre, index) {
         //alert(nombre);
-        $("#equipos").append("<option value='"+nombre+"'>"+nombre+"</option>");
+        $("#equipos").append("<option value='"+nombre+"'>"+(nombre.substr(0,nombre.length-1)+" "+nombre.substr(nombre.length-1,1)).toUpperCase()+"</option>");
     });
 
 
