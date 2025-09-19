@@ -9,6 +9,8 @@ $(document).ready(function() {
     var totaljugadoresencampo=0;
     var totalTiempo;
     var iniTiempo=0;
+    var cntErrores=0;
+    var maxJugagores=8;
     var arraycheckeados=[];
     var checkeadosrecuperados=[];
     var intervalos = {}; // Almacenará los intervalos individuales de cada cronómetro
@@ -25,6 +27,10 @@ $(document).ready(function() {
     var tiempopartido=1;
     var capitan="";
     var equipotitular=[];
+    var expulsados=[];
+    var minTiempo=600;
+    var avgTiempo=1500;
+    var maxTiempo=50;
 
     equips.forEach(function(nombre, index) {
         //alert(nombre);
@@ -47,8 +53,10 @@ $(document).ready(function() {
         marcatiempoTotal = JSON.parse(localStorage.getItem('marcatiempototal'));
         marcatiempototalDate = JSON.parse(localStorage.getItem('marcatiempototaldate'));
         adversario = JSON.parse(localStorage.getItem('adversario'));
+        cntErrores = JSON.parse(localStorage.getItem('cnt_errores'));
         capitan = JSON.parse(localStorage.getItem('capitan'))
         equipotitular=JSON.parse(localStorage.getItem('equipotitular'));
+        expulsados=JSON.parse(localStorage.getItem('expulsados'));
         enmarcha=JSON.parse(localStorage.getItem('iniciado'));
         marcatiempo=JSON.parse(localStorage.getItem('marcatiempo'));
         marcamensajes=JSON.parse(localStorage.getItem('marcamensajes'));
@@ -80,7 +88,7 @@ $(document).ready(function() {
     }else{
         if(!equipoElegido){
             console.log("No hay equipo elegido");
-            nombresCronometros=alevinA ;
+            //nombresCronometros=alevinA ;
             //hay que poner el selected al option
 
         }
@@ -101,8 +109,9 @@ $(document).ready(function() {
 
     function iniciar(){
         var texto="";
-        if(totaljugadoresencampo<7){
+        if(totaljugadoresencampo<7 && cntErrores==0){
             alert('SOLO TIENES '+totaljugadoresencampo+" JUGADORES SELECCIONADOS\n\nPOR FAVOR REVISALO");
+            cntErrores+=1;
             return
         }
         if(!iniciado){
@@ -232,21 +241,22 @@ $(document).ready(function() {
             const segundosTotales = iniTiempo % 60;
 
             localStorage.setItem('tiempototal', JSON.stringify(iniTiempo));
+
             marcatiempoTotal = Math.floor(Date.now() / 1000);
             localStorage.setItem('marcatiempototal', JSON.stringify(marcatiempoTotal));
-            $(`#time0`).text(`${minutosTotales}:${segundosTotales < 10 ? '0' : ''}${segundosTotales}`+'  ('+marcatiempototalDate+')');
+            $(`#time0`).text(` ${minutosTotales}:${segundosTotales < 10 ? '0' : ''}${segundosTotales}`+'  ('+marcatiempototalDate+')');
             }, 1000);
 
     }
 
     function showTimeColor(tiempo, jugador,arranque=false){
         var clase='rojo';
-        if(tiempo>600 && tiempo<1500 ){
+        if(tiempo>minTiempo && tiempo<avgTiempo ){
             clase='naranja';
             $("#ES"+jugador).removeClass("rojo");
 
         }
-        if(tiempo>1500 ) {
+        if(tiempo>avgTiempo ) {
             clase = 'verde';
             $("#ES"+jugador).removeClass("naranja");
             $("#ES"+jugador).removeClass("rojo");
@@ -529,6 +539,25 @@ $(document).ready(function() {
         if(accion=="TR"){
             var texto = "Tarjeta Roja: "+nombre+" min "+minutosTotales+"";
             updateVarLocalStorage('tarjetasRojasleft','tarjetasRojasLeft');
+
+            maxJugagores-=1;
+            totaljugadoresencampo-=1;
+
+            $("#check"+nombre).prop('checked',false);
+            $("#check"+nombre).prop('disabled', true);
+            clearInterval(intervalos[nombre]);
+
+            delete intervalos[nombre];
+            delete arraycheckeados[nombre];
+            arraycheckeados = arraycheckeados.filter(nom => nom !== nombre);
+            delete equipotitular[nombre];
+            equipotitular = equipotitular.filter(nom => nom !== nombre);
+            expulsados.push(nombre);
+
+            localStorage.setItem('checkeados', JSON.stringify(arraycheckeados));
+            localStorage.setItem('equipotitular',JSON.stringify(equipotitular));
+            localStorage.setItem('expulsados',JSON.stringify(expulsados));
+
         }
         if(accion=="PA"){
             var texto = "Parada: "+nombre+" min "+minutosTotales+"";
@@ -642,10 +671,16 @@ $(document).ready(function() {
             buttonTR.attr("id","TR"+nombresCronometros[i]);
 
 
+
             checkbox.attr("type", "checkbox");
             checkbox.attr("class", "checkboxplayers");
             checkbox.attr("id", "check" + nombresCronometros[i]);
-            //checkbox.attr("onclick", "comprobarcheckbox()");
+            if(expulsados.includes(nombresCronometros[i])){
+                checkbox.hide();
+                maxJugagores-=1;
+            }
+
+                        //checkbox.attr("onclick", "comprobarcheckbox()");
 
             buttondelete.attr("id","buttondelete"+nombresCronometros[i]);
             buttondelete.attr("class","buttondelete");
@@ -690,7 +725,7 @@ $(document).ready(function() {
                 spantiempo.text("0:00");
             }else{
                 console.log("entra per el else");
-                spantiempo.text(`${minutos}:${segundos < 10 ? '0' : ''}${segundos}`)
+                spantiempo.text(` ${minutos}:${segundos < 10 ? '0' : ''}${segundos}`)
             };
                 midiv.append(span1);
                 midiv.append(spanjugador);
@@ -1032,28 +1067,32 @@ $(document).ready(function() {
         equipoElegido=$(this).val();
         //Vaciar el div conometros
         $("#cronometros").empty();
+        maxJugagores=8;
+
         switch(equipoElegido) {
             //case "BenjaminA":nombresCronometros=benjaminA;break;
             //case "BenjaminB":nombresCronometros=benjaminB;break;
-            case "alevinA":nombresCronometros=alevinA;break;
-            case "alevinB":nombresCronometros=alevinB;break;
-            case "alevinF":nombresCronometros=alevinF;break;
-            case "benjaminB":nombresCronometros=benjaminB;break;
-            case "benjaminA":nombresCronometros=benjaminA;break;
-            case "prebenjaminA":nombresCronometros=prebenjaminA;break;
-            case "prebenjaminB":nombresCronometros=prebenjaminB;break;
-            case "infantilA":nombresCronometros=infantilA;break;
-            case "infantilB":nombresCronometros=infantilB;break;
-            case "infantilF":nombresCronometros=infantilF;break;
-            case "cadeteA":nombresCronometros=cadeteA;break;
-            case "cadeteB":nombresCronometros=cadeteB;break;
-            case "cadeteF":nombresCronometros=cadeteF;break;
-            case "JuvenilA":nombresCronometros=JuvenilA;break;
-            case "JuvenilB":nombresCronometros=JuvenilB;break;
-            case "JuvenilF":nombresCronometros=JuvenilB;break;
+            case "alevinA":nombresCronometros=alevinA;maxTiempo=30;break;
+            case "alevinB":nombresCronometros=alevinB;maxTiempo=30;break;
+            case "alevinF":nombresCronometros=alevinF;maxTiempo=30;break;
+            case "benjaminB":nombresCronometros=benjaminB;maxTiempo=25;break;
+            case "benjaminA":nombresCronometros=benjaminA;maxTiempo=25;break;
+            case "prebenjaminA":nombresCronometros=prebenjaminAmaxTiempo=25;;break;
+            case "prebenjaminB":nombresCronometros=prebenjaminB;maxTiempo=25;break;
+            case "infantilA":nombresCronometros=infantilA;maxJugagores=11;maxTiempo=70;break;
+            case "infantilB":nombresCronometros=infantilB;maxJugagores=11;maxTiempo=70;break;
+            case "infantilF":nombresCronometros=infantilF;maxJugagores=11;maxTiempo=70;break;
+            case "cadeteA":nombresCronometros=cadeteA;maxJugagores=11;maxTiempo=80;break;
+            case "cadeteB":nombresCronometros=cadeteB;maxJugagores=11;maxTiempo=80;break;
+            case "cadeteF":nombresCronometros=cadeteF;maxJugagores=11;maxTiempo=80;break;
+            case "JuvenilA":nombresCronometros=JuvenilA;maxJugagores=11;maxTiempo=90;break;
+            case "JuvenilB":nombresCronometros=JuvenilB;maxJugagores=11;maxTiempo=90;break;
+            case "JuvenilF":nombresCronometros=JuvenilB;maxJugagores=11;maxTiempo=90;break;
         }
         //alert('');
         localStorage.setItem('equipoelegido', JSON.stringify(equipoElegido));
+        minTiempo=Mth.round(maxTiempo/3);
+        avgTiempo=Mth.round(maxTiempo/2);
         reiniciarIntervalos();
         addeventchange();
 
@@ -1072,7 +1111,8 @@ $(document).ready(function() {
                 console.log('Checkbox marcado');
                 equipotitular.push(nombre);
                 totaljugadoresencampo++;
-                if(totaljugadoresencampo>8){
+
+                if(totaljugadoresencampo>maxJugagores){
                     $(this).prop('checked',false)
                         totaljugadoresencampo--;
                 }
