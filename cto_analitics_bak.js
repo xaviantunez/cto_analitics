@@ -49,28 +49,28 @@ $(document).ready(function() {
         $('#divequipos').hide();
         $('#add-rival-div').hide();
         //-----------------------
-        
+        //tiempos = JSON.parse(localStorage.getItem('tiempos'));
         tiempos = storageManager("leer",'tiempos');
-        iniTiempo = storageManager("leer",'tiempototal');
-        marcatiempoTotal = storageManager("leer",'marcatiempototal');
-        marcatiempototalDate = storageManager("leer",'marcatiempototaldate');
-        adversario = storageManager("leer",'adversario');
-        cntErrores = storageManager("leer",'cnt_errores');
-        capitan = storageManager("leer",'capitan')
-        equipotitular=storageManager("leer",'equipotitular');
-        expulsados=storageManager("leer",'expulsados');
-        enmarcha=storageManager("leer",'iniciado');
-        marcatiempo=storageManager("leer",'marcatiempo');
-        marcamensajes=storageManager("leer",'marcamensajes');
-        mensajes=storageManager("leer",'mensajes');
-        mensajestablaMarcador=storageManager("leer",'mensajestablamarcador');
-        equipoElegido=storageManager("leer",'equipoElegido');
-        portero=storageManager("leer",'portero');
+        iniTiempo = JSON.parse(localStorage.getItem('tiempototal'));
+        marcatiempoTotal = JSON.parse(localStorage.getItem('marcatiempototal'));
+        marcatiempototalDate = JSON.parse(localStorage.getItem('marcatiempototaldate'));
+        adversario = JSON.parse(localStorage.getItem('adversario'));
+        cntErrores = JSON.parse(localStorage.getItem('cnt_errores'));
+        capitan = JSON.parse(localStorage.getItem('capitan'))
+        equipotitular=JSON.parse(localStorage.getItem('equipotitular'));
+        expulsados=JSON.parse(localStorage.getItem('expulsados'));
+        enmarcha=JSON.parse(localStorage.getItem('iniciado'));
+        marcatiempo=JSON.parse(localStorage.getItem('marcatiempo'));
+        marcamensajes=JSON.parse(localStorage.getItem('marcamensajes'));
+        mensajes=JSON.parse(localStorage.getItem('mensajes'));
+        mensajestablaMarcador=JSON.parse(localStorage.getItem('mensajestablamarcador'));
+        equipoElegido=JSON.parse(localStorage.getItem('equipoElegido'));
+        portero=JSON.parse(localStorage.getItem('portero'));
         if(enmarcha=="") enmarcha=0;
         if(mensajes == null) mensajes={};
         if(marcamensajes == null) marcamensajes={};
 
-        var nombresCronometrosTemp =storageManager("leer",'nombresCronometros');
+        var nombresCronometrosTemp =JSON.parse(localStorage.getItem('nombresCronometros'));
         if(nombresCronometrosTemp){
             nombresCronometros=nombresCronometrosTemp;
         }
@@ -79,8 +79,8 @@ $(document).ready(function() {
         }else{
             $('#id2 span').text(adversario);
         }
-        var resulAdv = storageManager("leer",'resulAdv');
-        var resulCto = storageManager("leer",'resulCto');
+        var resulAdv = JSON.parse(localStorage.getItem('resulAdv'));
+        var resulCto = JSON.parse(localStorage.getItem('resulCto'));
         //------------------------------------------------------------------
         cargarestadistica("left");
         cargarestadistica("right");
@@ -128,11 +128,11 @@ $(document).ready(function() {
             $('.spantitulos').hide();
 
 
-            storageManager("guardar",'equipotitular',equipotitular);
-            storageManager("guardar",'resulAdv', 0);
-            storageManager("guardar",'resulCto', 0);
-            storageManager("guardar",'nombresCronometros', nombresCronometros);
-            storageManager("guardar",'iniciado', 1);
+            localStorage.setItem('equipotitular',JSON.stringify(equipotitular));
+            localStorage.setItem('resulAdv', JSON.stringify(0));
+            localStorage.setItem('resulCto', JSON.stringify(0));
+            localStorage.setItem('nombresCronometros', JSON.stringify(nombresCronometros));
+            localStorage.setItem('iniciado', JSON.stringify(1));
 
         }
         $('#suplentes').empty();
@@ -145,12 +145,12 @@ $(document).ready(function() {
                 else texto+=", "+jugador+' '
                 console.log('jugador' +jugador+' '+$("#pcheck" + jugador).is(':checked'));
                 if ($("#pcheck" + jugador).is(':checked')) {
-                    storageManager("guardar",'portero', jugador);
+                    localStorage.setItem('portero', JSON.stringify(jugador));
                     $("#TP"+jugador).show();
                     $("#PA"+jugador).show();
                     $("#AS"+jugador).hide();
                     $("#GO"+jugador).hide();
-                    $("#RF"+jugador).show();
+                    $("#RF"+jugador).hide();
                     $("#RD"+jugador).hide();
                     $("#TA"+jugador).show();
                     $("#TR"+jugador).show();
@@ -180,7 +180,7 @@ $(document).ready(function() {
 
     function cargarestadistica(columna) {
         $('#divestadisticas .numestadisticas'+columna).each(function(index, item) {
-            var estadistica=storageManager("leer",arrayestadisticas[index]+columna);
+            var estadistica=JSON.parse(localStorage.getItem(arrayestadisticas[index]+columna));
             if(estadistica){
                 $(this).text(estadistica); 
             }else{
@@ -231,7 +231,7 @@ $(document).ready(function() {
         if(marcatiempototalDate==null || marcatiempototalDate==0)
         {
             marcatiempototalDate = fechaHora();
-            storageManager("guardar",'marcatiempototaldate', marcatiempototalDate);
+            localStorage.setItem('marcatiempototaldate', JSON.stringify(marcatiempototalDate));
             mensajeTablaMarcador('INICIO TIEMPO TOTAL');
         }
         totalTiempo = setInterval(function() {
@@ -242,10 +242,10 @@ $(document).ready(function() {
             const minutosTotales = Math.floor(iniTiempo / 60);
             const segundosTotales = iniTiempo % 60;
 
-            storageManager("guardar",'tiempototal', iniTiempo);
+            localStorage.setItem('tiempototal', JSON.stringify(iniTiempo));
 
             marcatiempoTotal = Math.floor(Date.now() / 1000);
-            storageManager("guardar",'marcatiempototal', marcatiempoTotal);
+            localStorage.setItem('marcatiempototal', JSON.stringify(marcatiempoTotal));
             $(`#time0`).text(` ${minutosTotales}:${segundosTotales < 10 ? '0' : ''}${segundosTotales}`+'  ('+marcatiempototalDate+')');
             }, 1000);
 
@@ -283,12 +283,12 @@ $(document).ready(function() {
                 }
             }
         }
-        storageManager("guardar",'tiempos', tiempos);
+        localStorage.setItem('tiempos', JSON.stringify(tiempos));
 
         console.log("ajustar Tiempo Total " +marcatiempoTotal);
         if(marcatiempoTotal != null) {
             iniTiempo += Math.floor(Date.now() / 1000) - marcatiempoTotal;
-            storageManager("guardar",'tiempototal', iniTiempo);
+            localStorage.setItem('tiempototal', JSON.stringify(iniTiempo));
             marcatiempoTotal = Math.floor(Date.now() / 1000);
         }
 
@@ -302,7 +302,7 @@ $(document).ready(function() {
         if ($("#check" + jugador).is(':checked')) {
             $("#cronometros").prepend($("#"+jugador));
             arraycheckeados.push(jugador);
-            storageManager("guardar",'checkeados', arraycheckeados);
+            localStorage.setItem('checkeados', JSON.stringify(arraycheckeados));
             intervalos[jugador] = setInterval(function() {
             tiempos[jugador]++;
             showTimeColor(tiempos[jugador],jugador);
@@ -314,9 +314,9 @@ $(document).ready(function() {
                     //if(primero==false) tiempos[jugador]+=Math.floor(Date.now() / 1000)-marcatiempo[jugador];
                     tiempos[jugador]+=Math.floor(Date.now() / 1000)-marcatiempo[jugador];
                 }
-                storageManager("guardar",'tiempos', tiempos);
+                localStorage.setItem('tiempos', JSON.stringify(tiempos));
                 marcatiempo[jugador] = Math.floor(Date.now() / 1000);
-                storageManager("guardar",'marcatiempo', marcatiempo);
+                localStorage.setItem('marcatiempo', JSON.stringify(marcatiempo));
 
                 //timeout para hacer desaparecer el mensaje
                 if(mensajes != null){
@@ -324,8 +324,8 @@ $(document).ready(function() {
                         if(Math.floor(Date.now() / 1000)-marcamensajes[jugador]>5){
                             mensajes[jugador]="";
                             marcamensajes[jugador]="";
-                            storageManager("guardar",'marcamensajes', marcamensajes);
-                            storageManager("guardar",'mensajes', mensajes);
+                            localStorage.setItem('marcamensajes', JSON.stringify(marcamensajes));
+                            localStorage.setItem('mensajes', JSON.stringify(mensajes));
                             $("#INFO"+jugador).text("");
                         }
                     }
@@ -345,7 +345,7 @@ $(document).ready(function() {
             clearInterval(intervalos[jugador]);
             delete intervalos[jugador];
         }
-        storageManager("guardar",'tiempos', tiempos);
+        localStorage.setItem('tiempos', JSON.stringify(tiempos));
     }
 
     function reiniciarIntervalos() {
@@ -429,9 +429,9 @@ $(document).ready(function() {
         }
         $('.spanaccion').hide();
         $('.spantitulos').hide();
-        checkeadosrecuperados = storageManager("leer",'checkeados');
+        checkeadosrecuperados = JSON.parse(localStorage.getItem('checkeados'));
         if(checkeadosrecuperados){
-            checkeadosrecuperados = storageManager("leer",'checkeados');
+            checkeadosrecuperados = JSON.parse(localStorage.getItem('checkeados'));
             checkeadosrecuperados.forEach(function (nombre) {
                if(nombre==portero) $("#pcheck"+nombre).prop("checked", true);
                 $("#check"+nombre).prop("checked", true);
@@ -487,7 +487,7 @@ $(document).ready(function() {
         var div=$("#"+iddiv);
         var valor = parseInt(div.text())+1;
         div.text(valor);
-        storageManager("guardar",storage, valor);
+        localStorage.setItem(storage, valor);
 
     }
     function ajustarMensajeTablaMarcador(){
@@ -500,7 +500,7 @@ $(document).ready(function() {
         var nuevaFila = "<tr><td>"+fechaHora()+' '+cadena+"</td><td></td></tr>";
         mensajestablaMarcador.push(nuevaFila);
         $("#tablaMarcador").append(nuevaFila);
-        storageManager("guardar",'mensajestablamarcador',mensajestablaMarcador);
+        localStorage.setItem('mensajestablamarcador',JSON.stringify(mensajestablaMarcador));
     }
 
 	$(document).on('click',".buttonaccion", function() {
@@ -556,9 +556,9 @@ $(document).ready(function() {
             equipotitular = equipotitular.filter(nom => nom !== nombre);
             expulsados.push(nombre);
 
-            storageManager("guardar",'checkeados', arraycheckeados);
-            storageManager("guardar",'equipotitular',equipotitular);
-            storageManager("guardar",'expulsados',expulsados);
+            localStorage.setItem('checkeados', JSON.stringify(arraycheckeados));
+            localStorage.setItem('equipotitular',JSON.stringify(equipotitular));
+            localStorage.setItem('expulsados',JSON.stringify(expulsados));
 
         }
         if(accion=="PA"){
@@ -575,8 +575,8 @@ $(document).ready(function() {
         
         mensajes[nombre]=texto.slice(0,texto.indexOf(":"));
         marcamensajes[nombre]= Math.floor(Date.now() / 1000);
-        storageManager("guardar",'marcamensajes', marcamensajes);
-        storageManager("guardar",'mensajes', mensajes);
+        localStorage.setItem('marcamensajes', JSON.stringify(marcamensajes));
+        localStorage.setItem('mensajes', JSON.stringify(mensajes));
         mensajeTablaMarcador(texto);
 
 
@@ -738,6 +738,7 @@ $(document).ready(function() {
                 midiv.append(checkboxp);
                 midiv.append(spanpuerta);
 
+
                 var spanbotones = $("<span>");
                 spanbotones.attr("id", "spbotones");
                 //alert(spanfaltas.innerHTML);
@@ -783,7 +784,7 @@ $(document).ready(function() {
         if(checkeadosrecuperados){
             checkeadosrecuperados.length=0;
         }
-        storageManager("guardar",'iniciado', 0);
+        localStorage.setItem('iniciado', JSON.stringify(0));
         marcatiempototalDate=null;
         localStorage.removeItem('marcatiempototaldate');
         //arraycheckeados.length=0;
@@ -857,7 +858,7 @@ $(document).ready(function() {
         }
         if(jugadorFueraJuego){
             $(`#check${jugadorFueraJuego}`).prop('checked', true);
-            var recuperados = storageManager("leer",'checkeados');
+            var recuperados = JSON.parse(localStorage.getItem('checkeados'));
             if(recuperados){
             // Buscar y eliminar el nombre del array
                 var index = recuperados.indexOf(jugadorEnJuego);
@@ -867,7 +868,7 @@ $(document).ready(function() {
                     recuperados.splice(index, 1);
                     arraycheckeados.splice(index2, 1);
                     // Actualizar el array en localStorage
-                    storageManager("guardar","checkeados", recuperados);
+                    localStorage.setItem("checkeados", JSON.stringify(recuperados));
                     $("#SP"+jugadorFueraJuego).show();
                     mensajeTablaMarcador('ENTRA: '+jugadorFueraJuego);
                     if($("#pcheck"+jugadorFueraJuego).is(":checked")){
@@ -912,7 +913,7 @@ $(document).ready(function() {
         //console.log("Estadistica "+tipoestadistica.attr("id")+"left");
         var currentValue = parseInt(leftDiv.text());
         leftDiv.text(currentValue + 1);
-        storageManager("guardar",tipoestadistica.attr("id")+"left", currentValue + 1);
+        localStorage.setItem(tipoestadistica.attr("id")+"left", JSON.stringify(currentValue + 1));
     });
     $('.increment-right').click(function() {
         var rightDiv = $(this).closest('.sectionestadistica').find('.numestadisticasright');
@@ -920,7 +921,7 @@ $(document).ready(function() {
         //console.log("Estadistica "+tipoestadistica.attr("id")+"left");
         var currentValue = parseInt(rightDiv.text());
         rightDiv.text(currentValue + 1);
-        storageManager("guardar",tipoestadistica.attr("id")+"right", currentValue + 1);
+        localStorage.setItem(tipoestadistica.attr("id")+"right", JSON.stringify(currentValue + 1));
     });
     //-------------------------------------
     $('#add-gol-cto').click(function() {
@@ -954,12 +955,12 @@ $(document).ready(function() {
          mensajeTablaMarcador('Gol '+goleador+" min "+minutosTotales+" asistencia "+asistente);
 
         //actualizar en el div el nuevo resultado
-        storageManager("guardar",'resulCto', resulCto);
+        localStorage.setItem('resulCto', JSON.stringify(resulCto));  
         //incrementar el disparo a porteria
         const leftDiv = $('#rematesPorteriaLeft');
         var currentValue = parseInt(leftDiv.text());
         leftDiv.text(currentValue + 1);
-        storageManager("guardar","rematesPorterialeft", currentValue + 1);
+        localStorage.setItem("rematesPorterialeft", JSON.stringify(currentValue + 1));
 
         $('#goleador-modal').hide();    
      });
@@ -980,12 +981,12 @@ $(document).ready(function() {
 
         //actualizar en el div el nuevo resultado
         $("#resulAdv").text(resulAdv);
-        storageManager("guardar",'resulAdv', resulAdv);
+        localStorage.setItem('resulAdv', JSON.stringify(resulAdv));    
         //incrementar remate a porteria del adversario
         const rightDiv = $('#rematesPorteriaRight');
         var currentValue = parseInt(rightDiv.text());
         rightDiv.text(currentValue + 1);
-        storageManager("guardar","rematesPorteriaright", currentValue + 1);
+        localStorage.setItem("rematesPorteriaright", JSON.stringify(currentValue + 1));
         $('#goleador-adv-modal').hide(); 
     });
     $('#add-rival').click(function() {
@@ -998,7 +999,7 @@ $(document).ready(function() {
         $('#id2 span').text(adversario);
         $('#textadversario').val("");
         $('#adversario-modal').hide();
-        storageManager("guardar",'adversario', adversario);
+        localStorage.setItem('adversario', JSON.stringify(adversario));
     });
     $('#add-new-player').click(function() {
         $('#new-player-modal').show();
@@ -1027,7 +1028,7 @@ $(document).ready(function() {
         });
         $('#new-player-modal').hide();
         //getitem and setittem
-        storageManager("guardar",'nombresCronometros', nombresCronometros);
+        localStorage.setItem('nombresCronometros', JSON.stringify(nombresCronometros));
     });
     $('#close-new-player').click(function() {
         $('#new-player-modal').hide();
@@ -1055,7 +1056,7 @@ $(document).ready(function() {
     $('#save-capitan').click(function() {
         $('#capitan-modal').hide();
         capitan=$('#jugadoresSeleccionados').val();
-        storageManager("guardar","capitan", capitan);
+        localStorage.setItem("capitan", JSON.stringify(capitan));
         
     });
 
@@ -1091,7 +1092,7 @@ $(document).ready(function() {
             case "JuvenilF":nombresCronometros=JuvenilB;maxJugagores=11;maxTiempo=90;break;
         }
         //alert('');
-        storageManager("guardar",'equipoelegido', equipoElegido);
+        localStorage.setItem('equipoelegido', JSON.stringify(equipoElegido));
         minTiempo=Math.round(maxTiempo/3);
         avgTiempo=Math.round(maxTiempo/2);
         reiniciarIntervalos();
