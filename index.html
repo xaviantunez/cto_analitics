@@ -31,6 +31,7 @@
         #reiniciar-todos, #add-new-player {background-color: #1a1a19;}
         #iniciar-todos, #cambiar-estado{ background-color: #107c41;}
         #parar-todos, #tryCapitan { background-color: #4d55b9;}
+        #parar-todos { display:none;}
         #help { background-color: #CC0000;color:#ffffff;}
         #guardar-pdf {background-color: red;}
         #guardar-excel {background-color: #107c41;}
@@ -207,7 +208,7 @@
             display: inline-block;
             width: 70%;
         }
-        #add-rival, #saveadversario{
+        #add-rival, #saveadversario, #change-localteam{
             background-color: grey;
             color: white; /* Texto blanco */
             padding: 15px 32px; /* Espaciado */
@@ -332,10 +333,10 @@
     <!--Fin css-->
     </head>
     <body>
-        <div id="divequipos">
-            <label for="equipos">Seleccione Equipo</label>
-            <select id="equipos">
-                <option value="">SELECCIONAR</option>
+        <div id="divequipos" style="display: inline-block;width:100%">
+
+            <select id="equipos" style="width:auto;">
+                <option value="">SELECCIONAR EQUIPO LOCAL</option>
                 <!--<option value="prebenjaminA">Prebenjamin A</option>
                 <option value="benjaminA">Benjamin A</option>
                 <option value="benjaminB">Benjamin B</option>
@@ -343,9 +344,12 @@
                 <option value="alevinB">Alevin B</option>
                 <option value="alevinF">Alevin F</option>-->
             </select>
+            <button id="change-localteam">Cambiar</button>
+
+
         </div>
         <div id="add-rival-div">
-            <button id="add-rival">A&nacute;adir rival</button>
+
         </div>
         <div id="cronometros"></div>
         <div>
@@ -371,6 +375,7 @@
                 <span id="time0">0:00</span>
             </div>
             <div class="button-controls">
+                <button id="add-rival">A&nacute;adir rival</button>
                 <button id="tryCapitan">Escoge capitan</button>
                 <button id="iniciar-todos">Empezar tiempo</button>
                 <button id="parar-todos">Parar tiempo</button>

@@ -48,6 +48,7 @@ $(document).ready(function() {
         //esconder el select de e3quipos
         $('#divequipos').hide();
         $('#add-rival-div').hide();
+
         //-----------------------
         
         tiempos = storageManager("leer",'tiempos');
@@ -65,10 +66,15 @@ $(document).ready(function() {
         mensajes=storageManager("leer",'mensajes');
         mensajestablaMarcador=storageManager("leer",'mensajestablamarcador');
         equipoElegido=storageManager("leer",'equipoElegido');
+        maxTiempo=storageManager("leer",'maxTiempo');
         portero=storageManager("leer",'portero');
         if(enmarcha=="") enmarcha=0;
+        if(maxTiempo=="") enmarcha=50;
         if(mensajes == null) mensajes={};
         if(marcamensajes == null) marcamensajes={};
+        minTiempo=Math.round(maxTiempo/3)*60;
+        avgTiempo=Math.round(maxTiempo/2)*60;
+
 
         var nombresCronometrosTemp =storageManager("leer",'nombresCronometros');
         if(nombresCronometrosTemp){
@@ -89,7 +95,7 @@ $(document).ready(function() {
         $('#resulCto').text(resulCto);
     }else{
         if(!equipoElegido){
-            console.log("No hay equipo elegido");
+            //console.log("No hay equipo elegido");
             //nombresCronometros=alevinA ;
             //hay que poner el selected al option
 
@@ -102,10 +108,14 @@ $(document).ready(function() {
         //
         ajustaCronometros()
         iniciar();
+        $('#iniciar-todos').toggle();
+        $('#parar-todos').toggle();
 
     }
         // Iniciar todos los cronómetros si están marcados
     $('#iniciar-todos').click(function() {
+        $('#parar-todos').toggle();
+        $('#iniciar-todos').toggle();
         iniciar();
     });
 
@@ -128,6 +138,7 @@ $(document).ready(function() {
             $('.spantitulos').hide();
 
 
+
             storageManager("guardar",'equipotitular',equipotitular);
             storageManager("guardar",'resulAdv', 0);
             storageManager("guardar",'resulCto', 0);
@@ -143,15 +154,15 @@ $(document).ready(function() {
                 $("#SP"+jugador).show();
                 if(texto=="") texto="Equipo en el campo: "+jugador
                 else texto+=", "+jugador+' '
-                console.log('jugador' +jugador+' '+$("#pcheck" + jugador).is(':checked'));
+                //console.log('jugador' +jugador+' '+$("#pcheck" + jugador).is(':checked'));
                 if ($("#pcheck" + jugador).is(':checked')) {
                     storageManager("guardar",'portero', jugador);
                     $("#TP"+jugador).show();
                     $("#PA"+jugador).show();
                     $("#AS"+jugador).hide();
                     $("#GO"+jugador).hide();
-                    $("#RF"+jugador).show();
                     $("#RD"+jugador).hide();
+                    $("#RF"+jugador).show();
                     $("#TA"+jugador).show();
                     $("#TR"+jugador).show();
                     $('.spantitulos').show();
@@ -170,10 +181,12 @@ $(document).ready(function() {
                 $("#TP"+jugador).hide();
                 $("#PA"+jugador).hide();
                 $("#SP"+jugador).hide();
+                $("#pcheck"+jugador).hide();
+                $("#puerta"+jugador).hide();
 
             }
             showTimeColor(tiempos[jugador],jugador,true);
-            console.log(tiempos[jugador]+" "+jugador);
+            //console.log(tiempos[jugador]+" "+jugador);
         }
         if(enmarcha==0)mensajeTablaMarcador(texto);
     }
@@ -266,7 +279,7 @@ $(document).ready(function() {
 
         if(!arranque) $("#ES"+jugador).toggleClass(clase);
         else $("#ES"+jugador).addClass(clase);
-        //console.log(jugador+' '+tiempo);
+        ////console.log(jugador+' '+tiempo+' '+minTiempo+' '+avgTiempo);
 
     }
 
@@ -285,7 +298,7 @@ $(document).ready(function() {
         }
         storageManager("guardar",'tiempos', tiempos);
 
-        console.log("ajustar Tiempo Total " +marcatiempoTotal);
+        //console.log("ajustar Tiempo Total " +marcatiempoTotal);
         if(marcatiempoTotal != null) {
             iniTiempo += Math.floor(Date.now() / 1000) - marcatiempoTotal;
             storageManager("guardar",'tiempototal', iniTiempo);
@@ -359,7 +372,7 @@ $(document).ready(function() {
         iniTiempo=0; 
         pdfParte="Primera Parte "
         pararIntervalos();
-        //console.log("reiniciarIntervalos ");
+        ////console.log("reiniciarIntervalos ");
         localStorage.removeItem('checkeados');
 
         localStorage.removeItem('tiempos');
@@ -377,11 +390,13 @@ $(document).ready(function() {
         localStorage.removeItem('marcatiempototaldate');
         localStorage.removeItem('mensajestablamarcador');
         localStorage.removeItem('portero');
+        localStorage.removeItem('expulsados');
+        localStorage.removeItem('rematesFueraRight');
 
 
 
         for (var i = 0; i < nombresCronometros.length; i++) {
-            //console.log("array  "+nombresCronometros[i]);
+            ////console.log("array  "+nombresCronometros[i]);
             var jugador=nombresCronometros[i];
             $("#time" + jugador).text("0:00");
             tiempos[jugador]=0;
@@ -443,36 +458,36 @@ $(document).ready(function() {
 
     document.addEventListener("visibilitychange", function() {
         if (document.hidden) {
-            console.log("El navegador ha entrado en suspensión.");
+            //console.log("El navegador ha entrado en suspensión.");
         } else {
-            console.log("El navegador ha vuelto a estar activo.");
+            //console.log("El navegador ha vuelto a estar activo.");
         }
     });
 
     $(document).on("visibilitychange", function() {
         if (document.hidden) {
-            console.log("El navegador está en segundo plano o suspendido.");
+            //console.log("El navegador está en segundo plano o suspendido.");
         } else {
-            console.log("El navegador está activo.");
+            //console.log("El navegador está activo.");
             window.location.reload();
         }
     });
 
     $(window).on("blur", function() {
-        console.log("El usuario cambió de pestaña o minimizó la app.");
+        //console.log("El usuario cambió de pestaña o minimizó la app.");
     });
 
     $(window).on("focus", function() {
-        console.log("El usuario volvió a la página.");
+        //console.log("El usuario volvió a la página.");
         window.location.reload();
     });
 
     $(document).on('click',".buttondelete", function() {
     //$(".buttondelete").click(function(){
-        //console.log($(this).attr("id"));
+        ////console.log($(this).attr("id"));
         var id=$(this).attr("id");
         var nombre=id.substring(12,id.length)
-        console.log(nombre);
+        //console.log(nombre);
         var positiontodelete=nombresCronometros.indexOf(nombre);
         nombresCronometros.splice(positiontodelete,1);
         if ($("#check" + nombre).is(':checked')) {
@@ -505,7 +520,7 @@ $(document).ready(function() {
 
 	$(document).on('click',".buttonaccion", function() {
     //$(".buttondelete").click(function(){
-        //console.log($(this).attr("id"));
+        ////console.log($(this).attr("id"));
         var id=$(this).attr("id");
         var nombre=id.substring(2,id.length)
         var accion=id.substring(0,2)
@@ -588,7 +603,7 @@ $(document).ready(function() {
 
 
 
-        /*console.log(nombre);
+        /*//console.log(nombre);
         var positiontodelete=nombresCronometros.indexOf(nombre);
         nombresCronometros.splice(positiontodelete,1);
         if ($("#check" + nombre).is(':checked')) {
@@ -598,7 +613,7 @@ $(document).ready(function() {
         $("#"+nombre).remove();*/
     });
     function add_fila_player(nombresCronometros,i){
-        //console.log(i+" "+nombresCronometros[i]+" desde add_fila_player");
+        ////console.log(i+" "+nombresCronometros[i]+" desde add_fila_player");
         var midiv = $("<div>");
             midiv.attr("id", nombresCronometros[i]);
             midiv.attr("class", "cronometro");
@@ -701,6 +716,8 @@ $(document).ready(function() {
             checkboxp.attr("id", "pcheck" + nombresCronometros[i]);
             checkboxp.text("portero");
             checkboxp.attr("class","spanjugador");
+            checkboxp.on("click",function(){checkPortero(nombresCronometros[i])});
+            //alert(checkboxp.attr("id"));
             var spanpuerta = $("<span>");
             spanpuerta.attr("class", "spanportero");
             spanpuerta.attr("id", "puerta" + nombresCronometros[i]);
@@ -728,12 +745,12 @@ $(document).ready(function() {
             spantiempo.attr("id", "time" + nombresCronometros[i]);
             const minutos = Math.floor(tiempos[nombresCronometros[i]] / 60);
             const segundos = tiempos[nombresCronometros[i]] % 60;
-            //console.log("segundos "+segundos);
+            ////console.log("segundos "+segundos);
             if (isNaN(segundos)) {
-                console.log("entra per isNaN");
+                ////console.log("entra per isNaN");
                 spantiempo.text("0:00");
             }else{
-                console.log("entra per el else");
+                ////console.log("entra per el else");
                 spantiempo.text(` ${minutos}:${segundos < 10 ? '0' : ''}${segundos}`)
             };
                 midiv.append(span1);
@@ -784,10 +801,22 @@ $(document).ready(function() {
             $("#cronometros").append(midiv);
     }
 
+    function showCheckPorteros(){
+        for (var i = 0; i < nombresCronometros.length; i++) {
+            var jugador = nombresCronometros[i];
+            $("#pcheck" + jugador).show();
+            $("#puerta" + jugador).show();
+            //console.log(jugador);
+        }
+    }
+
     // Evento para el botón de detener todos los cronómetros
     $('#parar-todos').click(function() {
+        $('#iniciar-todos').toggle();
+        $('#parar-todos').toggle();
         clearInterval(totalTiempo);
         pararIntervalos(); // Detiene todos los cronómetros
+        showCheckPorteros();
         iniciado=false;
         enmarcha=false;
         $('.spanaccion').hide();
@@ -867,6 +896,8 @@ $(document).ready(function() {
             $("#TA"+jugadorEnJuego).show();
             $("#TR"+jugadorEnJuego).show();
             $("#SP"+jugadorEnJuego).hide();
+            //$("#pcheck"+jugadorEnJuego).hide();
+            //$("#puerta"+jugadorEnJuego).hide();
 
             $("#cronometros").append($("#"+jugadorEnJuego));
             showTimeColor(tiempos[jugadorEnJuego],jugadorEnJuego,true);
@@ -919,13 +950,15 @@ $(document).ready(function() {
                 $("#TA"+jugador).show();
                 $("#TR"+jugador).show();
                 $("#SP"+jugador).hide();
+                //$("#pcheck"+jugador).hide();
+                //$("#puerta"+jugador).hide();
             }
         }          
     });
     $('.increment-left').click(function() {
         var leftDiv = $(this).closest('.sectionestadistica').find('.numestadisticasleft');
         var tipoestadistica = $(this).closest('.grupdivestadisticas').find('span');
-        //console.log("Estadistica "+tipoestadistica.attr("id")+"left");
+        ////console.log("Estadistica "+tipoestadistica.attr("id")+"left");
         var currentValue = parseInt(leftDiv.text());
         leftDiv.text(currentValue + 1);
         storageManager("guardar",tipoestadistica.attr("id")+"left", currentValue + 1);
@@ -933,7 +966,7 @@ $(document).ready(function() {
     $('.increment-right').click(function() {
         var rightDiv = $(this).closest('.sectionestadistica').find('.numestadisticasright');
         var tipoestadistica = $(this).closest('.grupdivestadisticas').find('span');
-        //console.log("Estadistica "+tipoestadistica.attr("id")+"left");
+        ////console.log("Estadistica "+tipoestadistica.attr("id")+"left");
         var currentValue = parseInt(rightDiv.text());
         rightDiv.text(currentValue + 1);
         storageManager("guardar",tipoestadistica.attr("id")+"right", currentValue + 1);
@@ -1010,7 +1043,7 @@ $(document).ready(function() {
     });
     $('#saveadversario').click(function() {
         adversario = $('#textadversario').val();
-        //console.log(adversario); 
+        ////console.log(adversario); 
         $('#id2 span').text(adversario);
         $('#textadversario').val("");
         $('#adversario-modal').hide();
@@ -1024,15 +1057,15 @@ $(document).ready(function() {
         //capturar el div cronometros
         var divcrono=$('.cronometros');
         //crear div jugador y añadirlo
-        //console.log(new_player);
+        ////console.log(new_player);
         nombresCronometros.push(new_player);
         var q_players=nombresCronometros.length;
-        //console.log(nombresCronometros+" q_players "+q_players);
+        ////console.log(nombresCronometros+" q_players "+q_players);
         q_players--;
-        //console.log(nombresCronometros+" q_players "+q_players);
+        ////console.log(nombresCronometros+" q_players "+q_players);
         add_fila_player(nombresCronometros,q_players);
         $('#'+new_player).on('change', '#check'+new_player, function() {
-            //console.log("cambia el checked desde save-new-player ");
+            ////console.log("cambia el checked desde save-new-player ");
 
             if ($(this).prop('checked')) {
                 totaljugadoresencampo++;
@@ -1077,10 +1110,13 @@ $(document).ready(function() {
 
 
     $('#jugadores-en-juego').val();
-    
-    
+
+    $('#change-localteam').click(function() {
+        $('#equipos').disabled=false;
+    });
     $( "#equipos" ).on( "change", function() {
-        console.log($(this).val());
+        this.disabled=true;
+        //console.log($(this).val());
         equipoElegido=$(this).val();
         //Vaciar el div conometros
         $("#cronometros").empty();
@@ -1089,13 +1125,13 @@ $(document).ready(function() {
         switch(equipoElegido) {
             //case "BenjaminA":nombresCronometros=benjaminA;break;
             //case "BenjaminB":nombresCronometros=benjaminB;break;
-            case "alevinA":nombresCronometros=alevinA;maxTiempo=30;break;
-            case "alevinB":nombresCronometros=alevinB;maxTiempo=30;break;
-            case "alevinF":nombresCronometros=alevinF;maxTiempo=30;break;
-            case "benjaminB":nombresCronometros=benjaminB;maxTiempo=25;break;
-            case "benjaminA":nombresCronometros=benjaminA;maxTiempo=25;break;
-            case "prebenjaminA":nombresCronometros=prebenjaminAmaxTiempo=25;;break;
-            case "prebenjaminB":nombresCronometros=prebenjaminB;maxTiempo=25;break;
+            case "alevinA":nombresCronometros=alevinA;maxTiempo=60;break;
+            case "alevinB":nombresCronometros=alevinB;maxTiempo=60;break;
+            case "alevinF":nombresCronometros=alevinF;maxTiempo=60;break;
+            case "benjaminB":nombresCronometros=benjaminB;maxTiempo=50;break;
+            case "benjaminA":nombresCronometros=benjaminA;maxTiempo=50;break;
+            case "prebenjaminA":nombresCronometros=prebenjaminAmaxTiempo=50;;break;
+            case "prebenjaminB":nombresCronometros=prebenjaminB;maxTiempo=50;break;
             case "infantilA":nombresCronometros=infantilA;maxJugagores=11;maxTiempo=70;break;
             case "infantilB":nombresCronometros=infantilB;maxJugagores=11;maxTiempo=70;break;
             case "infantilF":nombresCronometros=infantilF;maxJugagores=11;maxTiempo=70;break;
@@ -1108,8 +1144,9 @@ $(document).ready(function() {
         }
         //alert('');
         storageManager("guardar",'equipoelegido', equipoElegido);
-        minTiempo=Math.round(maxTiempo/3);
-        avgTiempo=Math.round(maxTiempo/2);
+        storageManager("guardar",'maxTiempo', maxTiempo);
+        minTiempo=Math.round(maxTiempo/3)*60;
+        avgTiempo=Math.round(maxTiempo/2)*60;
         reiniciarIntervalos();
         addeventchange();
 
@@ -1122,10 +1159,10 @@ $(document).ready(function() {
             var idjugador=$(this).attr("id");
             var arraynombre=idjugador.split("check");
             var nombre=arraynombre[1];
-            console.log("linea 964 ");
+            //console.log("linea 964 ");
 
             if ($(this).prop('checked')) {
-                console.log('Checkbox marcado');
+                //console.log('Checkbox marcado');
                 equipotitular.push(nombre);
                 totaljugadoresencampo++;
 
@@ -1135,25 +1172,55 @@ $(document).ready(function() {
                 }
             } else {
                 var playerdesmarcado=equipotitular.indexOf(nombre);
-                console.log("A eliminar "+playerdesmarcado)
+                //console.log("A eliminar "+playerdesmarcado)
                 if(playerdesmarcado!==-1){
                     equipotitular.splice(playerdesmarcado,1);
                 }
-                console.log('Checkbox desmarcado');
+                //console.log('Checkbox desmarcado');
                     totaljugadoresencampo--;
             }
-            console.log(equipotitular);
+            //console.log(equipotitular);
             $('#jugjugando').text(totaljugadoresencampo);
         
         }
     )
-        $('.checkboxportero').on('change', function() {
-            for (var jugador in tiempos) {
-                //if $("#pcheck"+jugador)is(':checked'))
-            }
-            }
-        );
+
+
     };
+
+    function checkPortero(nombre) {
+        for (var i = 0; i < nombresCronometros.length; i++) {
+            var jugador = nombresCronometros[i];
+            if(nombre==jugador && $("#pcheck" + jugador).is(':checked') ){
+                storageManager("guardar",'portero', jugador);
+                $("#TP"+jugador).show();
+                $("#PA"+jugador).show();
+                $("#AS"+jugador).hide();
+                $("#GO"+jugador).hide();
+                $("#RF"+jugador).hide();
+                $("#RD"+jugador).hide();
+                $("#TA"+jugador).show();
+                $("#TR"+jugador).show();
+                $("#SP"+jugador).show();
+            }
+            else{
+                $("#TP"+jugador).hide();
+                $("#PA"+jugador).hide();
+                $("#AS"+jugador).show();
+                $("#GO"+jugador).show();
+                $("#RF"+jugador).show();
+                $("#RD"+jugador).show();
+                $("#TA"+jugador).show();
+                $("#TR"+jugador).show();
+                $("#SP"+jugador).hide();
+                $("#pcheck" + jugador).prop("checked",false);
+
+            }
+            //console.log(jugador);
+        }
+        window.location.reload();
+    }
+
 
     $('#showgrafics').click(function() {
         creargrafico();
@@ -1166,21 +1233,21 @@ $(document).ready(function() {
         $("#spbtn3"+this.id).toggle();
     });
     function creargrafico() {
-        console.log("Show graficos "+tiempos)
+        //console.log("Show graficos "+tiempos)
         jugadoresgrafico=[];
         tiemposgrafico=[]
         for (var jugador in tiempos) {
-            console.log("Show graficos "+jugador+" "+ tiempos[jugador]);
+            //console.log("Show graficos "+jugador+" "+ tiempos[jugador]);
             jugadoresgrafico.push(jugador);
             tiemposgrafico.push(tiempos[jugador]/60);
         }
         if(first){
-            //console.log("es la primera volta")
+            ////console.log("es la primera volta")
             mostrargrafico(jugadoresgrafico,tiemposgrafico);
             first=false;
         }else{
             myBarChart.destroy();
-            //console.log("ya no es la primera volta")
+            ////console.log("ya no es la primera volta")
             mostrargrafico(jugadoresgrafico,tiemposgrafico);
         }
     }
@@ -1242,9 +1309,9 @@ $(document).ready(function() {
         const Partido="CTO "+adversario;
         const resultadoCto = $("#resulCto").text();
         const resultadoAdv = $("#resulAdv").text();
-        console.log(fechacompleta)
-        console.log(Partido)
-        console.log(equipotitular);
+        //console.log(fechacompleta)
+        //console.log(Partido)
+        //console.log(equipotitular);
         var nombres=[];
         var tiempos=[];
         var data={};
