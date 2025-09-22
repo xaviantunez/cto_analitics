@@ -41,4 +41,6 @@ const juvenilA = ["Toshko","Haitem_Ettafy","Mohamed_Adim","Hector_Gosp","Blai_Fu
     "Marc_Tomas","Blai_Lopez","Fernando_Guevara","Alexandre_Mestre","Daniel_Bertomeu"];
 const juvenilB = [];
 const juvenilF = [];
-const equips =["prebenjaminA","benjaminB","benjaminA","alevinF","alevinB","alevinA","infantilA","infantilB","infantilF","cadeteF","cadeteB","cadeteA","juvenilA","juvenilB","juvenilF"];
+//const equips =["prebenjaminA","benjaminB","benjaminA","alevinF","alevinB","alevinA","infantilA","infantilB","infantilF","cadeteF","cadeteB","cadeteA","juvenilA","juvenilB","juvenilF"];
+const equips =["prebenjaminA","benjaminB","benjaminA","alevinF","alevinB","alevinA","infantilA","cadeteF","cadeteA","juvenilA"];
+

@@ -33,8 +33,9 @@ $(document).ready(function() {
     var maxTiempo=50;
 
     equips.forEach(function(nombre, index) {
-        //alert(nombre);
+
         $("#equipos").append("<option value='"+nombre+"'>"+(nombre.substr(0,nombre.length-1)+" "+nombre.substr(nombre.length-1,1)).toUpperCase()+"</option>");
+
     });
 
 
@@ -48,6 +49,7 @@ $(document).ready(function() {
         //esconder el select de e3quipos
         $('#divequipos').hide();
         $('#add-rival-div').hide();
+        $('#add-rival').hide();
 
         //-----------------------
         
@@ -110,6 +112,7 @@ $(document).ready(function() {
         iniciar();
         $('#iniciar-todos').toggle();
         $('#parar-todos').toggle();
+        $('#tryCapitan').hide();
 
     }
         // Iniciar todos los cronómetros si están marcados
@@ -1047,6 +1050,7 @@ $(document).ready(function() {
         $('#id2 span').text(adversario);
         $('#textadversario').val("");
         $('#adversario-modal').hide();
+        mensajeTablaMarcador("ADVERSARIO:"+adversario);
         storageManager("guardar",'adversario', adversario);
     });
     $('#add-new-player').click(function() {
@@ -1103,6 +1107,7 @@ $(document).ready(function() {
     });
     $('#save-capitan').click(function() {
         $('#capitan-modal').hide();
+        $('#tryCapitan').hide();
         capitan=$('#jugadoresSeleccionados').val();
         storageManager("guardar","capitan", capitan);
         
@@ -1112,7 +1117,8 @@ $(document).ready(function() {
     $('#jugadores-en-juego').val();
 
     $('#change-localteam').click(function() {
-        $('#equipos').disabled=false;
+        $("#equipos").prop("disabled",false);
+
     });
     $( "#equipos" ).on( "change", function() {
         this.disabled=true;
@@ -1218,7 +1224,7 @@ $(document).ready(function() {
             }
             //console.log(jugador);
         }
-        window.location.reload();
+        //window.location.reload();
     }
 
 
