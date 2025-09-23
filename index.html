@@ -183,6 +183,11 @@
         #tablaMarcador{
             width: 100%;
         }
+        #tablaDatosPartido{
+            width: 100%;
+            vertical-align: top;
+            border:1px solid #000000;
+        }
         .sectionestadistica{
             padding: 15px 0;
             border-top: 1px solid;
@@ -529,6 +534,13 @@
             <div id="divgraficos">
                 <button id="showgrafics">Mostrar Graficos</button> 
             </div>
-            <canvas id="myBarChart" width="400" height="400"></canvas>
+            <canvas id="myBarChart" width="400" height="400" style="display:none;"></canvas>
+        <div id="marcaor-partido">
+            <table id="tablaDatosPartido">
+                <tr>
+                    <th id="id2">DATOS RELEVANTES</th>
+                </tr>
+            </table>
+        </div>
     </body>
 </html>

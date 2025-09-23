@@ -510,14 +510,14 @@ $(document).ready(function() {
     }
     function ajustarMensajeTablaMarcador(){
         for (var i = 0; i < mensajestablaMarcador.length; i++) {
-            $("#tablaMarcador").append(mensajestablaMarcador[i]);
+            $("#tablaDatosPartido").append(mensajestablaMarcador[i]);
         }
 
     }
     function mensajeTablaMarcador(cadena){
         var nuevaFila = "<tr><td>"+fechaHora()+' '+cadena+"</td><td></td></tr>";
         mensajestablaMarcador.push(nuevaFila);
-        $("#tablaMarcador").append(nuevaFila);
+        $("#tablaDatosPartido").append(nuevaFila);
         storageManager("guardar",'mensajestablamarcador',mensajestablaMarcador);
     }
 
@@ -834,6 +834,7 @@ $(document).ready(function() {
         storageManager("guardar",'iniciado', 0);
         marcatiempototalDate=null;
         localStorage.removeItem('marcatiempototaldate');
+        mensajeTablaMarcador("Tiempo Parado");
         //arraycheckeados.length=0;
     });
     // Evento para el botón de reiniciar todos los cronómetros
@@ -956,7 +957,8 @@ $(document).ready(function() {
                 //$("#pcheck"+jugador).hide();
                 //$("#puerta"+jugador).hide();
             }
-        }          
+        }
+        $(window).scrollTop(0);
     });
     $('.increment-left').click(function() {
         var leftDiv = $(this).closest('.sectionestadistica').find('.numestadisticasleft');
@@ -1050,6 +1052,7 @@ $(document).ready(function() {
         $('#id2 span').text(adversario);
         $('#textadversario').val("");
         $('#adversario-modal').hide();
+        $('#add-rival').hide();
         mensajeTablaMarcador("ADVERSARIO:"+adversario);
         storageManager("guardar",'adversario', adversario);
     });
@@ -1109,6 +1112,7 @@ $(document).ready(function() {
         $('#capitan-modal').hide();
         $('#tryCapitan').hide();
         capitan=$('#jugadoresSeleccionados').val();
+        mensajeTablaMarcador('Capitan Local: '+capitan);
         storageManager("guardar","capitan", capitan);
         
     });
@@ -1220,11 +1224,11 @@ $(document).ready(function() {
                 $("#TR"+jugador).show();
                 $("#SP"+jugador).hide();
                 $("#pcheck" + jugador).prop("checked",false);
-
             }
-            //console.log(jugador);
+
+
         }
-        //window.location.reload();
+        window.location.reload();
     }
 
 
@@ -1258,6 +1262,7 @@ $(document).ready(function() {
         }
     }
     function mostrargrafico(jugadoresgrafico,tiemposgrafico){
+        $('#myBarChart').show();
     var ctx = document.getElementById('myBarChart').getContext('2d');
     // Datos de ejemplo: 12 datos para el gráfico de barras
     var data = {
@@ -1424,7 +1429,7 @@ $(document).ready(function() {
     // 11. Resetear variable
     pdfParte = "Total Partido ";
 });
-
+    $(window).scrollTop(0);
 });       
      //-------------------------------------------------------------------------------------
 
