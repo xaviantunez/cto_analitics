@@ -25,7 +25,7 @@ const prebenjaminA = ["Romeo_Morganti", "Leo_Perez", "Aitor_Martin", "Andreu_Rom
 ];
 const infantilA = ["Raul_Doca","Vicent_Escriva","David_Llopis","Guillem_Millet","Andreu_Benet","Rodrigo_Llopis",
     "Ian_Hadj-Akli","Bacari_Traore","Diego_Sanjuan","Marc_Cuevas","Xavi_Choez","Alex_Ayet","Marc_Girau", "Ferran_Fuster"
-    "Quim_Santonja","Sergi_Pinargore",'Dani_Ortega','Cristian_Firici','Ruben_Escriva',];
+    "Quim_Santonja","Sergi_Pinargore",'Dani_Ortega','Cristian_Firici','Ruben_Escriva'];
 const infantilB = [];
 const infantilF = [];
 const cadeteA = ["Enzo_Ciscar","Ismael_Just","Cristian_Barbu","Alvaro_Cardona","Mateo_Sabater","Sandro_Bosca","Gerard_Mauri",
@@ -43,5 +43,6 @@ const juvenilB = [];
 const juvenilF = [];
 //const equips =["prebenjaminA","benjaminB","benjaminA","alevinF","alevinB","alevinA","infantilA","infantilB","infantilF","cadeteF","cadeteB","cadeteA","juvenilA","juvenilB","juvenilF"];
 const equips =["prebenjaminA","benjaminB","benjaminA","alevinF","alevinB","alevinA","infantilA","cadeteF","cadeteA","juvenilA"];
+
 
 
