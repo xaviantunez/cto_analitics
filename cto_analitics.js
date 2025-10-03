@@ -526,30 +526,31 @@ $(document).ready(function() {
         ////console.log($(this).attr("id"));
         var id=$(this).attr("id");
         var nombre=id.substring(2,id.length)
+        var nom_txt=nombre.replace(/_/g, " ")
         var accion=id.substring(0,2)
         //Recoger minuto del partido
         const minutosTotales = Math.floor(iniTiempo / 60);
         if(accion=="AS"){
-            var texto = "Asistencia:"+nombre+" min "+minutosTotales+"";
+            var texto = "Asistencia:"+nom_txt+" min "+minutosTotales+"";
         }
         if(accion=="GO"){
             updateVarLocalStorage('resulCto');
-            var texto = "Gol: "+nombre+" min "+minutosTotales+"";
+            var texto = "Gol: "+nom_txt+" min "+minutosTotales+"";
         }
         if(accion=="FH"){
-            var texto = "Hace Falta: "+nombre+" min "+minutosTotales+"";
+            var texto = "Hace Falta: "+nom_txt+" min "+minutosTotales+"";
             updateVarLocalStorage('faltasCometidasright','faltasRight');
         }
         if(accion=="FR"){
-            var texto = "Recibe Falta: "+nombre+" min "+minutosTotales+"";
+            var texto = "Recibe Falta: "+nom_txt+" min "+minutosTotales+"";
             updateVarLocalStorage('faltasCometidasleft','faltasLeft');
         }
         if(accion=="RD"){
-            var texto = "Remate Dentro: "+nombre+" min "+minutosTotales+"";
+            var texto = "Remate Dentro: "+nom_txt+" min "+minutosTotales+"";
             updateVarLocalStorage('rematesPorterialeft','rematesPorteriaLeft');
         }
         if(accion=="RF"){
-            var texto = "Remate Fuera: "+nombre+" min "+minutosTotales+"";
+            var texto = "Remate Fuera: "+nom_txt+" min "+minutosTotales+"";
             if (portero==nombre){
                 var texto = "Remate Fuera Equipo Rival min "+minutosTotales+"";
                 updateVarLocalStorage('rematesFueraRight','rematesFueraRight');
@@ -558,11 +559,11 @@ $(document).ready(function() {
 
         }
         if(accion=="TA"){
-            var texto = "Tarjeta Amarilla: "+nombre+" min "+minutosTotales+"";
+            var texto = "Tarjeta Amarilla: "+nom_txt+" min "+minutosTotales+"";
             updateVarLocalStorage('tarjetasAmarillasleft','tarjetasAmarillasLeft');
         }
         if(accion=="TR"){
-            var texto = "Tarjeta Roja: "+nombre+" min "+minutosTotales+"";
+            var texto = "Tarjeta Roja: "+nom_txt+" min "+minutosTotales+"";
             updateVarLocalStorage('tarjetasRojasleft','tarjetasRojasLeft');
 
             maxJugagores-=1;
@@ -685,15 +686,22 @@ $(document).ready(function() {
 			buttonTP.hide();
 
             var buttonTA =$("<button>")
-            buttonTA.text("XX");
+            buttonTA.text("XXX");
             buttonTA.attr("class","buttonaccion amarillo");
             buttonTA.attr("id","TA"+nombresCronometros[i]);
 
 
             var buttonTR =$("<button>")
-            buttonTR.text("XX");
+            buttonTR.text("XXX");
             buttonTR.attr("class","buttonaccion rojo");
             buttonTR.attr("id","TR"+nombresCronometros[i]);
+
+            var buttonCC =$("<button>")
+            buttonCC.text("CAMBIO");
+            buttonCC.attr("class","buttonaccion");
+            buttonCC.attr("id","CC"+nombresCronometros[i]);
+            buttonCC.on("click",function(){cambiarJugador(nombresCronometros[i])});
+
 
 
 
@@ -741,6 +749,12 @@ $(document).ready(function() {
             spantarjetas.attr("id", "sptarjetas" + nombresCronometros[i]);
             spantarjetas.text("TARJETAS");
             spantarjetas.attr("class","spantarjetas");
+
+            var spancambio = $("<div>");
+            spancambio.attr("class", "spancambio");
+            spancambio.attr("id", "spcambio" + nombresCronometros[i]);
+            spancambio.text('CAMBIO');
+
 
             spanjugador.attr("id", "name" + nombresCronometros[i]);
             spanjugador.text(nombresCronometros[i].replace(/_/g, " ").toUpperCase());
@@ -795,6 +809,16 @@ $(document).ready(function() {
                 spanbotones.append(buttonTR);
                 spanbotones.hide();
                 span2.append(spanbotones);
+
+                var spanbotones = $("<span>");
+                spanbotones.attr("id", "spbtn4"+nombresCronometros[i]);
+                spanbotones.attr("class", "spbotones");
+                //alert(spanfaltas.innerHTML);
+                spanbotones.append(spancambio);
+                spanbotones.append(buttonCC);
+                spanbotones.hide();
+                span2.append(spanbotones);
+
                 span11.text("PULSA PARA ABRIR EL MENU");
                 span11.attr("class","leyenda");
                 span11.attr("id","sp11"+nombresCronometros[i]);
@@ -1241,6 +1265,7 @@ $(document).ready(function() {
         $("#spbtn1"+this.id).toggle();
         $("#spbtn2"+this.id).toggle();
         $("#spbtn3"+this.id).toggle();
+        $("#spbtn4"+this.id).toggle();
     });
     function creargrafico() {
         //console.log("Show graficos "+tiempos)
