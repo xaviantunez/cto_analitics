@@ -685,13 +685,13 @@ $(document).ready(function() {
 			buttonTP.hide();
 
             var buttonTA =$("<button>")
-            buttonTA.text("AMA");
+            buttonTA.text("XX");
             buttonTA.attr("class","buttonaccion amarillo");
             buttonTA.attr("id","TA"+nombresCronometros[i]);
 
 
             var buttonTR =$("<button>")
-            buttonTR.text("ROJ");
+            buttonTR.text("XX");
             buttonTR.attr("class","buttonaccion rojo");
             buttonTR.attr("id","TR"+nombresCronometros[i]);
 
@@ -743,7 +743,7 @@ $(document).ready(function() {
             spantarjetas.attr("class","spantarjetas");
 
             spanjugador.attr("id", "name" + nombresCronometros[i]);
-            spanjugador.text(nombresCronometros[i].replace(/_/g, " "));
+            spanjugador.text(nombresCronometros[i].replace(/_/g, " ").toUpperCase());
             spanjugador.attr("class","spanjugador");
             spantiempo.attr("id", "time" + nombresCronometros[i]);
             const minutos = Math.floor(tiempos[nombresCronometros[i]] / 60);
@@ -1432,5 +1432,4 @@ $(document).ready(function() {
     $(window).scrollTop(0);
 });       
      //-------------------------------------------------------------------------------------
-
 
