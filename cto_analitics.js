@@ -743,7 +743,7 @@ $(document).ready(function() {
             spantarjetas.attr("class","spantarjetas");
 
             spanjugador.attr("id", "name" + nombresCronometros[i]);
-            spanjugador.text(nombresCronometros[i]);
+            spanjugador.text(nombresCronometros[i].replace(/_/g, " "));
             spanjugador.attr("class","spanjugador");
             spantiempo.attr("id", "time" + nombresCronometros[i]);
             const minutos = Math.floor(tiempos[nombresCronometros[i]] / 60);
@@ -1432,4 +1432,5 @@ $(document).ready(function() {
     $(window).scrollTop(0);
 });       
      //-------------------------------------------------------------------------------------
+
 
