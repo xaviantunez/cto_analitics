@@ -61,6 +61,7 @@ $(document).ready(function() {
         cntErrores = storageManager("leer",'cnt_errores');
         capitan = storageManager("leer",'capitan')
         equipotitular=storageManager("leer",'equipotitular');
+        arraycheckeados=storageManager("leer",'checkeados');
         expulsados=storageManager("leer",'expulsados');
         enmarcha=storageManager("leer",'iniciado');
         marcatiempo=storageManager("leer",'marcatiempo');
@@ -117,12 +118,14 @@ $(document).ready(function() {
     }
         // Iniciar todos los cronómetros si están marcados
     $('#iniciar-todos').click(function() {
+        console.log("iniciar-todos");
         $('#parar-todos').toggle();
         $('#iniciar-todos').toggle();
         iniciar();
     });
 
     function iniciar(){
+        console.log("iniciar");
         var texto="";
         if(totaljugadoresencampo<7 && cntErrores==0){
             alert('SOLO TIENES '+totaljugadoresencampo+" JUGADORES SELECCIONADOS\n\nPOR FAVOR REVISALO");
@@ -195,6 +198,7 @@ $(document).ready(function() {
     }
 
     function cargarestadistica(columna) {
+        console.log("cargarestadistica");
         $('#divestadisticas .numestadisticas'+columna).each(function(index, item) {
             var estadistica=storageManager("leer",arrayestadisticas[index]+columna);
             if(estadistica){
@@ -206,6 +210,7 @@ $(document).ready(function() {
     }
 
     function removeestadisticas() {
+        console.log("removeestadisticas");
         arrayestadisticas.forEach(function (estadistica) {
             localStorage.removeItem(estadistica+'left');
             localStorage.removeItem(estadistica+'right');
@@ -218,6 +223,7 @@ $(document).ready(function() {
         });
     }
     function fechaHora() {
+        console.log("fechaHora");
         let ahora = new Date();
 
         // Obtener los componentes de la fecha
@@ -244,6 +250,7 @@ $(document).ready(function() {
     }
 
     function iniciartotaltiempo(){
+        console.log("iniciartotaltiempo");
         if(marcatiempototalDate==null || marcatiempototalDate==0)
         {
             marcatiempototalDate = fechaHora();
@@ -268,6 +275,7 @@ $(document).ready(function() {
     }
 
     function showTimeColor(tiempo, jugador,arranque=false){
+        console.log("showTimeColor");
         var clase='rojo';
         if(tiempo>minTiempo && tiempo<avgTiempo ){
             clase='naranja';
@@ -287,6 +295,7 @@ $(document).ready(function() {
     }
 
     function ajustaCronometros(){
+        console.log("ajustaCronometros");
         var primero=true;
         for (var i = 0; i < nombresCronometros.length; i++) {
             var jugador = nombresCronometros[i];
@@ -312,6 +321,7 @@ $(document).ready(function() {
 
     // Crear el intervalo para cada cronómetro
     function crearIntervalo(jugador) {
+        console.log("crearIntervalo");
         if (!tiempos[jugador]) {
             tiempos[jugador] = 0;
         }
@@ -351,12 +361,14 @@ $(document).ready(function() {
     }
     // Función para iniciar el cronómetro de un jugador
     function iniciarCronometro(jugador) {
+        console.log("iniciarCronometro");
         if (!intervalos[jugador]) { // Solo inicia el cronómetro si no está corriendo
             crearIntervalo(jugador);
         }
     }
 
     function pararIntervalos() {
+        console.log("pararIntervalos");
         for (var jugador in intervalos) {
             clearInterval(intervalos[jugador]);
             delete intervalos[jugador];
@@ -365,6 +377,7 @@ $(document).ready(function() {
     }
 
     function reiniciarIntervalos() {
+        console.log("reiniciarIntervalos");
         //addeventchange();
         $('#divequipos').show();
         $('#add-rival-div').show();
@@ -424,6 +437,7 @@ $(document).ready(function() {
     }
 
     function cambiarJugador(val){
+        console.log("cambiarJugador");
 
         $('#jugadores-en-juego').empty();
         $('#jugadores-fuera-juego').empty();
@@ -442,6 +456,7 @@ $(document).ready(function() {
     }
 
     function mostrarplantilla() {
+        console.log("mostrarplantilla");
         for (var i = 0; i < nombresCronometros.length; i++) {
             add_fila_player(nombresCronometros,i);
         }
@@ -460,6 +475,7 @@ $(document).ready(function() {
     }
 
     document.addEventListener("visibilitychange", function() {
+        console.log("visibilitychange addEventListener");
         if (document.hidden) {
             //console.log("El navegador ha entrado en suspensión.");
         } else {
@@ -468,6 +484,7 @@ $(document).ready(function() {
     });
 
     $(document).on("visibilitychange", function() {
+        console.log("visibilitychange on");
         if (document.hidden) {
             //console.log("El navegador está en segundo plano o suspendido.");
         } else {
@@ -486,6 +503,7 @@ $(document).ready(function() {
     });
 
     $(document).on('click',".buttondelete", function() {
+        console.log("click buttondelete");
     //$(".buttondelete").click(function(){
         ////console.log($(this).attr("id"));
         var id=$(this).attr("id");
@@ -501,6 +519,7 @@ $(document).ready(function() {
     });
 
     function updateVarLocalStorage(storage,iddiv=''){
+        console.log("updateVarLocalStorage");
         if(iddiv=="")iddiv=storage;
         var div=$("#"+iddiv);
         var valor = parseInt(div.text())+1;
@@ -509,12 +528,14 @@ $(document).ready(function() {
 
     }
     function ajustarMensajeTablaMarcador(){
+        console.log("ajustarMensajeTablaMarcador");
         for (var i = 0; i < mensajestablaMarcador.length; i++) {
             $("#tablaDatosPartido").append(mensajestablaMarcador[i]);
         }
 
     }
     function mensajeTablaMarcador(cadena){
+        console.log("mensajeTablaMarcador");
         var nuevaFila = "<tr><td>"+fechaHora()+' '+cadena+"</td><td></td></tr>";
         mensajestablaMarcador.push(nuevaFila);
         $("#tablaDatosPartido").append(nuevaFila);
@@ -522,6 +543,7 @@ $(document).ready(function() {
     }
 
 	$(document).on('click',".buttonaccion", function() {
+        console.log("click buttonaccion");
     //$(".buttondelete").click(function(){
         ////console.log($(this).attr("id"));
         var id=$(this).attr("id");
@@ -617,6 +639,7 @@ $(document).ready(function() {
         $("#"+nombre).remove();*/
     });
     function add_fila_player(nombresCronometros,i){
+        console.log("add_fila_player");
         ////console.log(i+" "+nombresCronometros[i]+" desde add_fila_player");
         var midiv = $("<div>");
             midiv.attr("id", nombresCronometros[i]);
@@ -829,6 +852,7 @@ $(document).ready(function() {
     }
 
     function showCheckPorteros(){
+        console.log("showCheckPorteros");
         for (var i = 0; i < nombresCronometros.length; i++) {
             var jugador = nombresCronometros[i];
             $("#pcheck" + jugador).show();
@@ -839,6 +863,7 @@ $(document).ready(function() {
 
     // Evento para el botón de detener todos los cronómetros
     $('#parar-todos').click(function() {
+        console.log("parar-todos");
         $('#iniciar-todos').toggle();
         $('#parar-todos').toggle();
         clearInterval(totalTiempo);
@@ -863,24 +888,29 @@ $(document).ready(function() {
     });
     // Evento para el botón de reiniciar todos los cronómetros
     $('#reiniciar-todos').click(function() {
+        console.log("reiniciar-todos");
 
         $('#delete-cookies-modal').show();
 
     });
     $('#eliminarsesion').click(function() {
+        console.log("eliminarsesion");
         reiniciarIntervalos(); // Detiene y reinicia todos los cronómetros
         $('#delete-cookies-modal').hide();
         window.location.reload();
 
     });
     $('#continuarsesion').click(function() {
+        console.log("continuarsesion");
         $('#delete-cookies-modal').hide();
     });
     
     $(document).on('click',".reservas", function() {
+        console.log("click reservas");
         cambiarJugador(this.innerHTML);
     });
     $('#cambiar-jugadores').click(function() {
+        console.log("cambiar-jugadores");
         $('#jugadores-en-juego').empty();
         $('#jugadores-fuera-juego').empty(); 
         for (var i = 0; i < nombresCronometros.length; i++) {
@@ -895,6 +925,7 @@ $(document).ready(function() {
         $('#jugadores-modal').show();
     });
     $('#salir-ayuda').click(function() {
+        console.log("salir-ayuda");
         $('#ayuda-modal').hide();
     });
     $('#salir-cambio').click(function() {
@@ -907,7 +938,7 @@ $(document).ready(function() {
         $('#goleador-adv-modal').hide();
     });    
     $('#cambiar-estado').click(function() {
-
+        console.log("cambiar-estado");
         const jugadorEnJuego = $('#jugadores-en-juego').val();
         const jugadorFueraJuego = $('#jugadores-fuera-juego').val();
         if(jugadorEnJuego){
@@ -1189,6 +1220,7 @@ $(document).ready(function() {
     });
     addeventchange();
     function addeventchange() {
+        console.log("addeventchange");
         $('.checkboxplayers').on('change', function() {
             var idjugador=$(this).attr("id");
             var arraynombre=idjugador.split("check");
@@ -1223,36 +1255,43 @@ $(document).ready(function() {
     };
 
     function checkPortero(nombre) {
-        for (var i = 0; i < nombresCronometros.length; i++) {
-            var jugador = nombresCronometros[i];
-            if(nombre==jugador && $("#pcheck" + jugador).is(':checked') ){
-                storageManager("guardar",'portero', jugador);
-                $("#TP"+jugador).show();
-                $("#PA"+jugador).show();
-                $("#AS"+jugador).hide();
-                $("#GO"+jugador).hide();
-                $("#RF"+jugador).hide();
-                $("#RD"+jugador).hide();
-                $("#TA"+jugador).show();
-                $("#TR"+jugador).show();
-                $("#SP"+jugador).show();
-            }
-            else{
-                $("#TP"+jugador).hide();
-                $("#PA"+jugador).hide();
-                $("#AS"+jugador).show();
-                $("#GO"+jugador).show();
-                $("#RF"+jugador).show();
-                $("#RD"+jugador).show();
-                $("#TA"+jugador).show();
-                $("#TR"+jugador).show();
-                $("#SP"+jugador).hide();
-                $("#pcheck" + jugador).prop("checked",false);
-            }
+        console.log("checkPortero");
+            for (var i = 0; i < nombresCronometros.length; i++) {
+                var jugador = nombresCronometros[i];
+                if(nombre==jugador && $("#pcheck" + jugador).is(':checked') ) {
+                    storageManager("guardar", 'portero', jugador);
+                    if (iniciado) {
+                        $("#TP" + jugador).show();
+                        $("#PA" + jugador).show();
+                        $("#AS" + jugador).hide();
+                        $("#GO" + jugador).hide();
+                        $("#RF" + jugador).hide();
+                        $("#RD" + jugador).hide();
+                        $("#TA" + jugador).show();
+                        $("#TR" + jugador).show();
+                        $("#SP" + jugador).show();
+                    }
+                }
+                else{
+                    if(iniciado) {
+                        $("#TP" + jugador).hide();
+                        $("#PA" + jugador).hide();
+                        $("#AS" + jugador).show();
+                        $("#GO" + jugador).show();
+                        $("#RF" + jugador).show();
+                        $("#RD" + jugador).show();
+                        $("#TA" + jugador).show();
+                        $("#TR" + jugador).show();
+                        $("#SP" + jugador).hide();
+                    }
+                    $("#pcheck" + jugador).prop("checked",false);
+                }
 
 
         }
-        window.location.reload();
+
+        if(iniciado) window.location.reload();
+
     }
 
 
@@ -1260,12 +1299,29 @@ $(document).ready(function() {
         creargrafico();
     });
     $('.cronometro').click(function() {
+        console.log("cronometro");
+        //console.log(this.id);
 
         $("#sp11"+this.id).toggle();
         $("#spbtn1"+this.id).toggle();
         $("#spbtn2"+this.id).toggle();
         $("#spbtn3"+this.id).toggle();
         $("#spbtn4"+this.id).toggle();
+        if($("#check" + this.id).is(':checked')){
+            if(!arraycheckeados.includes(this.id)){
+                arraycheckeados.push(this.id);
+            }
+            if(!equipotitular.includes(this.id)){equipotitular.push(this.id)};
+
+        }
+        else {
+            delete arraycheckeados[this.id];
+            delete equipotitular[this.id];
+            arraycheckeados = arraycheckeados.filter(nom => nom !== this.id);
+            equipotitular = equipotitular.filter(nom => nom !== this.id);
+        }
+        storageManager("guardar", 'checkeados', arraycheckeados);
+        storageManager("guardar", 'equipotitular', equipotitular);
     });
     function creargrafico() {
         //console.log("Show graficos "+tiempos)
