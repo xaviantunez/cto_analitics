@@ -327,7 +327,11 @@ $(document).ready(function() {
         }
         if ($("#check" + jugador).is(':checked')) {
             $("#cronometros").prepend($("#"+jugador));
-            arraycheckeados.push(jugador);
+			 if(!arraycheckeados.includes(jugador)){
+                arraycheckeados.push(jugador);
+				console.log(jugador);
+            }
+            
             storageManager("guardar",'checkeados', arraycheckeados);
             intervalos[jugador] = setInterval(function() {
             tiempos[jugador]++;
@@ -1516,6 +1520,7 @@ $(document).ready(function() {
     $(window).scrollTop(0);
 });       
      //-------------------------------------------------------------------------------------
+
 
 
 
