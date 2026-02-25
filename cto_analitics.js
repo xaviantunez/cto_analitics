@@ -462,6 +462,7 @@ $(document).ready(function() {
         }
         $('.spanaccion').hide();
         $('.spantitulos').hide();
+		totaljugadoresencampo=0;
         checkeadosrecuperados = storageManager("leer",'checkeados');
         if(checkeadosrecuperados){
             checkeadosrecuperados = storageManager("leer",'checkeados');
@@ -1513,4 +1514,5 @@ $(document).ready(function() {
     $(window).scrollTop(0);
 });       
      //-------------------------------------------------------------------------------------
+
 
