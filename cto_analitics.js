@@ -1312,6 +1312,7 @@ $(document).ready(function() {
         if($("#check" + this.id).is(':checked')){
             if(!arraycheckeados.includes(this.id)){
                 arraycheckeados.push(this.id);
+				console.log(this.id);
             }
             if(!equipotitular.includes(this.id)){equipotitular.push(this.id)};
 
@@ -1515,6 +1516,7 @@ $(document).ready(function() {
     $(window).scrollTop(0);
 });       
      //-------------------------------------------------------------------------------------
+
 
 
 
