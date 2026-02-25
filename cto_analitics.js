@@ -470,6 +470,7 @@ $(document).ready(function() {
                if(nombre==portero) $("#pcheck"+nombre).prop("checked", true);
                 $("#check"+nombre).prop("checked", true);
                     totaljugadoresencampo++;
+					console.log(totaljugadoresencampo);
             });
             $('#jugjugando').text(totaljugadoresencampo);
         }
@@ -1514,5 +1515,6 @@ $(document).ready(function() {
     $(window).scrollTop(0);
 });       
      //-------------------------------------------------------------------------------------
+
 
 
