@@ -169,8 +169,14 @@ $(document).ready(function() {
                     $("#GO"+jugador).hide();
                     $("#RD"+jugador).hide();
                     $("#RF"+jugador).show();
-                    $("#TA"+jugador).show();
-                    $("#TR"+jugador).show();
+					if(maxJugagores>8){
+                    	$("#TA"+jugador).show();
+                    	$("#TR"+jugador).show();
+					}
+					else{
+						$("#TA"+jugador).hide();
+                    	$("#TR"+jugador).hide();
+					}
                     $('.spantitulos').show();
 
                 }
@@ -182,8 +188,14 @@ $(document).ready(function() {
                 $("#GO"+jugador).show();
                 $("#RF"+jugador).show();
                 $("#RD"+jugador).show();
-                $("#TA"+jugador).show();
-                $("#TR"+jugador).show();
+                if(maxJugagores>8){
+                    $("#TA"+jugador).show();
+                    $("#TR"+jugador).show();
+				}
+				else{
+					$("#TA"+jugador).hide();
+                    $("#TR"+jugador).hide();
+				}
                 $("#TP"+jugador).hide();
                 $("#PA"+jugador).hide();
                 $("#SP"+jugador).hide();
@@ -1012,8 +1024,14 @@ $(document).ready(function() {
                 $("#GO"+jugador).show();
                 $("#RF"+jugador).show();
                 $("#RD"+jugador).show();
-                $("#TA"+jugador).show();
-                $("#TR"+jugador).show();
+                if(maxJugagores>8){
+                    $("#TA"+jugador).show();
+                    $("#TR"+jugador).show();
+				}
+				else{
+					$("#TA"+jugador).hide();
+                    $("#TR"+jugador).hide();
+				}
                 $("#SP"+jugador).hide();
                 //$("#pcheck"+jugador).hide();
                 //$("#puerta"+jugador).hide();
@@ -1520,6 +1538,7 @@ $(document).ready(function() {
     $(window).scrollTop(0);
 });       
      //-------------------------------------------------------------------------------------
+
 
 
 
