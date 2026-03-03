@@ -163,11 +163,14 @@ $(document).ready(function() {
                 //console.log('jugador' +jugador+' '+$("#pcheck" + jugador).is(':checked'));
 				
 				if(maxJugagores>8) {
-					$("#sptarjetas"+jugador).show();
+					$("#TR"+jugador).show();
+					$("#TA"+jugador).show();
 					$('.spantarjetas').show();
 				}
 				else{
 					$("#sptarjetas"+jugador).hide();
+					$("#TR"+jugador).hide();
+					$("#TA"+jugador).hide();
 					$('.spantarjetas').hide();
 				}
 
@@ -966,8 +969,17 @@ $(document).ready(function() {
             $("#GO"+jugadorEnJuego).show();
             $("#RF"+jugadorEnJuego).show();
             $("#RD"+jugadorEnJuego).show();
-            if(maxJugagores>8) $("#sptarjetas"+jugador).show();
-			else $("#sptarjetas"+jugador).hide();
+            if(maxJugagores>8) {
+					$("#TR"+jugador).show();
+					$("#TA"+jugador).show();
+					$('.spantarjetas').show();
+				}
+				else{
+					$("#sptarjetas"+jugador).hide();
+					$("#TR"+jugador).hide();
+					$("#TA"+jugador).hide();
+					$('.spantarjetas').hide();
+				}
 			
             $("#SP"+jugadorEnJuego).hide();
             //$("#pcheck"+jugadorEnJuego).hide();
@@ -998,7 +1010,7 @@ $(document).ready(function() {
                         $("#GO"+jugadorFueraJuego).hide();
                         $("#RF"+jugadorFueraJuego).hide();
                         $("#RD"+jugadorFueraJuego).hide();
-                       	if(maxJugagores>8) $("#sptarjetas"+jugador).show();
+                       	if(>8) $("#sptarjetas"+jugador).show();
 						else $("#sptarjetas"+jugador).hide();
                         $('.spantitulos').hide();
                     }
@@ -1021,8 +1033,17 @@ $(document).ready(function() {
                 $("#GO"+jugador).show();
                 $("#RF"+jugador).show();
                 $("#RD"+jugador).show();
-                if(maxJugagores>8) $("#sptarjetas"+jugador).show();
-				else $("#sptarjetas"+jugador).hide();
+                if(maxJugagores>8) {
+					$("#TR"+jugador).show();
+					$("#TA"+jugador).show();
+					$('.spantarjetas').show();
+				}
+				else{
+					$("#sptarjetas"+jugador).hide();
+					$("#TR"+jugador).hide();
+					$("#TA"+jugador).hide();
+					$('.spantarjetas').hide();
+				}
                 $("#SP"+jugador).hide();
                 //$("#pcheck"+jugador).hide();
                 //$("#puerta"+jugador).hide();
@@ -1529,6 +1550,7 @@ $(document).ready(function() {
     $(window).scrollTop(0);
 });       
      //-------------------------------------------------------------------------------------
+
 
 
 
