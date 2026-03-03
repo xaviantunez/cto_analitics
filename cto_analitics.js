@@ -1010,8 +1010,17 @@ $(document).ready(function() {
                         $("#GO"+jugadorFueraJuego).hide();
                         $("#RF"+jugadorFueraJuego).hide();
                         $("#RD"+jugadorFueraJuego).hide();
-                       	if(>8) $("#sptarjetas"+jugador).show();
-						else $("#sptarjetas"+jugador).hide();
+						if(maxJugagores>8) {
+							$("#TR"+jugador).show();
+							$("#TA"+jugador).show();
+							$('.spantarjetas').show();
+						}
+						else{
+							$("#sptarjetas"+jugador).hide();
+							$("#TR"+jugador).hide();
+							$("#TA"+jugador).hide();
+							$('.spantarjetas').hide();
+						}
                         $('.spantitulos').hide();
                     }
                 }
@@ -1550,6 +1559,7 @@ $(document).ready(function() {
     $(window).scrollTop(0);
 });       
      //-------------------------------------------------------------------------------------
+
 
 
 
