@@ -363,7 +363,7 @@ $(document).ready(function() {
             const segundos = tiempos[jugador] % 60;
             //console.log(jugador+" "+tiempos[jugador]);
             $("#time" + jugador).text(`${minutos}:${segundos < 10 ? '0' : ''}${segundos}`);
-                if((Math.floor(Date.now() / 1000)-marcatiempo[jugador])>=2){
+                if((Math.floor(Date.now() / 1000)-marcatiempo[jugador])>1){
                     //if(primero==false) tiempos[jugador]+=Math.floor(Date.now() / 1000)-marcatiempo[jugador];
 					//###sugerencia
                     tiempos[jugador]+=Math.floor(Date.now() / 1000)-marcatiempo[jugador];
@@ -1594,6 +1594,7 @@ $(document).ready(function() {
     $(window).scrollTop(0);
 });       
      //-------------------------------------------------------------------------------------
+
 
 
 
