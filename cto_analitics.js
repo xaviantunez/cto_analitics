@@ -363,7 +363,8 @@ $(document).ready(function() {
             $("#time" + jugador).text(`${minutos}:${segundos < 10 ? '0' : ''}${segundos}`);
                 if((Math.floor(Date.now() / 1000)-marcatiempo[jugador])>2){
                     //if(primero==false) tiempos[jugador]+=Math.floor(Date.now() / 1000)-marcatiempo[jugador];
-                    tiempos[jugador]+=Math.floor(Date.now() / 1000)-marcatiempo[jugador];
+					//###sugerencia
+                    //tiempos[jugador]+=Math.floor(Date.now() / 1000)-marcatiempo[jugador];
                 }
 				//if(jugador=="Julia_Garcia") console.log(jugador+" 2 "+tiempos[jugador]);
                 storageManager("guardar",'tiempos', tiempos);
@@ -1589,4 +1590,5 @@ $(document).ready(function() {
     $(window).scrollTop(0);
 });       
      //-------------------------------------------------------------------------------------
+
 
