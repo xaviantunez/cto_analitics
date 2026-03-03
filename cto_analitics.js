@@ -153,14 +153,8 @@ $(document).ready(function() {
         $('#suplentes').empty();
         for (var i = 0; i < nombresCronometros.length; i++) {
             var jugador = nombresCronometros[i];
-            if ($("#check" + jugador).is(':checked')) {
-                iniciarCronometro(jugador);
-                $("#SP"+jugador).show();
-                if(texto=="") texto="Equipo en el campo: "+jugador
-                else texto+=", "+jugador+' '
-                //console.log('jugador' +jugador+' '+$("#pcheck" + jugador).is(':checked'));
-				
-				if(maxJugagores>8) {
+			console.log(maxjugagores);
+			if(maxJugagores>8) {
 					$("#TR"+jugador).show();
 					$("#TA"+jugador).show();
 					$('.spantarjetas').show();
@@ -172,7 +166,14 @@ $(document).ready(function() {
 					$('.spantarjetas').hide();
 				}
 
-					
+            if ($("#check" + jugador).is(':checked')) {
+                iniciarCronometro(jugador);
+                $("#SP"+jugador).show();
+                if(texto=="") texto="Equipo en el campo: "+jugador
+                else texto+=", "+jugador+' '
+                //console.log('jugador' +jugador+' '+$("#pcheck" + jugador).is(':checked'));
+				
+								
 				
                 if ($("#pcheck" + jugador).is(':checked')) {
                     storageManager("guardar",'portero', jugador);
@@ -1591,6 +1592,7 @@ $(document).ready(function() {
     $(window).scrollTop(0);
 });       
      //-------------------------------------------------------------------------------------
+
 
 
 
