@@ -288,19 +288,28 @@ $(document).ready(function() {
     function showTimeColor(tiempo, jugador,arranque=false){
         console.log("showTimeColor");
         var clase='rojo';
+		var claselbl='rojolbl';
         if(tiempo>minTiempo && tiempo<avgTiempo ){
             clase='naranja';
+			claselbl='naranjalbl';
             $("#ES"+jugador).removeClass("rojo");
-
+			$("#name"+jugador).removeClass("rojolbl");
         }
         if(tiempo>avgTiempo ) {
             clase = 'verde';
+			claselbl='verdelbl';
             $("#ES"+jugador).removeClass("naranja");
-            $("#ES"+jugador).removeClass("rojo");
+            $("#name"+jugador).removeClass("naranjalbl");
         }
 
-        if(!arranque) $("#ES"+jugador).toggleClass(clase);
-        else $("#ES"+jugador).addClass(clase);
+        if(!arranque){
+			$("#ES"+jugador).toggleClass(clase);
+			$("#name"+jugador).toggleClass(claselbl);
+		}
+        else{
+			$("#ES"+jugador).addClass(clase);
+			$("#name"+jugador).addClass(claselbl);
+		}
         ////console.log(jugador+' '+tiempo+' '+minTiempo+' '+avgTiempo);
 
     }
@@ -1559,6 +1568,7 @@ $(document).ready(function() {
     $(window).scrollTop(0);
 });       
      //-------------------------------------------------------------------------------------
+
 
 
 
