@@ -162,8 +162,16 @@ $(document).ready(function() {
                 else texto+=", "+jugador+' '
                 //console.log('jugador' +jugador+' '+$("#pcheck" + jugador).is(':checked'));
 				
-				if(maxJugagores>8) $("#sptarjetas"+jugador).show();
-				else $("#sptarjetas"+jugador).hide();
+				if(maxJugagores>8) {
+					$("#sptarjetas"+jugador).show();
+					$('.spantarjetas').show();
+				}
+				else{
+					$("#sptarjetas"+jugador).hide();
+					$('.spantarjetas').hide();
+				}
+
+					
 				
                 if ($("#pcheck" + jugador).is(':checked')) {
                     storageManager("guardar",'portero', jugador);
@@ -1521,6 +1529,7 @@ $(document).ready(function() {
     $(window).scrollTop(0);
 });       
      //-------------------------------------------------------------------------------------
+
 
 
 
