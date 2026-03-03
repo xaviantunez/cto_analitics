@@ -166,7 +166,7 @@ $(document).ready(function() {
 					$('.spantarjetas').show();
 				}
 				else{
-					$("#sptarjetas"+jugador).hide();
+					//$("#sptarjetas"+jugador).hide();
 					$("#TR"+jugador).hide();
 					$("#TA"+jugador).hide();
 					$('.spantarjetas').hide();
@@ -1591,6 +1591,7 @@ $(document).ready(function() {
     $(window).scrollTop(0);
 });       
      //-------------------------------------------------------------------------------------
+
 
 
 
