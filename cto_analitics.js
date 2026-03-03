@@ -161,6 +161,10 @@ $(document).ready(function() {
                 if(texto=="") texto="Equipo en el campo: "+jugador
                 else texto+=", "+jugador+' '
                 //console.log('jugador' +jugador+' '+$("#pcheck" + jugador).is(':checked'));
+				
+				if(maxJugagores>8) $("#sptarjetas"+jugador).show();
+				else $("#sptarjetas"+jugador).hide();
+				
                 if ($("#pcheck" + jugador).is(':checked')) {
                     storageManager("guardar",'portero', jugador);
                     $("#TP"+jugador).show();
@@ -168,15 +172,7 @@ $(document).ready(function() {
                     $("#AS"+jugador).hide();
                     $("#GO"+jugador).hide();
                     $("#RD"+jugador).hide();
-                    $("#RF"+jugador).show();
-					if(maxJugagores>8){
-                    	$("#TA"+jugador).show();
-                    	$("#TR"+jugador).show();
-					}
-					else{
-						$("#TA"+jugador).hide();
-                    	$("#TR"+jugador).hide();
-					}
+                    $("#RF"+jugador).show();					
                     $('.spantitulos').show();
 
                 }
@@ -187,15 +183,7 @@ $(document).ready(function() {
                 $("#AS"+jugador).show();
                 $("#GO"+jugador).show();
                 $("#RF"+jugador).show();
-                $("#RD"+jugador).show();
-                if(maxJugagores>8){
-                    $("#TA"+jugador).show();
-                    $("#TR"+jugador).show();
-				}
-				else{
-					$("#TA"+jugador).hide();
-                    $("#TR"+jugador).hide();
-				}
+                $("#RD"+jugador).show();                
                 $("#TP"+jugador).hide();
                 $("#PA"+jugador).hide();
                 $("#SP"+jugador).hide();
@@ -970,8 +958,9 @@ $(document).ready(function() {
             $("#GO"+jugadorEnJuego).show();
             $("#RF"+jugadorEnJuego).show();
             $("#RD"+jugadorEnJuego).show();
-            $("#TA"+jugadorEnJuego).show();
-            $("#TR"+jugadorEnJuego).show();
+            if(maxJugagores>8) $("#sptarjetas"+jugador).show();
+			else $("#sptarjetas"+jugador).hide();
+			
             $("#SP"+jugadorEnJuego).hide();
             //$("#pcheck"+jugadorEnJuego).hide();
             //$("#puerta"+jugadorEnJuego).hide();
@@ -1001,8 +990,8 @@ $(document).ready(function() {
                         $("#GO"+jugadorFueraJuego).hide();
                         $("#RF"+jugadorFueraJuego).hide();
                         $("#RD"+jugadorFueraJuego).hide();
-                        $("#TA"+jugadorFueraJuego).show();
-                        $("#TR"+jugadorFueraJuego).show();
+                       	if(maxJugagores>8) $("#sptarjetas"+jugador).show();
+						else $("#sptarjetas"+jugador).hide();
                         $('.spantitulos').hide();
                     }
                 }
@@ -1024,14 +1013,8 @@ $(document).ready(function() {
                 $("#GO"+jugador).show();
                 $("#RF"+jugador).show();
                 $("#RD"+jugador).show();
-                if(maxJugagores>8){
-                    $("#TA"+jugador).show();
-                    $("#TR"+jugador).show();
-				}
-				else{
-					$("#TA"+jugador).hide();
-                    $("#TR"+jugador).hide();
-				}
+                if(maxJugagores>8) $("#sptarjetas"+jugador).show();
+				else $("#sptarjetas"+jugador).hide();
                 $("#SP"+jugador).hide();
                 //$("#pcheck"+jugador).hide();
                 //$("#puerta"+jugador).hide();
@@ -1538,6 +1521,7 @@ $(document).ready(function() {
     $(window).scrollTop(0);
 });       
      //-------------------------------------------------------------------------------------
+
 
 
 
