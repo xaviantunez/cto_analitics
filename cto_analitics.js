@@ -262,7 +262,7 @@ $(document).ready(function() {
     }
 
     function iniciartotaltiempo(){
-        console.log("iniciartotaltiempo");
+        console.log("iniciartotaltiempo +iniciado");
         if(marcatiempototalDate==null || marcatiempototalDate==0)
         {
             marcatiempototalDate = fechaHora();
@@ -1595,6 +1595,7 @@ $(document).ready(function() {
     $(window).scrollTop(0);
 });       
      //-------------------------------------------------------------------------------------
+
 
 
 
