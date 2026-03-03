@@ -153,7 +153,7 @@ $(document).ready(function() {
         $('#suplentes').empty();
         for (var i = 0; i < nombresCronometros.length; i++) {
             var jugador = nombresCronometros[i];
-			console.log(maxjugagores);
+			console.log("maxjugadores:"+maxjugagores);
 			if(maxJugagores>8) {
 					$("#TR"+jugador).show();
 					$("#TA"+jugador).show();
@@ -1592,6 +1592,7 @@ $(document).ready(function() {
     $(window).scrollTop(0);
 });       
      //-------------------------------------------------------------------------------------
+
 
 
 
