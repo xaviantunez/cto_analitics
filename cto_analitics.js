@@ -292,22 +292,22 @@ $(document).ready(function() {
         if(tiempo>minTiempo && tiempo<avgTiempo ){
             clase='naranja';
 			claselbl='naranjalbl';
-            $("#ES"+jugador).removeClass("rojo");
+            //$("#ES"+jugador).removeClass("rojo");
 			$("#name"+jugador).removeClass("rojolbl");
         }
         if(tiempo>avgTiempo ) {
             clase = 'verde';
 			claselbl='verdelbl';
-            $("#ES"+jugador).removeClass("naranja");
+            //$("#ES"+jugador).removeClass("naranja");
             $("#name"+jugador).removeClass("naranjalbl");
         }
 
         if(!arranque){
-			$("#ES"+jugador).toggleClass(clase);
+			//$("#ES"+jugador).toggleClass(clase);
 			$("#name"+jugador).toggleClass(claselbl);
 		}
         else{
-			$("#ES"+jugador).addClass(clase);
+			//$("#ES"+jugador).addClass(clase);
 			$("#name"+jugador).addClass(claselbl);
 		}
         ////console.log(jugador+' '+tiempo+' '+minTiempo+' '+avgTiempo);
@@ -685,8 +685,8 @@ $(document).ready(function() {
             var span2 = $("<span>");
             var span3 = $("<span>");
             //CODIGO POR COLORES DEL TIEMPO JUGADO
-            span1.attr("id","ES"+nombresCronometros[i]);
-            span1.text("H");
+            //span1.attr("id","ES"+nombresCronometros[i]);
+            //span1.text("H");
             //MENU ACCIONES RAPIDAS POR JUGADOR
 
             span2.attr("class","spanaccion");
@@ -1568,6 +1568,7 @@ $(document).ready(function() {
     $(window).scrollTop(0);
 });       
      //-------------------------------------------------------------------------------------
+
 
 
 
