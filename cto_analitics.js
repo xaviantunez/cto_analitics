@@ -355,17 +355,18 @@ $(document).ready(function() {
             storageManager("guardar",'checkeados', arraycheckeados);
             intervalos[jugador] = setInterval(function() {
 				//if(jugador=="Julia_Garcia") console.log(jugador+" "+tiempos[jugador]);
-            tiempos[jugador]++;
+            //tiempos[jugador]++;
             showTimeColor(tiempos[jugador],jugador);
             const minutos = Math.floor(tiempos[jugador] / 60);
             const segundos = tiempos[jugador] % 60;
             //console.log(jugador+" "+tiempos[jugador]);
             $("#time" + jugador).text(`${minutos}:${segundos < 10 ? '0' : ''}${segundos}`);
-                if((Math.floor(Date.now() / 1000)-marcatiempo[jugador])>2){
+                if((Math.floor(Date.now() / 1000)-marcatiempo[jugador])>=2){
                     //if(primero==false) tiempos[jugador]+=Math.floor(Date.now() / 1000)-marcatiempo[jugador];
 					//###sugerencia
-                    //tiempos[jugador]+=Math.floor(Date.now() / 1000)-marcatiempo[jugador];
+                    tiempos[jugador]+=Math.floor(Date.now() / 1000)-marcatiempo[jugador];
                 }
+				else tiempos[jugador]++;
 				//if(jugador=="Julia_Garcia") console.log(jugador+" 2 "+tiempos[jugador]);
                 storageManager("guardar",'tiempos', tiempos);
                 marcatiempo[jugador] = Math.floor(Date.now() / 1000);
@@ -1590,5 +1591,6 @@ $(document).ready(function() {
     $(window).scrollTop(0);
 });       
      //-------------------------------------------------------------------------------------
+
 
 
