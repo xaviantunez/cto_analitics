@@ -272,6 +272,7 @@ $(document).ready(function() {
         totalTiempo = setInterval(function() {
             if((Math.floor(Date.now() / 1000)-marcatiempoTotal)>2 && marcatiempoTotal>0){
                 iniTiempo+=Math.floor(Date.now() / 1000)-marcatiempoTotal;
+				console.log("ajustando tiempo total");
             }
             else iniTiempo++;
             const minutosTotales = Math.floor(iniTiempo / 60);
@@ -357,7 +358,7 @@ $(document).ready(function() {
             storageManager("guardar",'checkeados', arraycheckeados);
             intervalos[jugador] = setInterval(function() {
 				//if(jugador=="Julia_Garcia") console.log(jugador+" "+tiempos[jugador]);
-            tiempos[jugador]++;
+            //tiempos[jugador]++;
             showTimeColor(tiempos[jugador],jugador);
             const minutos = Math.floor(tiempos[jugador] / 60);
             const segundos = tiempos[jugador] % 60;
@@ -368,7 +369,7 @@ $(document).ready(function() {
 					//###sugerencia
                     tiempos[jugador]+=Math.floor(Date.now() / 1000)-marcatiempo[jugador];
                 }
-				//else tiempos[jugador]++;
+				else tiempos[jugador]++;
 				//if(jugador=="Julia_Garcia") console.log(jugador+" 2 "+tiempos[jugador]);
                 storageManager("guardar",'tiempos', tiempos);
                 marcatiempo[jugador] = Math.floor(Date.now() / 1000);
@@ -1594,6 +1595,7 @@ $(document).ready(function() {
     $(window).scrollTop(0);
 });       
      //-------------------------------------------------------------------------------------
+
 
 
 
