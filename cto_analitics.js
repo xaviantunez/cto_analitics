@@ -364,12 +364,12 @@ $(document).ready(function() {
             const segundos = tiempos[jugador] % 60;
             //console.log(jugador+" "+tiempos[jugador]);
             $("#time" + jugador).text(`${minutos}:${segundos < 10 ? '0' : ''}${segundos}`);
-                if((Math.floor(Date.now() / 1000)-marcatiempo[jugador])>1){
+                if((Math.floor(Date.now() / 1000)-marcatiempo[jugador])>=1){
                     //if(primero==false) tiempos[jugador]+=Math.floor(Date.now() / 1000)-marcatiempo[jugador];
 					//###sugerencia
                     tiempos[jugador]+=Math.floor(Date.now() / 1000)-marcatiempo[jugador];
                 }
-				else tiempos[jugador]++;
+				//else tiempos[jugador]++;
 				//if(jugador=="Julia_Garcia") console.log(jugador+" 2 "+tiempos[jugador]);
                 storageManager("guardar",'tiempos', tiempos);
                 marcatiempo[jugador] = Math.floor(Date.now() / 1000);
@@ -1595,6 +1595,7 @@ $(document).ready(function() {
     $(window).scrollTop(0);
 });       
      //-------------------------------------------------------------------------------------
+
 
 
 
