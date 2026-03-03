@@ -262,7 +262,7 @@ $(document).ready(function() {
     }
 
     function iniciartotaltiempo(){
-        console.log("iniciartotaltiempo +iniciado");
+        console.log("iniciartotaltiempo +enmarcha");
         if(marcatiempototalDate==null || marcatiempototalDate==0)
         {
             marcatiempototalDate = fechaHora();
@@ -270,7 +270,7 @@ $(document).ready(function() {
             mensajeTablaMarcador('INICIO TIEMPO TOTAL');
         }
         totalTiempo = setInterval(function() {
-            if((Math.floor(Date.now() / 1000)-marcatiempoTotal)>2 && marcatiempoTotal>0 && iniciado==true){
+            if((Math.floor(Date.now() / 1000)-marcatiempoTotal)>2 && marcatiempoTotal>0 && enmarcha==1){
                 iniTiempo+=Math.floor(Date.now() / 1000)-marcatiempoTotal;
 				console.log("ajustando tiempo total");
             }
@@ -908,7 +908,7 @@ $(document).ready(function() {
         pararIntervalos(); // Detiene todos los cronómetros
         showCheckPorteros();
         iniciado=false;
-        enmarcha=false;
+        enmarcha=0;
         $('.spanaccion').hide();
         $('.titulos').hide();
         $('.checkboxportero').show();
@@ -1595,6 +1595,7 @@ $(document).ready(function() {
     $(window).scrollTop(0);
 });       
      //-------------------------------------------------------------------------------------
+
 
 
 
