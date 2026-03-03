@@ -69,6 +69,7 @@ $(document).ready(function() {
         equipoElegido=storageManager("leer",'equipoElegido');
         maxTiempo=storageManager("leer",'maxTiempo');
         portero=storageManager("leer",'portero');
+		maxJugagores=storageManager("leer",'jugadores');
         if(enmarcha=="") enmarcha=0;
         if(maxTiempo=="") enmarcha=50;
         if(mensajes == null) mensajes={};
@@ -1273,6 +1274,7 @@ $(document).ready(function() {
         //alert('');
         storageManager("guardar",'equipoelegido', equipoElegido);
         storageManager("guardar",'maxTiempo', maxTiempo);
+		storageManager("guardar",'jugadores',maxJugagores);
         minTiempo=Math.round(maxTiempo/3)*60;
         avgTiempo=Math.round(maxTiempo/2)*60;
         reiniciarIntervalos();
@@ -1592,6 +1594,7 @@ $(document).ready(function() {
     $(window).scrollTop(0);
 });       
      //-------------------------------------------------------------------------------------
+
 
 
 
