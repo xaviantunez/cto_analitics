@@ -1434,7 +1434,7 @@ $(document).ready(function() {
             scales: {
                 y: {
                     beginAtZero: true, // Asegura que el eje Y empiece desde cero
-                    max:60,
+                    max:maxTiempo,
                 }
             },
             plugins: {
@@ -1553,7 +1553,22 @@ $(document).ready(function() {
     // 8. Agregar la tabla al Excel
     XLSX.utils.sheet_add_aoa(ws, [['Tabla Marcador'], ...tablaMarcador], { origin: -1 });
 
-    // 9. Ajustar las columnas
+	   // 9. Agregar la tabla de marcador
+    const tablaMarcadorDatos = [];
+    $('#tablaDatosPartido tbody tr').each(function() {
+        const row = [];
+        $(this).find('td, th').each(function() {
+            row.push($(this).text().trim());
+        });
+        if (row.length > 0) {
+            tablaMarcadorDatos.push(row);
+        }
+    });
+
+    // 10. Agregar la tabla al Excel
+    XLSX.utils.sheet_add_aoa(ws, [['Eventos Datos'], ...tablaMarcadorDatos], { origin: -1 });
+
+    // 11. Ajustar las columnas
     const colWidths = [
         { wch: 20 }, // Nombre
         { wch: 10 }, // Tiempo
@@ -1574,3 +1589,4 @@ $(document).ready(function() {
     $(window).scrollTop(0);
 });       
      //-------------------------------------------------------------------------------------
+
