@@ -270,7 +270,7 @@ $(document).ready(function() {
             mensajeTablaMarcador('INICIO TIEMPO TOTAL');
         }
         totalTiempo = setInterval(function() {
-            if((Math.floor(Date.now() / 1000)-marcatiempoTotal)>2 && marcatiempoTotal>0){
+            if((Math.floor(Date.now() / 1000)-marcatiempoTotal)>2 && marcatiempoTotal>0 && iniciado==true){
                 iniTiempo+=Math.floor(Date.now() / 1000)-marcatiempoTotal;
 				console.log("ajustando tiempo total");
             }
@@ -1595,6 +1595,7 @@ $(document).ready(function() {
     $(window).scrollTop(0);
 });       
      //-------------------------------------------------------------------------------------
+
 
 
 
