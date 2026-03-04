@@ -1625,20 +1625,24 @@ $(document).ready(function() {
     // 8. Agregar la tabla al Excel
     XLSX.utils.sheet_add_aoa(ws, [['Tabla Marcador'], ...tablaMarcador], { origin: -1 });
 
-	// 9. Agregar la tabla de marcador
-    const tablaEventos = [];
-    $('#tablaDatosPartido tbody tr').each(function() {
-        const row = [];
-        $(this).find('td, th').each(function() {
-            row.push($(this).text().trim());
-        });
-        if (row.length > 0) {
-            tablaEventos.push(row);
-        }
-    });
+   // 9. Agregar la tabla de marcador
+   const tablaEventos = [];
+   $('#tablaDatosPartido tbody tr').each(function() {
+       const row = [];
+       $(this).find('td, th').each(function() {
+           var txt=$(this).text().trim().split(" ");
+           const momento = txt.slice(0, 2).join(" ");    // "04/03/2026 15:22:46"
+           const descripcion = txt.slice(2).join(" ");
+           row.push(momento);
+           row.push(descripcion);
+       });
+       if (row.length > 0) {
+           tablaEventos.push(row);
+       }
+   });
 
-    // 10. Agregar la tabla al Excel
-    XLSX.utils.sheet_add_aoa(ws, [['Eventos Partido'], ...tablaEventos], { origin: -1 });
+   // 10. Agregar la tabla al Excel
+   XLSX.utils.sheet_add_aoa(ws, [['Tabla Eventos Partido'], ...tablaEventos], { origin: -1 });
 
     // 11. Ajustar las columnas
     const colWidths = [
@@ -1661,5 +1665,3 @@ $(document).ready(function() {
     $(window).scrollTop(0);
 });
      //-------------------------------------------------------------------------------------
-
-
