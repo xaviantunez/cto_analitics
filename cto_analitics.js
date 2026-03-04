@@ -1625,7 +1625,22 @@ $(document).ready(function() {
     // 8. Agregar la tabla al Excel
     XLSX.utils.sheet_add_aoa(ws, [['Tabla Marcador'], ...tablaMarcador], { origin: -1 });
 
-    // 9. Ajustar las columnas
+	// 9. Agregar la tabla de marcador
+    const tablaEventos = [];
+    $('#tablaDatosPartido tbody tr').each(function() {
+        const row = [];
+        $(this).find('td, th').each(function() {
+            row.push($(this).text().trim());
+        });
+        if (row.length > 0) {
+            tablaEventos.push(row);
+        }
+    });
+
+    // 10. Agregar la tabla al Excel
+    XLSX.utils.sheet_add_aoa(ws, [['Eventos Partido'], ...tablaEventos], { origin: -1 });
+
+    // 11. Ajustar las columnas
     const colWidths = [
         { wch: 20 }, // Nombre
         { wch: 10 }, // Tiempo
@@ -1635,7 +1650,7 @@ $(document).ready(function() {
     ];
     ws['!cols'] = colWidths;
 
-    // 10. Crear el libro de trabajo y exportar a Excel
+    // 12. Crear el libro de trabajo y exportar a Excel
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Cronómetros y Marcador');
     XLSX.writeFile(wb, pdfParte + adversario + ' .xlsx');
@@ -1646,3 +1661,4 @@ $(document).ready(function() {
     $(window).scrollTop(0);
 });
      //-------------------------------------------------------------------------------------
+
