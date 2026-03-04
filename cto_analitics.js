@@ -1506,7 +1506,7 @@ $(document).ready(function() {
             scales: {
                 y: {
                     beginAtZero: true, // Asegura que el eje Y empiece desde cero
-                    max:60,
+                    max:maxTiempo,
                 }
             },
             plugins: {
@@ -1661,4 +1661,5 @@ $(document).ready(function() {
     $(window).scrollTop(0);
 });
      //-------------------------------------------------------------------------------------
+
 
