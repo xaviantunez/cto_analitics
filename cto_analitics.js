@@ -517,7 +517,7 @@ $(document).ready(function() {
         }
         removeestadisticas();
         totaljugadoresencampo=0;
-        $('#jugjugando').text(totaljugadoresencampo);
+        $('#jugjug').text("JUGADORES "+totaljugadoresencampo);
         $('#id2 span').text("Adversario");
         $('#resulAdv').text(0);
         $('#resulCto').text(0);
@@ -570,7 +570,7 @@ $(document).ready(function() {
                     totaljugadoresencampo++;
 					console.log(totaljugadoresencampo);
             });
-            $('#jugjugando').text(totaljugadoresencampo);
+            $('#jugjug').text("JUGADORES "+totaljugadoresencampo);
         }
     }
 
@@ -613,7 +613,7 @@ $(document).ready(function() {
         nombresCronometros.splice(positiontodelete,1);
         if ($("#check" + nombre).is(':checked')) {
             totaljugadoresencampo--;
-            $('#jugjugando').text(totaljugadoresencampo);
+            $('#jugjug').text("JUGADORES "+totaljugadoresencampo);
         }
         $("#"+nombre).remove();
     });
@@ -735,7 +735,7 @@ $(document).ready(function() {
         nombresCronometros.splice(positiontodelete,1);
         if ($("#check" + nombre).is(':checked')) {
             totaljugadoresencampo--;
-            $('#jugjugando').text(totaljugadoresencampo);
+            $('#jugjug').text("JUGADORES "+totaljugadoresencampo);
         }
         $("#"+nombre).remove();*/
     });
@@ -1262,7 +1262,7 @@ $(document).ready(function() {
                 totaljugadoresencampo++;
 
             } else { totaljugadoresencampo--;}
-            $('#jugjugando').text(totaljugadoresencampo);
+            $('#jugjug').text("JUGADORES "+(totaljugadoresencampo);
 
         });
         $('#new-player-modal').hide();
@@ -1376,7 +1376,7 @@ $(document).ready(function() {
                     totaljugadoresencampo--;
             }
             //console.log(equipotitular);
-            $('#jugjugando').text(totaljugadoresencampo);
+            $('#jugjug').text("JUGADORES "+totaljugadoresencampo);
 
         }
     )
@@ -1664,3 +1664,4 @@ $(document).ready(function() {
     $(window).scrollTop(0);
 });
      //-------------------------------------------------------------------------------------
+
