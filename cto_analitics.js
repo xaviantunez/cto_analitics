@@ -1262,7 +1262,7 @@ $(document).ready(function() {
                 totaljugadoresencampo++;
 
             } else { totaljugadoresencampo--;}
-            $('#jugjug').text("JUGADORES "+(totaljugadoresencampo);
+            $('#jugjug').text("JUGADORES "+totaljugadoresencampo);
 
         });
         $('#new-player-modal').hide();
@@ -1664,4 +1664,5 @@ $(document).ready(function() {
     $(window).scrollTop(0);
 });
      //-------------------------------------------------------------------------------------
+
 
