@@ -352,6 +352,10 @@
     <!--Fin css-->
     </head>
     <body>
+		<div class="cronometro" id="cronometroTotal">
+            <span class="spannombre" id="spannombreTotal">Total minutos</span>
+            <span id="time0">0:00</span>
+        </div>
         <div id="divequipos" style="display: inline-block;width:100%">
 
             <select id="equipos" style="width:auto;">
@@ -387,11 +391,7 @@
                 <input type="text" id="text-player">
                 <button class="player-button" id="save-new-player">Guardar</button>
                 <button class="player-button" id="close-new-player">Cancelar</button>
-            </div>
-            <div class="cronometro" id="cronometroTotal">
-                <span class="spannombre" id="spannombreTotal">Total minutos</span>
-                <span id="time0">0:00</span>
-            </div>
+            </div>            
             <div class="button-controls">
                 <button id="add-rival">Rival</button>
                 <button id="tryCapitan">Capit&aacute;n</button>
@@ -558,6 +558,7 @@
     </body>
 
 </html>
+
 
 
 
