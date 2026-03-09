@@ -95,6 +95,8 @@ $(document).ready(function() {
         }
         resulAdv = storageManager("leer",'resulAdv');
         resulCto = storageManager("leer",'resulCto');
+        if(resulAdv==null) resulAdv=0;
+        if(resulCto==null) resulCto=0;
         //------------------------------------------------------------------
         cargarestadistica("left");
         cargarestadistica("right");
