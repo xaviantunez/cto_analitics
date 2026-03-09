@@ -29,8 +29,6 @@ $(document).ready(function() {
     var minTiempo=600;
     var avgTiempo=1500;
     var maxTiempo=50;
-    var resulAdv = 0;
-    var resulCto = 0;
 
     equips.forEach(function(nombre, index) {
 
@@ -78,8 +76,12 @@ $(document).ready(function() {
         if(marcamensajes == null) marcamensajes={};
         minTiempo=Math.round(maxTiempo/3)*60;
         avgTiempo=Math.round(maxTiempo/2)*60;
-
-        if(capitan!='') $('#tryCapitan').hide();
+        var resulAdv=0;
+        var resulCto=0;
+        if(capitan!='') {
+            $('#tryCapitan').hide();
+            $('#divcapitan').css("display","none");
+        }
 
 
         var nombresCronometrosTemp =storageManager("leer",'nombresCronometros');
@@ -149,10 +151,9 @@ $(document).ready(function() {
 
 
 
-
             storageManager("guardar",'equipotitular',equipotitular);
-            storageManager("guardar",'resulAdv', resulAdv);
-            storageManager("guardar",'resulCto', resulAdv);
+            storageManager("guardar",'resulAdv', 0);
+            storageManager("guardar",'resulCto', 0);
             storageManager("guardar",'nombresCronometros', nombresCronometros);
 
 
@@ -522,7 +523,7 @@ $(document).ready(function() {
         }
         removeestadisticas();
         totaljugadoresencampo=0;
-        $('#jugjug').text("JUGADORES "+totaljugadoresencampo);
+        $('#jugjug').text($('#jugjug').text()+totaljugadoresencampo);
         $('#id2 span').text("Adversario");
         $('#resulAdv').text(0);
         $('#resulCto').text(0);
@@ -575,7 +576,7 @@ $(document).ready(function() {
                 totaljugadoresencampo++;
                 console.log(totaljugadoresencampo);
             });
-            $('#jugjug').text("JUGADORES "+totaljugadoresencampo);
+            $('#jugjug').text($('#jugjug').text()+totaljugadoresencampo);
         }
     }
 
@@ -618,7 +619,7 @@ $(document).ready(function() {
         nombresCronometros.splice(positiontodelete,1);
         if ($("#check" + nombre).is(':checked')) {
             totaljugadoresencampo--;
-            $('#jugjug').text("JUGADORES "+totaljugadoresencampo);
+            $('#jugjug').text($('#jugjug').text()+totaljugadoresencampo);
         }
         $("#"+nombre).remove();
     });
@@ -740,7 +741,7 @@ $(document).ready(function() {
         nombresCronometros.splice(positiontodelete,1);
         if ($("#check" + nombre).is(':checked')) {
             totaljugadoresencampo--;
-            $('#jugjug').text("JUGADORES "+totaljugadoresencampo);
+            $('#jugjug').text($('#jugjug').text()+totaljugadoresencampo);
         }
         $("#"+nombre).remove();*/
     });
@@ -1267,7 +1268,7 @@ $(document).ready(function() {
                 totaljugadoresencampo++;
 
             } else { totaljugadoresencampo--;}
-            $('#jugjug').text("JUGADORES "+totaljugadoresencampo);
+            $('#jugjug').text($('#jugjug').text()+totaljugadoresencampo);
 
         });
         $('#new-player-modal').hide();
@@ -1300,6 +1301,7 @@ $(document).ready(function() {
     $('#save-capitan').click(function() {
         $('#capitan-modal').hide();
         $('#tryCapitan').hide();
+        $('#divcapitan').css("display","none");
         capitan=$('#jugadoresSeleccionados').val();
         mensajeTablaMarcador('Capitan Local: '+capitan);
         storageManager("guardar","capitan", capitan);
@@ -1329,7 +1331,7 @@ $(document).ready(function() {
             case "alevinF":nombresCronometros=alevinF;maxTiempo=60;break;
             case "benjaminB":nombresCronometros=benjaminB;maxTiempo=50;break;
             case "benjaminA":nombresCronometros=benjaminA;maxTiempo=50;break;
-            case "prebenjaminA":nombresCronometros=prebenjaminAmaxTiempo=50;;break;
+            case "prebenjaminA":nombresCronometros=prebenjaminA;maxTiempo=50;break;
             case "prebenjaminB":nombresCronometros=prebenjaminB;maxTiempo=50;break;
             case "infantilA":nombresCronometros=infantilA;maxJugadores=11;maxTiempo=70;break;
             case "infantilB":nombresCronometros=infantilB;maxJugadores=11;maxTiempo=70;break;
@@ -1337,9 +1339,9 @@ $(document).ready(function() {
             case "cadeteA":nombresCronometros=cadeteA;maxJugadores=11;maxTiempo=80;break;
             case "cadeteB":nombresCronometros=cadeteB;maxJugadores=11;maxTiempo=80;break;
             case "cadeteF":nombresCronometros=cadeteF;maxJugadores=11;maxTiempo=80;break;
-            case "JuvenilA":nombresCronometros=JuvenilA;maxJugadores=11;maxTiempo=90;break;
-            case "JuvenilB":nombresCronometros=JuvenilB;maxJugadores=11;maxTiempo=90;break;
-            case "JuvenilF":nombresCronometros=JuvenilB;maxJugadores=11;maxTiempo=90;break;
+            case "juvenilA":nombresCronometros=juvenilA;maxJugadores=11;maxTiempo=90;break;
+            case "juvenilB":nombresCronometros=juvenilB;maxJugadores=11;maxTiempo=90;break;
+            case "juvenilF":nombresCronometros=juvenilB;maxJugadores=11;maxTiempo=90;break;
         }
         //alert('');
         storageManager("guardar",'equipoelegido', equipoElegido);
@@ -1381,7 +1383,7 @@ $(document).ready(function() {
                     totaljugadoresencampo--;
                 }
                 //console.log(equipotitular);
-                $('#jugjug').text("JUGADORES "+totaljugadoresencampo);
+                $('#jugjug').text($('#jugjug').text()+totaljugadoresencampo);
 
             }
         )
