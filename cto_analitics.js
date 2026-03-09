@@ -523,7 +523,7 @@ $(document).ready(function() {
         }
         removeestadisticas();
         totaljugadoresencampo=0;
-        $('#jugjug').text($('#jugjug').text()+totaljugadoresencampo);
+        $('#jugjug').text("JUGADORES: "+totaljugadoresencampo);
         $('#id2 span').text("Adversario");
         $('#resulAdv').text(0);
         $('#resulCto').text(0);
@@ -576,7 +576,7 @@ $(document).ready(function() {
                 totaljugadoresencampo++;
                 console.log(totaljugadoresencampo);
             });
-            $('#jugjug').text($('#jugjug').text()+totaljugadoresencampo);
+            $('#jugjug').text("JUGADORES: "+totaljugadoresencampo);
         }
     }
 
@@ -619,7 +619,7 @@ $(document).ready(function() {
         nombresCronometros.splice(positiontodelete,1);
         if ($("#check" + nombre).is(':checked')) {
             totaljugadoresencampo--;
-            $('#jugjug').text($('#jugjug').text()+totaljugadoresencampo);
+            $('#jugjug').text("JUGADORES: "+totaljugadoresencampo);
         }
         $("#"+nombre).remove();
     });
@@ -741,7 +741,7 @@ $(document).ready(function() {
         nombresCronometros.splice(positiontodelete,1);
         if ($("#check" + nombre).is(':checked')) {
             totaljugadoresencampo--;
-            $('#jugjug').text($('#jugjug').text()+totaljugadoresencampo);
+            $('#jugjug').text("JUGADORES: "+totaljugadoresencampo);
         }
         $("#"+nombre).remove();*/
     });
@@ -1268,7 +1268,7 @@ $(document).ready(function() {
                 totaljugadoresencampo++;
 
             } else { totaljugadoresencampo--;}
-            $('#jugjug').text($('#jugjug').text()+totaljugadoresencampo);
+            $('#jugjug').text("JUGADORES: "+totaljugadoresencampo);
 
         });
         $('#new-player-modal').hide();
@@ -1383,7 +1383,7 @@ $(document).ready(function() {
                     totaljugadoresencampo--;
                 }
                 //console.log(equipotitular);
-                $('#jugjug').text($('#jugjug').text()+totaljugadoresencampo);
+                $('#jugjug').text("JUGADORES: "+totaljugadoresencampo);
 
             }
         )
