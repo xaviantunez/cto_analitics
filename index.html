@@ -12,7 +12,7 @@
          <title>ESTADISTICA</title>
         <!--css-->
         <style>
-        .spannombre { text-align:right; display: inline-block; width: 100px; font-size: 20px; }
+        .spannombre { text-align:right; display: inline-block; width: 75px; font-size: 20px; }
         #iniciar-todos, #parar-todos, #guardar-pdf, #guardar-excel, #cambiar-estado,#salir-cambio,#salir-gol, #reiniciar-todos, #add-new-player, #tryCapitan, #help{
             color: white; /* Texto blanco */
             padding: 15px 32px; /* Espaciado */
@@ -36,22 +36,22 @@
         #guardar-pdf {background-color: red;}
         #guardar-excel {background-color: #107c41;}
         span {font-size: 14px;font-weight: bold;}
-        body { 
-            text-align: center; 
-            font-family: Arial, sans-serif; 
-            background-color: #f4f4f4; 
-            margin: 0; 
+        body {
+            text-align: center;
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
             padding: 2px;
         }
-        .cronometro, .noconvocados, #suplentes div, #banquillo{ 
+        .cronometro, .noconvocados, #suplentes div, #banquillo{
             margin: 5px;
             padding: 10px;
-            background-color: white; 
-            border-radius: 8px; 
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1); 
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
         #banquillo{
-            background-color: black; 
+            background-color: black;
             color: white;
         }
         #divjugjugando p{
@@ -65,44 +65,44 @@
             padding: 1px 0;
             color: white;
             font-weight: bold;
-             background-color: grey; 
-            border-radius: 8px; 
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1); 
+             background-color: grey;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
         .cronometro {
             color: #4b4040;
          }
-        .spannombre { 
-            text-align:right; 
-            display: inline-block; 
-            width: 100px; 
-            font-size: 14px; 
+        .spannombre {
+            text-align:right;
+            display: inline-block;
+            width: 100px;
+            font-size: 14px;
         }
-        .button { 
-            background-color: #007BFF; 
-            color: white; 
-            border: none; 
-            border-radius: 5px; 
+        .button {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
             padding: 10px 15px;
-            margin: 5px; 
-            transition: background-color 0.3s; 
+            margin: 5px;
+            transition: background-color 0.3s;
         }
-        .button:hover { 
-            background-color: #0056b3; 
+        .button:hover {
+            background-color: #0056b3;
         }
         #jugadores-modal, #goleador-modal, #goleador-adv-modal,#adversario-modal, #delete-cookies-modal,#new-player-modal, #capitan-modal, #ayuda-modal{
-            position: fixed; 
-            top: 50%; 
-            left: 50%; 
-            transform: translate(-50%, -50%); 
-            background: white; 
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
             padding: 40px;
-            font-size: 14px; 
-            border: 1px solid #ccc; 
-            border-radius: 8px; 
-            z-index: 1000; 
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            z-index: 1000;
             box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            display: none; 
+            display: none;
         }
         #ayuda-modal{
             padding: 10px;
@@ -110,18 +110,18 @@
         #delete-cookies-modal{
             text-align: center;
         }
-        select { 
-            width: 100%; 
-            padding: 10px; 
-            margin: 10px 0; 
-            border-radius: 5px; 
-            border: 1px solid #ccc; 
+        select {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ccc;
             min-width: 190px;
         }
-        #jugadores-en-juego, #jugadores-fuera-juego { 
-            margin-bottom: 20px; 
+        #jugadores-en-juego, #jugadores-fuera-juego {
+            margin-bottom: 20px;
         }
-        #cambiar-jugadores,  #save-gol-adv { 
+        #cambiar-jugadores,  #save-gol-adv {
             background-color: #107c41; /* Verde */
             color: white; /* Texto blanco */
             padding: 10px; /* Espaciado */
@@ -129,7 +129,7 @@
             text-decoration: none; /* Sin subrayado */
             display: inline-block; /* Estilo en línea */
             font-size: 14px; /* Tamaño de fuente */
-            margin: 4px 2px; /* Margen */       
+            margin: 4px 2px; /* Margen */
             border: none; /* Sin borde */
             border-radius: 5px; /* Bordes redondeados */
             transition: background-color 0.3s; /* Transición suave */
@@ -137,7 +137,7 @@
               #add-gol-cto, #save-gol,#salir-gol,#salir-gol-adv, #save-capitan, #cancel-capitan{
             background-color: #107c41;
             padding: 10px;
-        
+
             color: white; /* Texto blanco */
             border-radius: 5px; /* Bordes redondeados */
             text-align: center;
@@ -156,9 +156,9 @@
             display: block;
         }
 
-        #cambiar-jugadores:hover { 
-            background-color: #138496; 
-        }        
+        #cambiar-jugadores:hover {
+            background-color: #138496;
+        }
         #marcador-partido td{
             border-top: 1px solid #a9a1a1;
             padding: 14px;
@@ -172,9 +172,9 @@
         input#goleador-adversario {
             padding: 13px;
         }
-        #spannombreTotal{  
+        #spannombreTotal{
             padding: 10px;
-            width: 100px;
+            width: 250px;
             text-align: center;
         }
         span#time0 {
@@ -196,9 +196,10 @@
         .estadisticas{
             display: inline-block;
             border: none;
-            padding: 0 5px;			
+            padding: 0 5px;
+			font-weight:bolder !important;
         }
-        .numestadisticasleft{   
+        .numestadisticasleft{
             display: inline-block;
             text-align: left;
         }
@@ -232,7 +233,7 @@
         }
         .increment-right, .increment-left,.sectionestadistica span{
             font-size: 16px;
-            font-weight:bolder;
+            font-weight: bolder;
         }
         #cronometroTotal{
           background-color: white;
@@ -275,7 +276,7 @@
         .spanaccion{
             display: grid; /* Asegura que el botón ocupe toda la línea disponible */
             margin: 2px auto 2px; /* Agrega espacio encima y centra horizontalmente */
-            
+
         }
         .spbotones{
             display: inline-block; /* Asegura que el botón ocupe toda la línea disponible */
@@ -309,8 +310,8 @@
             font-size: 14px !important;
         }
 
-        #divnewplayer{
-            width: 30%;
+        #divnewplayer,#divcapitan{
+            /*width: 10%;*/
             display: inline-block;
             vertical-align: top;
             font-size: 15px;
@@ -320,7 +321,7 @@
             color: transparent; !important
         }
 		.naranjalbl{
-            color: #ffcc00 !important;            
+            color: #ffcc00 !important;
         }
         .rojo{
             /*background-color: #ffdfd4 !important;*/
@@ -337,17 +338,18 @@
         }
 		.rojolbl{
             /*background-color: #ffdfd4 !important;*/
-            color: #ff0000 !important;            
+            color: #ff0000 !important;
         }
         .verdelbl{
-            color: #00cc00 !important;            
+            color: #00cc00 !important;
         }
         .amarillolbl{
-            color: #fff350 !important;            
+            color: #fff350 !important;
         }
         /*fin estilo div checkbox jugadores*/
        #salir-cambio,#salir-gol,#salir-gol-adv, #cancel-capitan{background-color: #1a1a19;}
-    	.generic {
+
+	.generic {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -361,7 +363,7 @@
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    padding-left: 10px; 
+    padding-left: 10px;
     border: 0px solid #000000;
 }
 
@@ -371,12 +373,39 @@
     justify-content: flex-end;
     gap: 5px;
 }
+#tryCapitan,add-new-player{
+    display: inline-block;
+    margin: 0px;
+    padding: 12px 12px;
+}
+        .contenedor-jugadores {
+            display: flex;
+            gap: 15px;           /* Espacio entre divs */
+            align-items: center; /* Centra verticalmente */
+            width: 100%;
+        }
+        #divcapitan {
+            flex: 1;             /* Ocupa espacio disponible */
+            max-width: 75px;
+        }
 
+        #divjugjugando {
+            flex: 1;
+            text-align: center;  /* Centra el texto */
+
+        }
+
+        #divnewplayer {
+            flex: 0 0 auto;      /* Solo el tamaño del botón */
+            min-width:130px
+        }
+
+        </style>
     <!--Fin css-->
-			</style>
     </head>
     <body>
-		<div id="divequipos" style="display: inline-block;width:100%">
+
+        <div id="divequipos" style="display: inline-block;width:100%">
 
             <select id="equipos" style="width:auto;">
                 <option value="">EQUIPO LOCAL</option>
@@ -388,12 +417,13 @@
                 <option value="alevinF">Alevin F</option>-->
             </select>
             <button id="change-localteam">Cambiar</button>
+            <button id="add-rival">Rival</button>
 
 
         </div>
 		<div class="cronometro" id="cronometroTotal">
 			<div class="generic">
-				<div class="box1">
+				<div class="box1" >
 					<span class="spannombre" id="spannombreTotal">Total minutos</span>
 					<span id="time0">0:00</span>
 				</div>
@@ -406,30 +436,31 @@
         <div id="add-rival-div">
 
         </div>
-        
-        <div>
+
+        <div class="contenedor-jugadores">
+            <div id="divcapitan">
+                <button id="tryCapitan">Capit&aacute;n</button>
+                </div>
+
             <div id="divjugjugando">
-                <p id="jugjug">JUGADORES</p>
-                <!--<p id="jugjugando">0</p>-->  
+                <p id="jugjug">JUGADORES: </p>
+
             </div>
         <!---->
             <div id="divnewplayer">
-                <button id="add-new-player">Nuevo jugador</button>
-                
+                <button id="add-new-player">+Jugador</button>
+
+
             </div>
+
         </div>
             <div id="new-player-modal">
                 <label>Nuevo Jugador</label>
                 <input type="text" id="text-player">
                 <button class="player-button" id="save-new-player">Guardar</button>
                 <button class="player-button" id="close-new-player">Cancelar</button>
-            </div>            
-            <div class="button-controls">
-                <button id="add-rival">Rival</button>
-                <button id="tryCapitan">Capit&aacute;n</button>
-                
-                <!--<button id="help">?</button>-->
             </div>
+
 			<div id="cronometros"></div>
             <div id="banquillo">
                 <label>BANQUILLO</label>
@@ -445,14 +476,14 @@
                 <select id="jugadoresSeleccionados" size="1"></select>
                 <div style="display:inline-block;">
                     <button id="save-capitan">Guardar</button>
-                    <button id="cancel-capitan">Cerrar</button>        
+                    <button id="cancel-capitan">Cerrar</button>
                 </div>
             </div>
             <div id="jugadores-modal" style="display:none;">
                 <h4>Sale del campo</h4>
                 <select id="jugadores-en-juego" size="1"></select>
                 <h4>Entra al campo</h4>
-                <select id="jugadores-fuera-juego" size="1"></select>    
+                <select id="jugadores-fuera-juego" size="1"></select>
                 <button id="cambiar-estado">Cambio</button>
                 <button id="salir-cambio">Cerrar</button>
             </div>
@@ -506,7 +537,7 @@
                     <div class="numestadisticasleft" id="rematesPorteriaLeft">0</div>
                     <div class="grupdivestadisticas">
                         <div class="estadisticas"><button class="increment-left">+</button></div>
-                        <div class="estadisticas"><span span id="rematesPorteria">Remates Dentro</span></div>
+                        <div class="estadisticas"><span id="rematesPorteria">Remates Dentro</span></div>
                         <div class="estadisticas"><button class="increment-right">+</button></div>
                     </div>
                     <div class="numestadisticasright" id="rematesPorteriaRight">0</div>
@@ -515,7 +546,7 @@
                     <div class="numestadisticasleft" id="paradasPorteroLeft">0</div>
                     <div class="grupdivestadisticas" >
                         <div class="estadisticas"><button class="increment-left">+</button></div>
-                        <div class="estadisticas"><span span id="paradasPortero">Paradas portero</span></div>
+                        <div class="estadisticas"><span id="paradasPortero">Paradas portero</span></div>
                         <div class="estadisticas"><button class="increment-right">+</button></div>
                     </div>
                     <div class="numestadisticasright" id="paradasPorteroRight">0</div>
@@ -524,7 +555,7 @@
                     <div class="numestadisticasleft" id="cornerLeft">0</div>
                     <div class="grupdivestadisticas">
                         <div class="estadisticas"><button class="increment-left">+</button></div>
-                        <div class="estadisticas"><span span id="cornersFavor">Corners</span></div>
+                        <div class="estadisticas"><span id="cornersFavor">Corners</span></div>
                         <div class="estadisticas"><button class="increment-right">+</button></div>
                     </div>
                     <div class="numestadisticasright" id="cornerRight">0</div>
@@ -533,7 +564,7 @@
                     <div class="numestadisticasleft" id="outsideLeft">0</div>
                     <div class="grupdivestadisticas">
                         <div class="estadisticas"><button class="increment-left">+</button></div>
-                        <div class="estadisticas"><span span id="fuerasJuego">Fueras de juego</span></div>
+                        <div class="estadisticas"><span id="fuerasJuego">Fueras de juego</span></div>
                         <div class="estadisticas"><button class="increment-right">+</button></div>
                     </div>
                     <div class="numestadisticasright" id="outsideRight">0</div>
@@ -542,7 +573,7 @@
                     <div class="numestadisticasleft" id="faltasLeft">0</div>
                     <div class="grupdivestadisticas">
                         <div class="estadisticas"><button class="increment-left">+</button></div>
-                        <div class="estadisticas"><span span id="faltasCometidas">Faltas cometidas</span></div>
+                        <div class="estadisticas"><span id="faltasCometidas">Faltas cometidas</span></div>
                         <div class="estadisticas"><button class="increment-right">+</button></div>
                     </div>
                     <div class="numestadisticasright" id="faltasRight">0</div>
@@ -551,7 +582,7 @@
                     <div class="numestadisticasleft" id="tarjetasSmarillasLeft">0</div>
                     <div class="grupdivestadisticas">
                         <div class="estadisticas"><button class="increment-left">+</button></div>
-                        <div class="estadisticas"><span span id="tarjetasAmarillas">Tarjetas Amarillas</span></div>
+                        <div class="estadisticas"><span id="tarjetasAmarillas">Tarjetas Amarillas</span></div>
                         <div class="estadisticas"><button class="increment-right">+</button></div>
                     </div>
                     <div class="numestadisticasright" id="tarjetasAmarillasRight">0</div>
@@ -559,7 +590,7 @@
                     <div class="numestadisticasleft" id="tarjetasRojasLeft">0</div>
                     <div class="grupdivestadisticas">
                         <div class="estadisticas"><button class="increment-left">+</button></div>
-                        <div class="estadisticas"><span span id="tarjetasRojas">Tarjetas Rojas</span></div>
+                        <div class="estadisticas"><span id="tarjetasRojas">Tarjetas Rojas</span></div>
                         <div class="estadisticas"><button class="increment-right">+</button></div>
                     </div>
                     <div class="numestadisticasright" id="tarjetasRojasRight">0</div>
@@ -577,7 +608,7 @@
                 <button id="continuarsesion">No</button>
             </div>
             <div id="divgraficos">
-                <button id="showgrafics">Mostrar Graficos</button> 
+                <button id="showgrafics">Mostrar Graficos</button>
             </div>
             <canvas id="myBarChart" width="400" height="400" style="display:none;"></canvas>
         <div id="marcaor-partido">
@@ -590,17 +621,5 @@
     </body>
 
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
 
 
