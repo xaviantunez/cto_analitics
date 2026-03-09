@@ -29,6 +29,8 @@ $(document).ready(function() {
     var minTiempo=600;
     var avgTiempo=1500;
     var maxTiempo=50;
+    var resulAdv = 0;
+    var resulCto = 0;
 
     equips.forEach(function(nombre, index) {
 
@@ -77,6 +79,8 @@ $(document).ready(function() {
         minTiempo=Math.round(maxTiempo/3)*60;
         avgTiempo=Math.round(maxTiempo/2)*60;
 
+        if(capitan!='') $('#tryCapitan').hide();
+
 
         var nombresCronometrosTemp =storageManager("leer",'nombresCronometros');
         if(nombresCronometrosTemp){
@@ -87,8 +91,8 @@ $(document).ready(function() {
         }else{
             $('#id2 span').text(adversario);
         }
-        var resulAdv = storageManager("leer",'resulAdv');
-        var resulCto = storageManager("leer",'resulCto');
+        resulAdv = storageManager("leer",'resulAdv');
+        resulCto = storageManager("leer",'resulCto');
         //------------------------------------------------------------------
         cargarestadistica("left");
         cargarestadistica("right");
@@ -115,7 +119,7 @@ $(document).ready(function() {
         $('#tryCapitan').hide();
 
     }
-        // Iniciar todos los cronómetros si están marcados
+    // Iniciar todos los cronómetros si están marcados
     $('#iniciar-todos').click(function() {
         console.log("iniciar-todos");
         $('#parar-todos').toggle();
@@ -145,9 +149,10 @@ $(document).ready(function() {
 
 
 
+
             storageManager("guardar",'equipotitular',equipotitular);
-            storageManager("guardar",'resulAdv', 0);
-            storageManager("guardar",'resulCto', 0);
+            storageManager("guardar",'resulAdv', resulAdv);
+            storageManager("guardar",'resulCto', resulAdv);
             storageManager("guardar",'nombresCronometros', nombresCronometros);
 
 
@@ -155,7 +160,7 @@ $(document).ready(function() {
         $('#suplentes').empty();
         for (var i = 0; i < nombresCronometros.length; i++) {
             var jugador = nombresCronometros[i];
-			$("#check"+jugador).hide();
+            $("#check"+jugador).hide();
             if ($("#check" + jugador).is(':checked')) {
                 iniciarCronometro(jugador);
                 $("#SP"+jugador).show();
@@ -167,23 +172,23 @@ $(document).ready(function() {
                 if(enmarcha==0)mensajeTablaMarcador(texto);
                 //console.log('jugador' +jugador+' '+$("#pcheck" + jugador).is(':checked'));
 
-				if(maxJugadores>8) {
-					$("#TR"+jugador).show();
-					$("#TA"+jugador).show();
-					$('.spantarjetas').show();
-				}
-				else{					
-					$("#TR"+jugador).hide();
-					$("#TA"+jugador).hide();
-					$('.spantarjetas').hide();
-				}
+                if(maxJugadores>8) {
+                    $("#TR"+jugador).show();
+                    $("#TA"+jugador).show();
+                    $('.spantarjetas').show();
+                }
+                else{
+                    $("#TR"+jugador).hide();
+                    $("#TA"+jugador).hide();
+                    $('.spantarjetas').hide();
+                }
 
                 if ($("#pcheck" + jugador).is(':checked')) {
                     storageManager("guardar",'portero', jugador);
                     $("#TP"+jugador).show();
                     $("#PA"+jugador).show();
                     $("#AS"+jugador).hide();
-                    $("#GO"+jugador).hide();                    
+                    $("#GO"+jugador).hide();
                     $("#RD"+jugador).hide();
                     $("#RF"+jugador).show();
                     $('.spantitulos').show();
@@ -311,62 +316,62 @@ $(document).ready(function() {
             console.log("marcatiempototal");
 
             $(`#time0`).text(` ${minutosTotales}:${segundosTotales < 10 ? '0' : ''}${segundosTotales}`+'  ('+marcatiempototalDate+')');
-            }, 1000);
+        }, 1000);
 
     }
 
     function showTimeColor(tiempo, jugador,arranque=false){
         //console.log("showTimeColor");
         var clase='rojo';
-		var claselbl='rojolbl';
+        var claselbl='rojolbl';
         if(tiempo>minTiempo && tiempo<avgTiempo ){
             clase='naranja';
-			claselbl='naranjalbl';
+            claselbl='naranjalbl';
             //$("#ES"+jugador).removeClass("rojo");
-			$("#name"+jugador).removeClass("rojolbl");
+            $("#name"+jugador).removeClass("rojolbl");
         }
         if(tiempo>avgTiempo ) {
             clase = 'verde';
-			claselbl='verdelbl';
+            claselbl='verdelbl';
             //$("#ES"+jugador).removeClass("naranja");
             $("#name"+jugador).removeClass("naranjalbl");
         }
 
         if(!arranque){
-			//$("#ES"+jugador).toggleClass(clase);
-			$("#name"+jugador).toggleClass(claselbl);
-		}
+            //$("#ES"+jugador).toggleClass(clase);
+            $("#name"+jugador).toggleClass(claselbl);
+        }
         else{
-			//$("#ES"+jugador).addClass(clase);
-			$("#name"+jugador).addClass(claselbl);
-		}
+            //$("#ES"+jugador).addClass(clase);
+            $("#name"+jugador).addClass(claselbl);
+        }
         ////console.log(jugador+' '+tiempo+' '+minTiempo+' '+avgTiempo);
 
     }
 
     function ajustaCronometros(){
         console.log("ajustaCronometros");
-       /* var primero=true;
-        for (var i = 0; i < nombresCronometros.length; i++) {
-            var jugador = nombresCronometros[i];
-            if ($("#check" + jugador).is(':checked')) {
-                if(marcatiempo !=null) {
-                    if(marcatiempo[jugador]!=null && enmarcha) {
-                        tiempos[jugador] += Math.floor(Date.now() / 1000) - marcatiempo[jugador];
-                        marcatiempo[jugador] = Math.floor(Date.now() / 1000);
-						console.log("ajustaCronometros "+jugador+" "+tiempos[jugador]);
-                    }
-                }
-            }
-        }
-        storageManager("guardar",'tiempos', tiempos);
+        /* var primero=true;
+         for (var i = 0; i < nombresCronometros.length; i++) {
+             var jugador = nombresCronometros[i];
+             if ($("#check" + jugador).is(':checked')) {
+                 if(marcatiempo !=null) {
+                     if(marcatiempo[jugador]!=null && enmarcha) {
+                         tiempos[jugador] += Math.floor(Date.now() / 1000) - marcatiempo[jugador];
+                         marcatiempo[jugador] = Math.floor(Date.now() / 1000);
+                         console.log("ajustaCronometros "+jugador+" "+tiempos[jugador]);
+                     }
+                 }
+             }
+         }
+         storageManager("guardar",'tiempos', tiempos);
 
-        //console.log("ajustar Tiempo Total " +marcatiempoTotal);
-        if(marcatiempoTotal != null) {
-            iniTiempo += Math.floor(Date.now() / 1000) - marcatiempoTotal;
-            storageManager("guardar",'tiempototal', iniTiempo);
-            marcatiempoTotal = Math.floor(Date.now() / 1000);
-        }*/
+         //console.log("ajustar Tiempo Total " +marcatiempoTotal);
+         if(marcatiempoTotal != null) {
+             iniTiempo += Math.floor(Date.now() / 1000) - marcatiempoTotal;
+             storageManager("guardar",'tiempototal', iniTiempo);
+             marcatiempoTotal = Math.floor(Date.now() / 1000);
+         }*/
 
     }
 
@@ -378,13 +383,13 @@ $(document).ready(function() {
             tiempos[jugador] = 0;
         }if ($("#check" + jugador).is(':checked')) {
             $("#cronometros").prepend($("#"+jugador));
-			 if(!arraycheckeados.includes(jugador)){
+            if(!arraycheckeados.includes(jugador)){
                 arraycheckeados.push(jugador);
-				//console.log(jugador);
+                //console.log(jugador);
             }
 
             storageManager("guardar",'checkeados', arraycheckeados);
-             /**/
+            /**/
             //if(jugador=="Julia_Garcia") console.log(jugador+" "+tiempos[jugador]);
 
             showTimeColor(tiempos[jugador],jugador);
@@ -419,13 +424,13 @@ $(document).ready(function() {
             //if(jugador=="Julia_Garcia") console.log(jugador+" 3 "+tiempos[jugador]);
             /**/
             intervalos[jugador] = setInterval(function() {
-				//if(jugador=="Julia_Garcia") console.log(jugador+" "+tiempos[jugador]);
+                //if(jugador=="Julia_Garcia") console.log(jugador+" "+tiempos[jugador]);
 
-            showTimeColor(tiempos[jugador],jugador);
-            const minutos = Math.floor(tiempos[jugador] / 60);
-            const segundos = tiempos[jugador] % 60;
-            //console.log("Creando intervalo: "+jugador+" "+tiempos[jugador]);
-            $("#time" + jugador).text(`${minutos}:${segundos < 10 ? '0' : ''}${segundos}`);
+                showTimeColor(tiempos[jugador],jugador);
+                const minutos = Math.floor(tiempos[jugador] / 60);
+                const segundos = tiempos[jugador] % 60;
+                //console.log("Creando intervalo: "+jugador+" "+tiempos[jugador]);
+                $("#time" + jugador).text(`${minutos}:${segundos < 10 ? '0' : ''}${segundos}`);
                 if((Math.floor(Date.now() / 1000)-marcatiempo[jugador])>1 && enmarcha==1){
                     //if(primero==false) tiempos[jugador]+=Math.floor(Date.now() / 1000)-marcatiempo[jugador];
                     tiempos[jugador]+=Math.floor(Date.now() / 1000)-marcatiempo[jugador];
@@ -433,7 +438,7 @@ $(document).ready(function() {
                 else{
                     if(Math.floor(Date.now() / 1000)!=marcatiempo[jugador])tiempos[jugador]++
                 }
-				//if(jugador=="Julia_Garcia") console.log(jugador+" 2 "+tiempos[jugador]);
+                //if(jugador=="Julia_Garcia") console.log(jugador+" 2 "+tiempos[jugador]);
                 storageManager("guardar",'tiempos', tiempos);
                 marcatiempo[jugador] = Math.floor(Date.now() / 1000);
                 storageManager("guardar",'marcatiempo', marcatiempo);
@@ -450,7 +455,7 @@ $(document).ready(function() {
                         }
                     }
                 }
-				//if(jugador=="Julia_Garcia") console.log(jugador+" 3 "+tiempos[jugador]);
+                //if(jugador=="Julia_Garcia") console.log(jugador+" 3 "+tiempos[jugador]);
             }, 1000);
         }
 
@@ -560,15 +565,15 @@ $(document).ready(function() {
         }
         $('.spanaccion').hide();
         $('.spantitulos').hide();
-		totaljugadoresencampo=0;
+        totaljugadoresencampo=0;
         checkeadosrecuperados = storageManager("leer",'checkeados');
         if(checkeadosrecuperados){
             checkeadosrecuperados = storageManager("leer",'checkeados');
             checkeadosrecuperados.forEach(function (nombre) {
-               if(nombre==portero) $("#pcheck"+nombre).prop("checked", true);
+                if(nombre==portero) $("#pcheck"+nombre).prop("checked", true);
                 $("#check"+nombre).prop("checked", true);
-                    totaljugadoresencampo++;
-					console.log(totaljugadoresencampo);
+                totaljugadoresencampo++;
+                console.log(totaljugadoresencampo);
             });
             $('#jugjug').text("JUGADORES "+totaljugadoresencampo);
         }
@@ -604,7 +609,7 @@ $(document).ready(function() {
 
     $(document).on('click',".buttondelete", function() {
         console.log("click buttondelete");
-    //$(".buttondelete").click(function(){
+        //$(".buttondelete").click(function(){
         ////console.log($(this).attr("id"));
         var id=$(this).attr("id");
         var nombre=id.substring(12,id.length)
@@ -642,15 +647,15 @@ $(document).ready(function() {
         storageManager("guardar",'mensajestablamarcador',mensajestablaMarcador);
     }
 
-	$(document).on('click',".buttonaccion", function() {
+    $(document).on('click',".buttonaccion", function() {
         console.log("click buttonaccion");
-    //$(".buttondelete").click(function(){
+        //$(".buttondelete").click(function(){
         ////console.log($(this).attr("id"));
         var id=$(this).attr("id");
         var nombre=id.substring(2,id.length)
         var nom_txt=nombre.replace(/_/g, " ")
         var accion=id.substring(0,2)
-		var texto=""
+        var texto=""
         //Recoger minuto del partido
         const minutosTotales = Math.floor(iniTiempo / 60);
         if(accion=="AS"){
@@ -743,213 +748,213 @@ $(document).ready(function() {
         console.log("add_fila_player");
         ////console.log(i+" "+nombresCronometros[i]+" desde add_fila_player");
         var midiv = $("<div>");
-            midiv.attr("id", nombresCronometros[i]);
-            midiv.attr("class", "cronometro");
-            var spanjugador = $("<span>");
-            var spanbotones = $("<span>");
-            var spanfaltas = $("<div>");
-            var spanremates = $("<div>");
-            var spantarjetas = $("<div>");
+        midiv.attr("id", nombresCronometros[i]);
+        midiv.attr("class", "cronometro");
+        var spanjugador = $("<span>");
+        var spanbotones = $("<span>");
+        var spanfaltas = $("<div>");
+        var spanremates = $("<div>");
+        var spantarjetas = $("<div>");
 
-            var spantiempo = $("<span>");
-            var checkbox = $("<input>");
-            var buttondelete =$("<button>")
-            var buttonF =$("<button>")
-            var span1 = $("<span style='color: transparent; !important'>");
-            var span11 = $("<span>");
-            var span2 = $("<span>");
-            var span3 = $("<span>");
-            //CODIGO POR COLORES DEL TIEMPO JUGADO
-            //span1.attr("id","ES"+nombresCronometros[i]);
-            //span1.text("H");
-            //MENU ACCIONES RAPIDAS POR JUGADOR
+        var spantiempo = $("<span>");
+        var checkbox = $("<input>");
+        var buttondelete =$("<button>")
+        var buttonF =$("<button>")
+        var span1 = $("<span style='color: transparent; !important'>");
+        var span11 = $("<span>");
+        var span2 = $("<span>");
+        var span3 = $("<span>");
+        //CODIGO POR COLORES DEL TIEMPO JUGADO
+        //span1.attr("id","ES"+nombresCronometros[i]);
+        //span1.text("H");
+        //MENU ACCIONES RAPIDAS POR JUGADOR
 
-            span2.attr("class","spanaccion");
-            span2.attr("id","SP"+nombresCronometros[i]);
-            span3.attr("id","INFO"+nombresCronometros[i]);
+        span2.attr("class","spanaccion");
+        span2.attr("id","SP"+nombresCronometros[i]);
+        span3.attr("id","INFO"+nombresCronometros[i]);
 
-            //FALTA HECHA
-			buttonF.text("HACE");
-			buttonF.attr("class","buttonaccion");
-			buttonF.attr("id","FH"+nombresCronometros[i]);
-            //FALTA RECIBIDA
-            var buttonFR =$("<button>")
-			buttonFR.text("SUFRE");
-			buttonFR.attr("class","buttonaccion");
-			buttonFR.attr("id","FR"+nombresCronometros[i]);
-            //ASISTENCIA
-			var buttonA =$("<button>")
-			buttonA.text("ASISTE");
-			buttonA.attr("class","buttonaccion");
-			buttonA.attr("id","AS"+nombresCronometros[i]);
-            //REMATE DENTRO DE LOS 3 PALOS
-			var buttonR =$("<button>")
-			buttonR.text("DENTRO");
-			buttonR.attr("class","buttonaccion");
-			buttonR.attr("id","RD"+nombresCronometros[i]);
-            //REMATE FUERA
-            var buttonRF =$("<button>")
-			buttonRF.text("FUERA");
-			buttonRF.attr("class","buttonaccion");
-			buttonRF.attr("id","RF"+nombresCronometros[i]);
-			var buttonG =$("<button>")
-            //GOL
-			buttonG.text("GOL");
-			buttonG.attr("class","buttonaccion");
-			buttonG.attr("id","GO"+nombresCronometros[i]);
-            //PARADA DEL PORTERO
-            var buttonP =$("<button>")
-			buttonP.text("PARA");
-			buttonP.attr("class","buttonaccion");
-			buttonP.attr("id","PA"+nombresCronometros[i]);
-            buttonP.hide();
-            var buttonTP =$("<button>")
-			buttonTP.text("A PUERTA");
-			buttonTP.attr("class","buttonaccion");
-			buttonTP.attr("id","TP"+nombresCronometros[i]);
-			buttonTP.hide();
+        //FALTA HECHA
+        buttonF.text("HACE");
+        buttonF.attr("class","buttonaccion");
+        buttonF.attr("id","FH"+nombresCronometros[i]);
+        //FALTA RECIBIDA
+        var buttonFR =$("<button>")
+        buttonFR.text("SUFRE");
+        buttonFR.attr("class","buttonaccion");
+        buttonFR.attr("id","FR"+nombresCronometros[i]);
+        //ASISTENCIA
+        var buttonA =$("<button>")
+        buttonA.text("ASISTE");
+        buttonA.attr("class","buttonaccion");
+        buttonA.attr("id","AS"+nombresCronometros[i]);
+        //REMATE DENTRO DE LOS 3 PALOS
+        var buttonR =$("<button>")
+        buttonR.text("DENTRO");
+        buttonR.attr("class","buttonaccion");
+        buttonR.attr("id","RD"+nombresCronometros[i]);
+        //REMATE FUERA
+        var buttonRF =$("<button>")
+        buttonRF.text("FUERA");
+        buttonRF.attr("class","buttonaccion");
+        buttonRF.attr("id","RF"+nombresCronometros[i]);
+        var buttonG =$("<button>")
+        //GOL
+        buttonG.text("GOL");
+        buttonG.attr("class","buttonaccion");
+        buttonG.attr("id","GO"+nombresCronometros[i]);
+        //PARADA DEL PORTERO
+        var buttonP =$("<button>")
+        buttonP.text("PARA");
+        buttonP.attr("class","buttonaccion");
+        buttonP.attr("id","PA"+nombresCronometros[i]);
+        buttonP.hide();
+        var buttonTP =$("<button>")
+        buttonTP.text("A PUERTA");
+        buttonTP.attr("class","buttonaccion");
+        buttonTP.attr("id","TP"+nombresCronometros[i]);
+        buttonTP.hide();
 
-            var buttonTA =$("<button>")
-            buttonTA.text("XXX");
-            buttonTA.attr("class","buttonaccion amarillo");
-            buttonTA.attr("id","TA"+nombresCronometros[i]);
-
-
-            var buttonTR =$("<button>")
-            buttonTR.text("XXX");
-            buttonTR.attr("class","buttonaccion rojo");
-            buttonTR.attr("id","TR"+nombresCronometros[i]);
-
-            var buttonCC =$("<button>")
-            buttonCC.text("CAMBIO");
-            buttonCC.attr("class","buttonaccion");
-            buttonCC.attr("id","CC"+nombresCronometros[i]);
-            buttonCC.on("click",function(){cambiarJugador(nombresCronometros[i])});
+        var buttonTA =$("<button>")
+        buttonTA.text("XXX");
+        buttonTA.attr("class","buttonaccion amarillo");
+        buttonTA.attr("id","TA"+nombresCronometros[i]);
 
 
+        var buttonTR =$("<button>")
+        buttonTR.text("XXX");
+        buttonTR.attr("class","buttonaccion rojo");
+        buttonTR.attr("id","TR"+nombresCronometros[i]);
+
+        var buttonCC =$("<button>")
+        buttonCC.text("CAMBIO");
+        buttonCC.attr("class","buttonaccion");
+        buttonCC.attr("id","CC"+nombresCronometros[i]);
+        buttonCC.on("click",function(){cambiarJugador(nombresCronometros[i])});
 
 
-            checkbox.attr("type", "checkbox");
-            checkbox.attr("class", "checkboxplayers");
-            checkbox.attr("id", "check" + nombresCronometros[i]);
-            if(expulsados!==null) {
-                if (expulsados.includes(nombresCronometros[i])) {
-                    checkbox.hide();
-                    maxJugadores -= 1;
-                }
+
+
+        checkbox.attr("type", "checkbox");
+        checkbox.attr("class", "checkboxplayers");
+        checkbox.attr("id", "check" + nombresCronometros[i]);
+        if(expulsados!==null) {
+            if (expulsados.includes(nombresCronometros[i])) {
+                checkbox.hide();
+                maxJugadores -= 1;
             }
+        }
 
-                        //checkbox.attr("onclick", "comprobarcheckbox()");
-
-            buttondelete.attr("id","buttondelete"+nombresCronometros[i]);
-            buttondelete.attr("class","buttondelete");
-            buttondelete.text("-");
-
-            var checkboxp = $("<input>");
-            checkboxp.attr("type", "checkbox");
-            checkboxp.attr("class", "checkboxportero");
-            checkboxp.attr("id", "pcheck" + nombresCronometros[i]);
-            checkboxp.text("portero");
-            checkboxp.attr("class","spanjugador");
-            checkboxp.on("click",function(){checkPortero(nombresCronometros[i])});
-            //alert(checkboxp.attr("id"));
-            var spanpuerta = $("<span>");
-            spanpuerta.attr("class", "spanportero");
-            spanpuerta.attr("id", "puerta" + nombresCronometros[i]);
-            spanpuerta.text('Portero');
-            spanpuerta.attr("class","spanjugador");
         //checkbox.attr("onclick", "comprobarcheckbox()");
 
-            spanfaltas.attr("id", "spfaltas" + nombresCronometros[i]);
-            spanfaltas.text("FALTAS");
-            spanfaltas.attr("class","spanfaltas");
+        buttondelete.attr("id","buttondelete"+nombresCronometros[i]);
+        buttondelete.attr("class","buttondelete");
+        buttondelete.text("-");
 
-            spanremates.attr("id", "spremates" + nombresCronometros[i]);
-            spanremates.text("REMATES");
-            spanremates.attr("class","spanremates");
-            /*spangoles.attr("id", "spgoles" + nombresCronometros[i]);
-            spangoles.text("GOLES ");
-            spangoles.attr("class","spangoles");*/
-            spantarjetas.attr("id", "sptarjetas" + nombresCronometros[i]);
-            spantarjetas.text("TARJETAS");
-            spantarjetas.attr("class","spantarjetas");
+        var checkboxp = $("<input>");
+        checkboxp.attr("type", "checkbox");
+        checkboxp.attr("class", "checkboxportero");
+        checkboxp.attr("id", "pcheck" + nombresCronometros[i]);
+        checkboxp.text("portero");
+        checkboxp.attr("class","spanjugador");
+        checkboxp.on("click",function(){checkPortero(nombresCronometros[i])});
+        //alert(checkboxp.attr("id"));
+        var spanpuerta = $("<span>");
+        spanpuerta.attr("class", "spanportero");
+        spanpuerta.attr("id", "puerta" + nombresCronometros[i]);
+        spanpuerta.text('Portero');
+        spanpuerta.attr("class","spanjugador");
+        //checkbox.attr("onclick", "comprobarcheckbox()");
 
-            var spancambio = $("<div>");
-            spancambio.attr("class", "spancambio");
-            spancambio.attr("id", "spcambio" + nombresCronometros[i]);
-            spancambio.text('CAMBIO');
+        spanfaltas.attr("id", "spfaltas" + nombresCronometros[i]);
+        spanfaltas.text("FALTAS");
+        spanfaltas.attr("class","spanfaltas");
+
+        spanremates.attr("id", "spremates" + nombresCronometros[i]);
+        spanremates.text("REMATES");
+        spanremates.attr("class","spanremates");
+        /*spangoles.attr("id", "spgoles" + nombresCronometros[i]);
+        spangoles.text("GOLES ");
+        spangoles.attr("class","spangoles");*/
+        spantarjetas.attr("id", "sptarjetas" + nombresCronometros[i]);
+        spantarjetas.text("TARJETAS");
+        spantarjetas.attr("class","spantarjetas");
+
+        var spancambio = $("<div>");
+        spancambio.attr("class", "spancambio");
+        spancambio.attr("id", "spcambio" + nombresCronometros[i]);
+        spancambio.text('CAMBIO');
 
 
-            spanjugador.attr("id", "name" + nombresCronometros[i]);
-            spanjugador.text(" "+nombresCronometros[i].replace(/_/g, " ").toUpperCase()+" ");
-            spanjugador.attr("class","spanjugador");
-            spantiempo.attr("id", "time" + nombresCronometros[i]);
-            const minutos = Math.floor(tiempos[nombresCronometros[i]] / 60);
-            const segundos = tiempos[nombresCronometros[i]] % 60;
-            ////console.log("segundos "+segundos);
-            if (isNaN(segundos)) {
-                ////console.log("entra per isNaN");
-                spantiempo.text("0:00");
-            }else{
-                ////console.log("entra per el else");
-                spantiempo.text(` ${minutos}:${segundos < 10 ? '0' : ''}${segundos}`)
-            };
-                midiv.append(span1);
-                midiv.append(spanjugador);
-                midiv.append(checkbox);
-                midiv.append(spantiempo);
-                midiv.append(span3);
-                midiv.append(buttondelete);
-                midiv.append(checkboxp);
-                midiv.append(spanpuerta);
+        spanjugador.attr("id", "name" + nombresCronometros[i]);
+        spanjugador.text(" "+nombresCronometros[i].replace(/_/g, " ").toUpperCase()+" ");
+        spanjugador.attr("class","spanjugador");
+        spantiempo.attr("id", "time" + nombresCronometros[i]);
+        const minutos = Math.floor(tiempos[nombresCronometros[i]] / 60);
+        const segundos = tiempos[nombresCronometros[i]] % 60;
+        ////console.log("segundos "+segundos);
+        if (isNaN(segundos)) {
+            ////console.log("entra per isNaN");
+            spantiempo.text("0:00");
+        }else{
+            ////console.log("entra per el else");
+            spantiempo.text(` ${minutos}:${segundos < 10 ? '0' : ''}${segundos}`)
+        };
+        midiv.append(span1);
+        midiv.append(spanjugador);
+        midiv.append(checkbox);
+        midiv.append(spantiempo);
+        midiv.append(span3);
+        midiv.append(buttondelete);
+        midiv.append(checkboxp);
+        midiv.append(spanpuerta);
 
-                var spanbotones = $("<span>");
-                spanbotones.attr("id", "spbtn1"+nombresCronometros[i]);
-                spanbotones.attr("class", "spbotones");
-                //alert(spanfaltas.innerHTML);
-                spanbotones.append(spanfaltas);
-                spanbotones.append(buttonF);
-                spanbotones.append(buttonFR);
-                spanbotones.hide();
-                span2.append(spanbotones);
-                var spanbotones = $("<span>");
-                spanbotones.attr("id", "spbtn2"+nombresCronometros[i]);
-                spanbotones.attr("class", "spbotones");
-                spanbotones.append(spanremates);
-                spanbotones.append(buttonR);
-                spanbotones.append(buttonRF);
-                spanbotones.append(buttonA);
-                spanbotones.append(buttonG);
-                spanbotones.append(buttonP);
-                spanbotones.hide();
-                span2.append(spanbotones);
+        var spanbotones = $("<span>");
+        spanbotones.attr("id", "spbtn1"+nombresCronometros[i]);
+        spanbotones.attr("class", "spbotones");
+        //alert(spanfaltas.innerHTML);
+        spanbotones.append(spanfaltas);
+        spanbotones.append(buttonF);
+        spanbotones.append(buttonFR);
+        spanbotones.hide();
+        span2.append(spanbotones);
+        var spanbotones = $("<span>");
+        spanbotones.attr("id", "spbtn2"+nombresCronometros[i]);
+        spanbotones.attr("class", "spbotones");
+        spanbotones.append(spanremates);
+        spanbotones.append(buttonR);
+        spanbotones.append(buttonRF);
+        spanbotones.append(buttonA);
+        spanbotones.append(buttonG);
+        spanbotones.append(buttonP);
+        spanbotones.hide();
+        span2.append(spanbotones);
 
-                var spanbotones = $("<span>");
-                spanbotones.attr("id", "spbtn3"+nombresCronometros[i]);
-                spanbotones.attr("class", "spbotones");
-                //alert(spanfaltas.innerHTML);
-                spanbotones.append(spantarjetas);
-                spanbotones.append(buttonTA);
-                spanbotones.append(buttonTR);
-                spanbotones.hide();
-                span2.append(spanbotones);
+        var spanbotones = $("<span>");
+        spanbotones.attr("id", "spbtn3"+nombresCronometros[i]);
+        spanbotones.attr("class", "spbotones");
+        //alert(spanfaltas.innerHTML);
+        spanbotones.append(spantarjetas);
+        spanbotones.append(buttonTA);
+        spanbotones.append(buttonTR);
+        spanbotones.hide();
+        span2.append(spanbotones);
 
-                var spanbotones = $("<span>");
-                spanbotones.attr("id", "spbtn4"+nombresCronometros[i]);
-                spanbotones.attr("class", "spbotones");
-                //alert(spanfaltas.innerHTML);
-                spanbotones.append(spancambio);
-                spanbotones.append(buttonCC);
-                spanbotones.hide();
-                span2.append(spanbotones);
+        var spanbotones = $("<span>");
+        spanbotones.attr("id", "spbtn4"+nombresCronometros[i]);
+        spanbotones.attr("class", "spbotones");
+        //alert(spanfaltas.innerHTML);
+        spanbotones.append(spancambio);
+        spanbotones.append(buttonCC);
+        spanbotones.hide();
+        span2.append(spanbotones);
 
-                span11.text("PULSA PARA ABRIR EL MENU");
-                span11.attr("class","leyenda");
-                span11.attr("id","sp11"+nombresCronometros[i]);
-                span2.append(span11);
+        span11.text("PULSA PARA ABRIR EL MENU");
+        span11.attr("class","leyenda");
+        span11.attr("id","sp11"+nombresCronometros[i]);
+        span2.append(span11);
 
-                midiv.append(span2);
-            $("#cronometros").append(midiv);
+        midiv.append(span2);
+        $("#cronometros").append(midiv);
     }
 
     function showCheckPorteros(){
@@ -1057,15 +1062,15 @@ $(document).ready(function() {
             $("#RF"+jugadorEnJuego).show();
             $("#RD"+jugadorEnJuego).show();
             if(maxJugadores>8) {
-					$("#TR"+jugadorEnJuego).show();
-					$("#TA"+jugadorEnJuego).show();
-					$('.spantarjetas').show();
-				}
-				else{
-					$("#TR"+jugadorEnJuego).hide();
-					$("#TA"+jugadorEnJuego).hide();
-					$('.spantarjetas').hide();
-				}
+                $("#TR"+jugadorEnJuego).show();
+                $("#TA"+jugadorEnJuego).show();
+                $('.spantarjetas').show();
+            }
+            else{
+                $("#TR"+jugadorEnJuego).hide();
+                $("#TA"+jugadorEnJuego).hide();
+                $('.spantarjetas').hide();
+            }
 
             $("#SP"+jugadorEnJuego).hide();
             //$("#pcheck"+jugadorEnJuego).hide();
@@ -1078,7 +1083,7 @@ $(document).ready(function() {
             $(`#check${jugadorFueraJuego}`).prop('checked', true);
             var recuperados = storageManager("leer",'checkeados');
             if(recuperados){
-            // Buscar y eliminar el nombre del array
+                // Buscar y eliminar el nombre del array
                 var index = recuperados.indexOf(jugadorEnJuego);
                 var index2 = arraycheckeados.indexOf(jugadorEnJuego)
                 if (index !== -1) {
@@ -1096,16 +1101,16 @@ $(document).ready(function() {
                         $("#GO"+jugadorFueraJuego).hide();
                         $("#RF"+jugadorFueraJuego).hide();
                         $("#RD"+jugadorFueraJuego).hide();
-						if(maxJugadores>8) {
-							$("#TR"+jugadorFueraJuego).show();
-							$("#TA"+jugadorFueraJuego).show();
-							$('.spantarjetas').show();
-						}
-						else{
-							$("#TR"+jugadorFueraJuego).hide();
-							$("#TA"+jugadorFueraJuego).hide();
-							$('.spantarjetas').hide();
-						}
+                        if(maxJugadores>8) {
+                            $("#TR"+jugadorFueraJuego).show();
+                            $("#TA"+jugadorFueraJuego).show();
+                            $('.spantarjetas').show();
+                        }
+                        else{
+                            $("#TR"+jugadorFueraJuego).hide();
+                            $("#TA"+jugadorFueraJuego).hide();
+                            $('.spantarjetas').hide();
+                        }
                         $('.spantitulos').hide();
                     }
                 }
@@ -1119,7 +1124,7 @@ $(document).ready(function() {
         for (var i = 0; i < nombresCronometros.length; i++) {
             var jugador = nombresCronometros[i];
             if (!$("#check" + jugador).is(':checked')) {
-                 $('#suplentes').append($('<div class="reservas">').text(jugador));
+                $('#suplentes').append($('<div class="reservas">').text(jugador));
 
                 $("#TP"+jugador).hide();
                 $("#PA"+jugador).hide();
@@ -1128,15 +1133,15 @@ $(document).ready(function() {
                 $("#RF"+jugador).show();
                 $("#RD"+jugador).show();
                 if(maxJugadores>8) {
-					$("#TR"+jugador).show();
-					$("#TA"+jugador).show();
-					$('.spantarjetas').show();
-				}
-				else{
-					$("#TR"+jugador).hide();
-					$("#TA"+jugador).hide();
-					$('.spantarjetas').hide();
-				}
+                    $("#TR"+jugador).show();
+                    $("#TA"+jugador).show();
+                    $('.spantarjetas').show();
+                }
+                else{
+                    $("#TR"+jugador).hide();
+                    $("#TA"+jugador).hide();
+                    $('.spantarjetas').hide();
+                }
                 $("#SP"+jugador).hide();
                 //$("#pcheck"+jugador).hide();
                 //$("#puerta"+jugador).hide();
@@ -1172,12 +1177,12 @@ $(document).ready(function() {
                 $('#asistencia-en-juego').append(option);
             }
         }
-       $('#goleador-modal').show();
-    //------------
-    //----------
+        $('#goleador-modal').show();
+        //------------
+        //----------
     });
     //save gol
-     $('#save-gol').click(function() {
+    $('#save-gol').click(function() {
         // Cambiar el estado de los jugadores seleccionados
         const goleador = $('#goleador-en-juego option:selected').text();
         const asistente = $('#asistencia-en-juego option:selected').text();
@@ -1188,8 +1193,8 @@ $(document).ready(function() {
         $("#resulCto").text(resulCto);
         //Recoger minuto del partido
         const minutosTotales = Math.floor(iniTiempo / 60);
-         //crear fila en la tabla
-         mensajeTablaMarcador('Gol '+goleador+" min "+minutosTotales+" asistencia "+asistente);
+        //crear fila en la tabla
+        mensajeTablaMarcador('Gol '+goleador+" min "+minutosTotales+" asistencia "+asistente);
 
         //actualizar en el div el nuevo resultado
         storageManager("guardar",'resulCto', resulCto);
@@ -1200,9 +1205,9 @@ $(document).ready(function() {
         storageManager("guardar","rematesPorterialeft", currentValue + 1);
 
         $('#goleador-modal').hide();
-     });
+    });
     //fin de save gol
-     //add gol adversario
+    //add gol adversario
     $('#add-gol-adv').click(function() {
         //mostrar un campo de numerico y un boton para guardar el numero del goleador
         $('#goleador-adv-modal').show();
@@ -1352,70 +1357,70 @@ $(document).ready(function() {
     function addeventchange() {
         console.log("addeventchange");
         $('.checkboxplayers').on('change', function() {
-            var idjugador=$(this).attr("id");
-            var arraynombre=idjugador.split("check");
-            var nombre=arraynombre[1];
-            //console.log("linea 964 ");
+                var idjugador=$(this).attr("id");
+                var arraynombre=idjugador.split("check");
+                var nombre=arraynombre[1];
+                //console.log("linea 964 ");
 
-            if ($(this).prop('checked')) {
-                //console.log('Checkbox marcado');
-                equipotitular.push(nombre);
-                totaljugadoresencampo++;
+                if ($(this).prop('checked')) {
+                    //console.log('Checkbox marcado');
+                    equipotitular.push(nombre);
+                    totaljugadoresencampo++;
 
-                if(totaljugadoresencampo>maxJugadores){
-                    $(this).prop('checked',false)
+                    if(totaljugadoresencampo>maxJugadores){
+                        $(this).prop('checked',false)
                         totaljugadoresencampo--;
-                }
-            } else {
-                var playerdesmarcado=equipotitular.indexOf(nombre);
-                //console.log("A eliminar "+playerdesmarcado)
-                if(playerdesmarcado!==-1){
-                    equipotitular.splice(playerdesmarcado,1);
-                }
-                //console.log('Checkbox desmarcado');
+                    }
+                } else {
+                    var playerdesmarcado=equipotitular.indexOf(nombre);
+                    //console.log("A eliminar "+playerdesmarcado)
+                    if(playerdesmarcado!==-1){
+                        equipotitular.splice(playerdesmarcado,1);
+                    }
+                    //console.log('Checkbox desmarcado');
                     totaljugadoresencampo--;
-            }
-            //console.log(equipotitular);
-            $('#jugjug').text("JUGADORES "+totaljugadoresencampo);
+                }
+                //console.log(equipotitular);
+                $('#jugjug').text("JUGADORES "+totaljugadoresencampo);
 
-        }
-    )
+            }
+        )
 
 
     };
 
     function checkPortero(nombre) {
         console.log("checkPortero");
-            for (var i = 0; i < nombresCronometros.length; i++) {
-                var jugador = nombresCronometros[i];
-                if(nombre==jugador && $("#pcheck" + jugador).is(':checked') ) {
-                    storageManager("guardar", 'portero', jugador);
-                    if (iniciado) {
-                        $("#TP" + jugador).show();
-                        $("#PA" + jugador).show();
-                        $("#AS" + jugador).hide();
-                        $("#GO" + jugador).hide();
-                        $("#RF" + jugador).hide();
-                        $("#RD" + jugador).hide();
-                        $("#TA" + jugador).show();
-                        $("#TR" + jugador).show();
-                        $("#SP" + jugador).show();
-                    }
+        for (var i = 0; i < nombresCronometros.length; i++) {
+            var jugador = nombresCronometros[i];
+            if(nombre==jugador && $("#pcheck" + jugador).is(':checked') ) {
+                storageManager("guardar", 'portero', jugador);
+                if (iniciado) {
+                    $("#TP" + jugador).show();
+                    $("#PA" + jugador).show();
+                    $("#AS" + jugador).hide();
+                    $("#GO" + jugador).hide();
+                    $("#RF" + jugador).hide();
+                    $("#RD" + jugador).hide();
+                    $("#TA" + jugador).show();
+                    $("#TR" + jugador).show();
+                    $("#SP" + jugador).show();
                 }
-                else{
-                    if(iniciado) {
-                        $("#TP" + jugador).hide();
-                        $("#PA" + jugador).hide();
-                        $("#AS" + jugador).show();
-                        $("#GO" + jugador).show();
-                        $("#RF" + jugador).show();
-                        $("#RD" + jugador).show();
-                        $("#TA" + jugador).show();
-                        $("#TR" + jugador).show();
-                        $("#SP" + jugador).hide();
-                    }
-                    $("#pcheck" + jugador).prop("checked",false);
+            }
+            else{
+                if(iniciado) {
+                    $("#TP" + jugador).hide();
+                    $("#PA" + jugador).hide();
+                    $("#AS" + jugador).show();
+                    $("#GO" + jugador).show();
+                    $("#RF" + jugador).show();
+                    $("#RD" + jugador).show();
+                    $("#TA" + jugador).show();
+                    $("#TR" + jugador).show();
+                    $("#SP" + jugador).hide();
                 }
+                $("#pcheck" + jugador).prop("checked",false);
+            }
 
 
         }
@@ -1440,7 +1445,7 @@ $(document).ready(function() {
         if($("#check" + this.id).is(':checked')){
             if(!arraycheckeados.includes(this.id)){
                 arraycheckeados.push(this.id);
-				console.log(this.id);
+                console.log(this.id);
             }
             if(!equipotitular.includes(this.id)){equipotitular.push(this.id)};
 
@@ -1476,58 +1481,58 @@ $(document).ready(function() {
     }
     function mostrargrafico(jugadoresgrafico,tiemposgrafico){
         $('#myBarChart').show();
-    var ctx = document.getElementById('myBarChart').getContext('2d');
-    // Datos de ejemplo: 12 datos para el gráfico de barras
-    var data = {
-        labels: jugadoresgrafico,
-        datasets: [{
-            label: 'Minutos jugados',
-            data:  tiemposgrafico,// Datos de ejemplo para cada mes
-            backgroundColor: [
-              'rgba(255, 99, 132, 0.2)',
-              'rgba(255, 159, 64, 0.2)',
-              'rgba(255, 205, 86, 0.2)',
-              'rgba(75, 192, 192, 0.2)',
-              'rgba(54, 162, 235, 0.2)',
-              'rgba(153, 102, 255, 0.2)',
-              'rgba(201, 203, 207, 0.2)'
-            ],
-            borderColor: '#C70039', // Color del borde de las barras
-            borderWidth: 1
-        }]
-    };
-    // Configuración del gráfico
-    var config = {
-        type: 'bar', // Tipo de gráfico (en este caso, barras)
-        data: data,
-        options: {
-            responsive: true, // El gráfico se ajustará al tamaño de su contenedor
-            scales: {
-                y: {
-                    beginAtZero: true, // Asegura que el eje Y empiece desde cero
-                    max:maxTiempo,
-                }
-            },
-            plugins: {
-                legend: {
-                    position: 'top', // Posición de la leyenda
+        var ctx = document.getElementById('myBarChart').getContext('2d');
+        // Datos de ejemplo: 12 datos para el gráfico de barras
+        var data = {
+            labels: jugadoresgrafico,
+            datasets: [{
+                label: 'Minutos jugados',
+                data:  tiemposgrafico,// Datos de ejemplo para cada mes
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(255, 159, 64, 0.2)',
+                    'rgba(255, 205, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(201, 203, 207, 0.2)'
+                ],
+                borderColor: '#C70039', // Color del borde de las barras
+                borderWidth: 1
+            }]
+        };
+        // Configuración del gráfico
+        var config = {
+            type: 'bar', // Tipo de gráfico (en este caso, barras)
+            data: data,
+            options: {
+                responsive: true, // El gráfico se ajustará al tamaño de su contenedor
+                scales: {
+                    y: {
+                        beginAtZero: true, // Asegura que el eje Y empiece desde cero
+                        max:maxTiempo,
+                    }
                 },
-                tooltip: {
-                    callbacks: {
-                        // Personalización del tooltip
-                        label: function(tooltipItem) {
-                            return tooltipItem.raw + ' Minutos';
+                plugins: {
+                    legend: {
+                        position: 'top', // Posición de la leyenda
+                    },
+                    tooltip: {
+                        callbacks: {
+                            // Personalización del tooltip
+                            label: function(tooltipItem) {
+                                return tooltipItem.raw + ' Minutos';
+                            }
                         }
                     }
                 }
             }
-        }
-    };
-    // Crear el gráfico de barras
-    myBarChart = new Chart(ctx, config);
+        };
+        // Crear el gráfico de barras
+        myBarChart = new Chart(ctx, config);
     }
     //--------------------------------------------------------------------
-      $('#guardar-excel2').click(function() {
+    $('#guardar-excel2').click(function() {
 
 
         const Partido="CTO "+adversario;
@@ -1540,7 +1545,7 @@ $(document).ready(function() {
         var tiempos=[];
         var data={};
         var cronometros=$('#cronometros .cronometro')
-            for (var i = 0; i < cronometros.length;  i++) {
+        for (var i = 0; i < cronometros.length;  i++) {
             var nombre=cronometros.get(i).id;
             var tiempo=$('#time'+cronometros.get(i).id).text();
             data.push({Nombre: nombre, Tiempo: tiempo});
@@ -1548,7 +1553,7 @@ $(document).ready(function() {
 
 
 
-            }
+        }
 
         const ws= XLSX.utils.json_to_sheet(data);
         const wb= XLSX.utils.book_new();
@@ -1558,111 +1563,109 @@ $(document).ready(function() {
         XLSX.writeFile(wb, fileName);
 
 
-      });
-   $('#guardar-excel').click(function() {
-
-    // 1. Obtener los datos de los cronómetros
-    const nombres = [];
-    const tiempos = [];
-    let cronometros = document.querySelectorAll('#cronometros .cronometro');
-
-    cronometros.forEach(function(cronometro) {
-        let nombre = cronometro.querySelector('span[id^="name"]').textContent;
-        let tiempo = cronometro.querySelector('span[id^="time"]').textContent;
-        nombres.push(nombre);
-        tiempos.push(tiempo);
     });
+    $('#guardar-excel').click(function() {
 
-    // 2. Obtener los resultados de la tabla
-    const resultadoCto = $("#resulCto").text();
-    const resultadoAdv = $("#resulAdv").text();
+        // 1. Obtener los datos de los cronómetros
+        const nombres = [];
+        const tiempos = [];
+        let cronometros = document.querySelectorAll('#cronometros .cronometro');
 
-    // 3. Recoger estadísticas
-    const estadisticas = [];
-    $('.sectionestadistica').each(function() {
-        const leftValue = $(this).find('.numestadisticasleft').text();
-        const rightValue = $(this).find('.numestadisticasright').text();
-        const estadisticaLabel = $(this).find('span').text();
-        estadisticas.push([estadisticaLabel, leftValue, rightValue]);
-    });
+        cronometros.forEach(function(cronometro) {
+            let nombre = cronometro.querySelector('span[id^="name"]').textContent;
+            let tiempo = cronometro.querySelector('span[id^="time"]').textContent;
+            nombres.push(nombre);
+            tiempos.push(tiempo);
+        });
 
-    // 4. Crear la hoja de trabajo con los cronómetros
-    //XLSX.utils.sheet_add_aoa(ws, [['Fecha',fechacompleta]], { origin: -1 });
+        // 2. Obtener los resultados de la tabla
+        const resultadoCto = $("#resulCto").text();
+        const resultadoAdv = $("#resulAdv").text();
+
+        // 3. Recoger estadísticas
+        const estadisticas = [];
+        $('.sectionestadistica').each(function() {
+            const leftValue = $(this).find('.numestadisticasleft').text();
+            const rightValue = $(this).find('.numestadisticasright').text();
+            const estadisticaLabel = $(this).find('span').text();
+            estadisticas.push([estadisticaLabel, leftValue, rightValue]);
+        });
+
+        // 4. Crear la hoja de trabajo con los cronómetros
+        //XLSX.utils.sheet_add_aoa(ws, [['Fecha',fechacompleta]], { origin: -1 });
         var Fecha=new Date();
         var dia=Fecha.getDate();
         var mes=Fecha.getMonth()+1;
         var year=Fecha.getFullYear();
         var fechacompleta=dia+"/"+mes+"/"+year;
-     const ws =   XLSX.utils.aoa_to_sheet([['Fecha', fechacompleta]], { origin: 'A1' });
-     XLSX.utils.sheet_add_aoa(ws,[['Nombre', 'Tiempo'], ...nombres.map((n, i) => [n, tiempos[i]])],{origin:'A2'});
-     XLSX.utils.sheet_add_aoa(ws,[['Capitan', capitan]], { origin: -1 });
+        const ws =   XLSX.utils.aoa_to_sheet([['Fecha', fechacompleta]], { origin: 'A1' });
+        XLSX.utils.sheet_add_aoa(ws,[['Nombre', 'Tiempo'], ...nombres.map((n, i) => [n, tiempos[i]])],{origin:'A2'});
+        XLSX.utils.sheet_add_aoa(ws,[['Capitan', capitan]], { origin: -1 });
 
 
 
-    // 5. Agregar resultados de la tabla de marcador
-    const adversario = $('#id2 span').text();
-    XLSX.utils.sheet_add_aoa(ws, [['Resultados'], ['CTO', adversario], [resultadoCto, resultadoAdv]], { origin: -1 });
+        // 5. Agregar resultados de la tabla de marcador
+        const adversario = $('#id2 span').text();
+        XLSX.utils.sheet_add_aoa(ws, [['Resultados'], ['CTO', adversario], [resultadoCto, resultadoAdv]], { origin: -1 });
 
-    // 6. Agregar estadísticas
-    XLSX.utils.sheet_add_aoa(ws, [['Estadísticas'], ['Descripción', 'Cto', adversario]], { origin: -1 });
-    estadisticas.forEach(stat => {
-        XLSX.utils.sheet_add_aoa(ws, [stat], { origin: -1 });
-    });
-
-    // 7. Agregar la tabla de marcador
-    const tablaMarcador = [];
-    $('#tablaMarcador tbody tr').each(function() {
-        const row = [];
-        $(this).find('td, th').each(function() {
-            row.push($(this).text().trim());
+        // 6. Agregar estadísticas
+        XLSX.utils.sheet_add_aoa(ws, [['Estadísticas'], ['Descripción', 'Cto', adversario]], { origin: -1 });
+        estadisticas.forEach(stat => {
+            XLSX.utils.sheet_add_aoa(ws, [stat], { origin: -1 });
         });
-        if (row.length > 0) {
-            tablaMarcador.push(row);
-        }
+
+        // 7. Agregar la tabla de marcador
+        const tablaMarcador = [];
+        $('#tablaMarcador tbody tr').each(function() {
+            const row = [];
+            $(this).find('td, th').each(function() {
+                row.push($(this).text().trim());
+            });
+            if (row.length > 0) {
+                tablaMarcador.push(row);
+            }
+        });
+
+        // 8. Agregar la tabla al Excel
+        XLSX.utils.sheet_add_aoa(ws, [['Tabla Marcador'], ...tablaMarcador], { origin: -1 });
+
+        // 9. Agregar la tabla de marcador
+        const tablaEventos = [];
+        $('#tablaDatosPartido tbody tr').each(function() {
+            const row = [];
+            $(this).find('td, th').each(function() {
+                var txt=$(this).text().trim().split(" ");
+                const momento = txt.slice(0, 2).join(" ");    // "04/03/2026 15:22:46"
+                const descripcion = txt.slice(2).join(" ");
+                row.push(momento);
+                row.push(descripcion);
+            });
+            if (row.length > 0) {
+                tablaEventos.push(row);
+            }
+        });
+
+        // 10. Agregar la tabla al Excel
+        XLSX.utils.sheet_add_aoa(ws, [['Tabla Eventos Partido'], ...tablaEventos], { origin: -1 });
+
+        // 11. Ajustar las columnas
+        const colWidths = [
+            { wch: 20 }, // Nombre
+            { wch: 10 }, // Tiempo
+            { wch: 30 }, // Estadísticas
+            { wch: 10 }, // Equipo 1
+            { wch: 10 }  // Equipo 2
+        ];
+        ws['!cols'] = colWidths;
+
+        // 12. Crear el libro de trabajo y exportar a Excel
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, 'Cronómetros y Marcador');
+        XLSX.writeFile(wb, pdfParte + adversario + ' .xlsx');
+
+        // 11. Resetear variable
+        pdfParte = "Total Partido ";
     });
-
-    // 8. Agregar la tabla al Excel
-    XLSX.utils.sheet_add_aoa(ws, [['Tabla Marcador'], ...tablaMarcador], { origin: -1 });
-
-   // 9. Agregar la tabla de marcador
-   const tablaEventos = [];
-   $('#tablaDatosPartido tbody tr').each(function() {
-       const row = [];
-       $(this).find('td, th').each(function() {
-           var txt=$(this).text().trim().split(" ");
-           const momento = txt.slice(0, 2).join(" ");    // "04/03/2026 15:22:46"
-           const descripcion = txt.slice(2).join(" ");
-           row.push(momento);
-           row.push(descripcion);
-       });
-       if (row.length > 0) {
-           tablaEventos.push(row);
-       }
-   });
-
-   // 10. Agregar la tabla al Excel
-   XLSX.utils.sheet_add_aoa(ws, [['Tabla Eventos Partido'], ...tablaEventos], { origin: -1 });
-
-    // 11. Ajustar las columnas
-    const colWidths = [
-        { wch: 20 }, // Nombre
-        { wch: 10 }, // Tiempo
-        { wch: 30 }, // Estadísticas
-        { wch: 10 }, // Equipo 1
-        { wch: 10 }  // Equipo 2
-    ];
-    ws['!cols'] = colWidths;
-
-    // 12. Crear el libro de trabajo y exportar a Excel
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'Cronómetros y Marcador');
-    XLSX.writeFile(wb, pdfParte + adversario + ' .xlsx');
-
-    // 11. Resetear variable
-    pdfParte = "Total Partido ";
-});
     $(window).scrollTop(0);
 });
-     //-------------------------------------------------------------------------------------
-
-
+//-------------------------------------------------------------------------------------
