@@ -152,8 +152,8 @@ $(document).ready(function() {
 
 
             storageManager("guardar",'equipotitular',equipotitular);
-            storageManager("guardar",'resulAdv', 0);
-            storageManager("guardar",'resulCto', 0);
+            storageManager("guardar",'resulAdv', resulAdv);
+            storageManager("guardar",'resulCto', resulCto);
             storageManager("guardar",'nombresCronometros', nombresCronometros);
 
 
