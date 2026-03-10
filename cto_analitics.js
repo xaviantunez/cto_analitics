@@ -21,7 +21,7 @@ $(document).ready(function() {
     var mensajestablaMarcador=[];
     var nombresCronometros=[];
     var equipoElegido;
-    var pdfParte='Primera Parte ';
+    var pdfParte='Estadisticas ';
     var tiempopartido=1;
     var capitan="";
     var equipotitular=[];
@@ -1707,3 +1707,4 @@ $(document).ready(function() {
     $(window).scrollTop(0);
 });
 //-------------------------------------------------------------------------------------
+
