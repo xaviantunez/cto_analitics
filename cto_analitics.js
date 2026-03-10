@@ -105,7 +105,7 @@ $(document).ready(function() {
         $('#resulCto').text(resulCto);
     }else{
         if(!equipoElegido){
-            //console.log("No hay equipo elegido");
+            ////console.log("No hay equipo elegido");
             //nombresCronometros=alevinA ;
             //hay que poner el selected al option
 
@@ -114,6 +114,17 @@ $(document).ready(function() {
     }
     mostrarplantilla(); // Muestra la plantilla inicial con todos los cronómetros
     ajustarMensajeTablaMarcador();
+    if(maxJugadores>8){
+        $('#tarjetasRojasLeft').closest('.sectionestadistica').show();
+        $('#tarjetasAmarillasLeft').closest('.sectionestadistica').show();
+        //console.log("show");
+    }
+    else{
+        $('#tarjetasRojasLeft').closest('.sectionestadistica').hide();
+        $('#tarjetasAmarillasLeft').closest('.sectionestadistica').hide();
+        ////console.log( $("#tarjetasRojasLeft").innerHTML);
+    }
+
     if(enmarcha==1){
         //
         ajustaCronometros();
@@ -125,7 +136,7 @@ $(document).ready(function() {
     }
     // Iniciar todos los cronómetros si están marcados
     $('#iniciar-todos').click(function() {
-        console.log("iniciar-todos");
+        //console.log("iniciar-todos");
         $('#parar-todos').toggle();
         $('#iniciar-todos').toggle();
         //ajustaCronometros();
@@ -133,7 +144,7 @@ $(document).ready(function() {
     });
 
     function iniciar(){
-        console.log("iniciar");
+        //console.log("iniciar");
         var texto="";
         if(totaljugadoresencampo<7 && cntErrores==0){
             alert('SOLO TIENES '+totaljugadoresencampo+" JUGADORES SELECCIONADOS\n\nPOR FAVOR REVISALO");
@@ -173,7 +184,7 @@ $(document).ready(function() {
                 }
                 texto=jugador;
                 if(enmarcha==0)mensajeTablaMarcador(texto);
-                //console.log('jugador' +jugador+' '+$("#pcheck" + jugador).is(':checked'));
+                ////console.log('jugador' +jugador+' '+$("#pcheck" + jugador).is(':checked'));
 
                 if(maxJugadores>8) {
                     $("#TR"+jugador).show();
@@ -213,7 +224,7 @@ $(document).ready(function() {
 
             }
             showTimeColor(tiempos[jugador],jugador,true);
-            //console.log(tiempos[jugador]+" "+jugador);
+            ////console.log(tiempos[jugador]+" "+jugador);
         }
         if(!iniciado){
             iniciado=true;
@@ -223,7 +234,7 @@ $(document).ready(function() {
     }
 
     function cargarestadistica(columna) {
-        console.log("cargarestadistica");
+        //console.log("cargarestadistica");
         $('#divestadisticas .numestadisticas'+columna).each(function(index, item) {
             var estadistica=storageManager("leer",arrayestadisticas[index]+columna);
             if(estadistica){
@@ -235,7 +246,7 @@ $(document).ready(function() {
     }
 
     function removeestadisticas() {
-        console.log("removeestadisticas");
+        //console.log("removeestadisticas");
         arrayestadisticas.forEach(function (estadistica) {
             localStorage.removeItem(estadistica+'left');
             localStorage.removeItem(estadistica+'right');
@@ -249,7 +260,7 @@ $(document).ready(function() {
     }
 
     function fechaHora() {
-        console.log("fechaHora");
+        //console.log("fechaHora");
         let ahora = new Date();
 
         // Obtener los componentes de la fecha
@@ -276,7 +287,7 @@ $(document).ready(function() {
     }
 
     function iniciartotaltiempo(){
-        console.log("iniciartotaltiempo "+enmarcha);
+        //console.log("iniciartotaltiempo "+enmarcha);
         if(marcatiempototalDate==null || marcatiempototalDate==0)
         {
             marcatiempototalDate = fechaHora();
@@ -286,7 +297,7 @@ $(document).ready(function() {
         /*inicio*/
         if((Math.floor(Date.now() / 1000)-marcatiempoTotal)>1 && marcatiempoTotal>0 && enmarcha==1){
             iniTiempo+=Math.floor(Date.now() / 1000)-marcatiempoTotal;
-            console.log("aqui");
+            //console.log("aqui");
         }
         else{
             if(Math.floor(Date.now() / 1000)!=marcatiempoTotal) iniTiempo++;
@@ -298,13 +309,13 @@ $(document).ready(function() {
 
         marcatiempoTotal = Math.floor(Date.now() / 1000);
         storageManager("guardar",'marcatiempototal', marcatiempoTotal);
-        console.log("marcatiempototal");
+        //console.log("marcatiempototal");
 
         $(`#time0`).text(` ${minutosTotales}:${segundosTotales < 10 ? '0' : ''}${segundosTotales}`+'  ('+marcatiempototalDate+')');
         totalTiempo = setInterval(function() {
             if((Math.floor(Date.now() / 1000)-marcatiempoTotal)>1 && marcatiempoTotal>0 && enmarcha==1){
                 iniTiempo+=Math.floor(Date.now() / 1000)-marcatiempoTotal;
-                console.log("aqui");
+                //console.log("aqui");
             }
             else{
                 if(Math.floor(Date.now() / 1000)!=marcatiempoTotal) iniTiempo++;
@@ -316,7 +327,7 @@ $(document).ready(function() {
 
             marcatiempoTotal = Math.floor(Date.now() / 1000);
             storageManager("guardar",'marcatiempototal', marcatiempoTotal);
-            console.log("marcatiempototal");
+            //console.log("marcatiempototal");
 
             $(`#time0`).text(` ${minutosTotales}:${segundosTotales < 10 ? '0' : ''}${segundosTotales}`+'  ('+marcatiempototalDate+')');
         }, 1000);
@@ -324,7 +335,7 @@ $(document).ready(function() {
     }
 
     function showTimeColor(tiempo, jugador,arranque=false){
-        //console.log("showTimeColor");
+        ////console.log("showTimeColor");
         var clase='rojo';
         var claselbl='rojolbl';
         if(tiempo>minTiempo && tiempo<avgTiempo ){
@@ -348,12 +359,12 @@ $(document).ready(function() {
             //$("#ES"+jugador).addClass(clase);
             $("#name"+jugador).addClass(claselbl);
         }
-        ////console.log(jugador+' '+tiempo+' '+minTiempo+' '+avgTiempo);
+        //////console.log(jugador+' '+tiempo+' '+minTiempo+' '+avgTiempo);
 
     }
 
     function ajustaCronometros(){
-        console.log("ajustaCronometros");
+        //console.log("ajustaCronometros");
         /* var primero=true;
          for (var i = 0; i < nombresCronometros.length; i++) {
              var jugador = nombresCronometros[i];
@@ -362,14 +373,14 @@ $(document).ready(function() {
                      if(marcatiempo[jugador]!=null && enmarcha) {
                          tiempos[jugador] += Math.floor(Date.now() / 1000) - marcatiempo[jugador];
                          marcatiempo[jugador] = Math.floor(Date.now() / 1000);
-                         console.log("ajustaCronometros "+jugador+" "+tiempos[jugador]);
+                         //console.log("ajustaCronometros "+jugador+" "+tiempos[jugador]);
                      }
                  }
              }
          }
          storageManager("guardar",'tiempos', tiempos);
 
-         //console.log("ajustar Tiempo Total " +marcatiempoTotal);
+         ////console.log("ajustar Tiempo Total " +marcatiempoTotal);
          if(marcatiempoTotal != null) {
              iniTiempo += Math.floor(Date.now() / 1000) - marcatiempoTotal;
              storageManager("guardar",'tiempototal', iniTiempo);
@@ -381,24 +392,24 @@ $(document).ready(function() {
     // Crear el intervalo para cada cronómetro
     function crearIntervalo(jugador) {
 
-        console.log(jugador+" "+enmarcha)
+        //console.log(jugador+" "+enmarcha)
         if (!tiempos[jugador]) {
             tiempos[jugador] = 0;
         }if ($("#check" + jugador).is(':checked')) {
             $("#cronometros").prepend($("#"+jugador));
             if(!arraycheckeados.includes(jugador)){
                 arraycheckeados.push(jugador);
-                //console.log(jugador);
+                ////console.log(jugador);
             }
 
             storageManager("guardar",'checkeados', arraycheckeados);
             /**/
-            //if(jugador=="Julia_Garcia") console.log(jugador+" "+tiempos[jugador]);
+            //if(jugador=="Julia_Garcia") //console.log(jugador+" "+tiempos[jugador]);
 
             showTimeColor(tiempos[jugador],jugador);
             const minutos = Math.floor(tiempos[jugador] / 60);
             const segundos = tiempos[jugador] % 60;
-            //console.log("Creando intervalo: "+jugador+" "+tiempos[jugador]);
+            ////console.log("Creando intervalo: "+jugador+" "+tiempos[jugador]);
             $("#time" + jugador).text(`${minutos}:${segundos < 10 ? '0' : ''}${segundos}`);
             if((Math.floor(Date.now() / 1000)-marcatiempo[jugador])>1 && enmarcha==1){
                 //if(primero==false) tiempos[jugador]+=Math.floor(Date.now() / 1000)-marcatiempo[jugador];
@@ -407,7 +418,7 @@ $(document).ready(function() {
             else{
                 if(Math.floor(Date.now() / 1000)!=marcatiempo[jugador])tiempos[jugador]++
             }
-            //if(jugador=="Julia_Garcia") console.log(jugador+" 2 "+tiempos[jugador]);
+            //if(jugador=="Julia_Garcia") //console.log(jugador+" 2 "+tiempos[jugador]);
             storageManager("guardar",'tiempos', tiempos);
             marcatiempo[jugador] = Math.floor(Date.now() / 1000);
             storageManager("guardar",'marcatiempo', marcatiempo);
@@ -420,19 +431,20 @@ $(document).ready(function() {
                         marcamensajes[jugador]="";
                         storageManager("guardar",'marcamensajes', marcamensajes);
                         storageManager("guardar",'mensajes', mensajes);
-                        $("#INFO"+jugador).text("");
+                        //$("#INFO"+jugador).text("");
+                        $("#sp11"+jugador).text("PULSA PARA ABRIR EL MENU");
                     }
                 }
             }
-            //if(jugador=="Julia_Garcia") console.log(jugador+" 3 "+tiempos[jugador]);
+            //if(jugador=="Julia_Garcia") //console.log(jugador+" 3 "+tiempos[jugador]);
             /**/
             intervalos[jugador] = setInterval(function() {
-                //if(jugador=="Julia_Garcia") console.log(jugador+" "+tiempos[jugador]);
+                //if(jugador=="Julia_Garcia") //console.log(jugador+" "+tiempos[jugador]);
 
                 showTimeColor(tiempos[jugador],jugador);
                 const minutos = Math.floor(tiempos[jugador] / 60);
                 const segundos = tiempos[jugador] % 60;
-                //console.log("Creando intervalo: "+jugador+" "+tiempos[jugador]);
+                ////console.log("Creando intervalo: "+jugador+" "+tiempos[jugador]);
                 $("#time" + jugador).text(`${minutos}:${segundos < 10 ? '0' : ''}${segundos}`);
                 if((Math.floor(Date.now() / 1000)-marcatiempo[jugador])>1 && enmarcha==1){
                     //if(primero==false) tiempos[jugador]+=Math.floor(Date.now() / 1000)-marcatiempo[jugador];
@@ -441,7 +453,7 @@ $(document).ready(function() {
                 else{
                     if(Math.floor(Date.now() / 1000)!=marcatiempo[jugador])tiempos[jugador]++
                 }
-                //if(jugador=="Julia_Garcia") console.log(jugador+" 2 "+tiempos[jugador]);
+                //if(jugador=="Julia_Garcia") //console.log(jugador+" 2 "+tiempos[jugador]);
                 storageManager("guardar",'tiempos', tiempos);
                 marcatiempo[jugador] = Math.floor(Date.now() / 1000);
                 storageManager("guardar",'marcatiempo', marcatiempo);
@@ -454,25 +466,26 @@ $(document).ready(function() {
                             marcamensajes[jugador]="";
                             storageManager("guardar",'marcamensajes', marcamensajes);
                             storageManager("guardar",'mensajes', mensajes);
-                            $("#INFO"+jugador).text("");
+                            //$("#INFO"+jugador).text("");
+                            $("#sp11"+jugador).text("PULSA PARA ABRIR EL MENU");
                         }
                     }
                 }
-                //if(jugador=="Julia_Garcia") console.log(jugador+" 3 "+tiempos[jugador]);
+                //if(jugador=="Julia_Garcia") //console.log(jugador+" 3 "+tiempos[jugador]);
             }, 1000);
         }
 
     }
     // Función para iniciar el cronómetro de un jugador
     function iniciarCronometro(jugador) {
-        console.log("iniciarCronometro");
+        //console.log("iniciarCronometro");
         if (!intervalos[jugador]) { // Solo inicia el cronómetro si no está corriendo
             crearIntervalo(jugador);
         }
     }
 
     function pararIntervalos() {
-        console.log("pararIntervalos");
+        //console.log("pararIntervalos");
         for (var jugador in intervalos) {
             clearInterval(intervalos[jugador]);
             //###sugerencia 2
@@ -483,7 +496,7 @@ $(document).ready(function() {
     }
 
     function reiniciarIntervalos() {
-        console.log("reiniciarIntervalos");
+        //console.log("reiniciarIntervalos");
         //addeventchange();
         $('#divequipos').show();
         $('#add-rival-div').show();
@@ -494,7 +507,7 @@ $(document).ready(function() {
         iniTiempo=0;
         pdfParte="Primera Parte "
         pararIntervalos();
-        ////console.log("reiniciarIntervalos ");
+        //////console.log("reiniciarIntervalos ");
         localStorage.removeItem('checkeados');
 
         localStorage.removeItem('tiempos');
@@ -518,7 +531,7 @@ $(document).ready(function() {
 
 
         for (var i = 0; i < nombresCronometros.length; i++) {
-            ////console.log("array  "+nombresCronometros[i]);
+            //////console.log("array  "+nombresCronometros[i]);
             var jugador=nombresCronometros[i];
             $("#time" + jugador).text("0:00");
             tiempos[jugador]=0;
@@ -543,7 +556,7 @@ $(document).ready(function() {
     }
 
     function cambiarJugador(val){
-        console.log("cambiarJugador");
+        //console.log("cambiarJugador");
 
         $('#jugadores-en-juego').empty();
         $('#jugadores-fuera-juego').empty();
@@ -562,7 +575,7 @@ $(document).ready(function() {
     }
 
     function mostrarplantilla() {
-        console.log("mostrarplantilla");
+        //console.log("mostrarplantilla");
         for (var i = 0; i < nombresCronometros.length; i++) {
             add_fila_player(nombresCronometros,i);
         }
@@ -576,47 +589,47 @@ $(document).ready(function() {
                 if(nombre==portero) $("#pcheck"+nombre).prop("checked", true);
                 $("#check"+nombre).prop("checked", true);
                 totaljugadoresencampo++;
-                console.log(totaljugadoresencampo);
+                //console.log(totaljugadoresencampo);
             });
             $('#jugjug').text("JUGADORES: "+totaljugadoresencampo);
         }
     }
 
     document.addEventListener("visibilitychange", function() {
-        console.log("visibilitychange addEventListener");
+        //console.log("visibilitychange addEventListener");
         if (document.hidden) {
-            //console.log("El navegador ha entrado en suspensión.");
+            ////console.log("El navegador ha entrado en suspensión.");
         } else {
-            //console.log("El navegador ha vuelto a estar activo.");
+            ////console.log("El navegador ha vuelto a estar activo.");
         }
     });
 
     $(document).on("visibilitychange", function() {
-        console.log("visibilitychange on");
+        //console.log("visibilitychange on");
         if (document.hidden) {
-            //console.log("El navegador está en segundo plano o suspendido.");
+            ////console.log("El navegador está en segundo plano o suspendido.");
         } else {
-            //console.log("El navegador está activo.");
+            ////console.log("El navegador está activo.");
             window.location.reload();
         }
     });
 
     $(window).on("blur", function() {
-        //console.log("El usuario cambió de pestaña o minimizó la app.");
+        ////console.log("El usuario cambió de pestaña o minimizó la app.");
     });
 
     $(window).on("focus", function() {
-        //console.log("El usuario volvió a la página.");
+        ////console.log("El usuario volvió a la página.");
         window.location.reload();
     });
 
     $(document).on('click',".buttondelete", function() {
-        console.log("click buttondelete");
+        //console.log("click buttondelete");
         //$(".buttondelete").click(function(){
-        ////console.log($(this).attr("id"));
+        //////console.log($(this).attr("id"));
         var id=$(this).attr("id");
         var nombre=id.substring(12,id.length)
-        //console.log(nombre);
+        ////console.log(nombre);
         var positiontodelete=nombresCronometros.indexOf(nombre);
         nombresCronometros.splice(positiontodelete,1);
         if ($("#check" + nombre).is(':checked')) {
@@ -627,7 +640,7 @@ $(document).ready(function() {
     });
 
     function updateVarLocalStorage(storage,iddiv=''){
-        console.log("updateVarLocalStorage");
+        //console.log("updateVarLocalStorage");
         if(iddiv=="")iddiv=storage;
         var div=$("#"+iddiv);
         var valor = parseInt(div.text())+1;
@@ -636,14 +649,14 @@ $(document).ready(function() {
 
     }
     function ajustarMensajeTablaMarcador(){
-        console.log("ajustarMensajeTablaMarcador");
+        //console.log("ajustarMensajeTablaMarcador");
         for (var i = 0; i < mensajestablaMarcador.length; i++) {
             $("#tablaDatosPartido").append(mensajestablaMarcador[i]);
         }
 
     }
     function mensajeTablaMarcador(cadena){
-        console.log("mensajeTablaMarcador");
+        //console.log("mensajeTablaMarcador");
         var nuevaFila = "<tr><td>"+fechaHora()+' '+cadena+"</td><td></td></tr>";
         mensajestablaMarcador.push(nuevaFila);
         $("#tablaDatosPartido").append(nuevaFila);
@@ -651,9 +664,9 @@ $(document).ready(function() {
     }
 
     $(document).on('click',".buttonaccion", function() {
-        console.log("click buttonaccion");
+        //console.log("click buttonaccion");
         //$(".buttondelete").click(function(){
-        ////console.log($(this).attr("id"));
+        //////console.log($(this).attr("id"));
         var id=$(this).attr("id");
         var nombre=id.substring(2,id.length)
         var nom_txt=nombre.replace(/_/g, " ")
@@ -726,7 +739,8 @@ $(document).ready(function() {
             updateVarLocalStorage('rematesFueraright','rematesFueraRight');
         }
         //alert(texto);
-        $("#INFO"+nombre).text(" "+texto.slice(0,texto.indexOf(":")));
+        //$("#INFO"+nombre).text(" "+texto.slice(0,texto.indexOf(":")));
+        $("#sp11"+nombre).text(" "+texto.slice(0,texto.indexOf(":")).toUpperCase());
 
         mensajes[nombre]=texto.slice(0,texto.indexOf(":"));
         marcamensajes[nombre]= Math.floor(Date.now() / 1000);
@@ -738,7 +752,7 @@ $(document).ready(function() {
 
 
 
-        /*//console.log(nombre);
+        /*////console.log(nombre);
         var positiontodelete=nombresCronometros.indexOf(nombre);
         nombresCronometros.splice(positiontodelete,1);
         if ($("#check" + nombre).is(':checked')) {
@@ -748,8 +762,8 @@ $(document).ready(function() {
         $("#"+nombre).remove();*/
     });
     function add_fila_player(nombresCronometros,i){
-        console.log("add_fila_player");
-        ////console.log(i+" "+nombresCronometros[i]+" desde add_fila_player");
+        //console.log("add_fila_player");
+        //////console.log(i+" "+nombresCronometros[i]+" desde add_fila_player");
         var midiv = $("<div>");
         midiv.attr("id", nombresCronometros[i]);
         midiv.attr("class", "cronometro");
@@ -894,12 +908,12 @@ $(document).ready(function() {
         spantiempo.attr("id", "time" + nombresCronometros[i]);
         const minutos = Math.floor(tiempos[nombresCronometros[i]] / 60);
         const segundos = tiempos[nombresCronometros[i]] % 60;
-        ////console.log("segundos "+segundos);
+        //////console.log("segundos "+segundos);
         if (isNaN(segundos)) {
-            ////console.log("entra per isNaN");
+            //////console.log("entra per isNaN");
             spantiempo.text("0:00");
         }else{
-            ////console.log("entra per el else");
+            //////console.log("entra per el else");
             spantiempo.text(` ${minutos}:${segundos < 10 ? '0' : ''}${segundos}`)
         };
         midiv.append(span1);
@@ -961,19 +975,19 @@ $(document).ready(function() {
     }
 
     function showCheckPorteros(){
-        console.log("showCheckPorteros");
+        //console.log("showCheckPorteros");
         for (var i = 0; i < nombresCronometros.length; i++) {
             var jugador = nombresCronometros[i];
             $("#pcheck" + jugador).show();
             $("#puerta" + jugador).show();
             $("#check" + jugador).show();
-            //console.log(jugador);
+            ////console.log(jugador);
         }
     }
 
     // Evento para el botón de detener todos los cronómetros
     $('#parar-todos').click(function() {
-        console.log("parar-todos");
+        //console.log("parar-todos");
         $('#iniciar-todos').toggle();
         $('#parar-todos').toggle();
         clearInterval(totalTiempo);
@@ -998,29 +1012,29 @@ $(document).ready(function() {
     });
     // Evento para el botón de reiniciar todos los cronómetros
     $('#reiniciar-todos').click(function() {
-        console.log("reiniciar-todos");
+        //console.log("reiniciar-todos");
 
         $('#delete-cookies-modal').show();
 
     });
     $('#eliminarsesion').click(function() {
-        console.log("eliminarsesion");
+        //console.log("eliminarsesion");
         reiniciarIntervalos(); // Detiene y reinicia todos los cronómetros
         $('#delete-cookies-modal').hide();
         window.location.reload();
 
     });
     $('#continuarsesion').click(function() {
-        console.log("continuarsesion");
+        //console.log("continuarsesion");
         $('#delete-cookies-modal').hide();
     });
 
     $(document).on('click',".reservas", function() {
-        console.log("click reservas");
+        //console.log("click reservas");
         cambiarJugador(this.innerHTML);
     });
     $('#cambiar-jugadores').click(function() {
-        console.log("cambiar-jugadores");
+        //console.log("cambiar-jugadores");
         $('#jugadores-en-juego').empty();
         $('#jugadores-fuera-juego').empty();
         for (var i = 0; i < nombresCronometros.length; i++) {
@@ -1035,7 +1049,7 @@ $(document).ready(function() {
         $('#jugadores-modal').show();
     });
     $('#salir-ayuda').click(function() {
-        console.log("salir-ayuda");
+        //console.log("salir-ayuda");
         $('#ayuda-modal').hide();
     });
     $('#salir-cambio').click(function() {
@@ -1048,7 +1062,7 @@ $(document).ready(function() {
         $('#goleador-adv-modal').hide();
     });
     $('#cambiar-estado').click(function() {
-        console.log("cambiar-estado");
+        //console.log("cambiar-estado");
         const jugadorEnJuego = $('#jugadores-en-juego').val();
         const jugadorFueraJuego = $('#jugadores-fuera-juego').val();
         if(jugadorEnJuego){
@@ -1155,22 +1169,26 @@ $(document).ready(function() {
     $('.increment-left').click(function() {
         var leftDiv = $(this).closest('.sectionestadistica').find('.numestadisticasleft');
         var tipoestadistica = $(this).closest('.grupdivestadisticas').find('span');
-        ////console.log("Estadistica "+tipoestadistica.attr("id")+"left");
+        ////console.log("Estadistica "+tipoestadistica.text());
         var currentValue = parseInt(leftDiv.text());
         leftDiv.text(currentValue + 1);
         storageManager("guardar",tipoestadistica.attr("id")+"left", currentValue + 1);
         const minutosTotales = Math.floor(iniTiempo / 60);
-        mensajeTablaMarcador('CTO '+tipoestadistica.text()+" min "+minutosTotales);
+        mensajeTablaMarcador('CTO '+tipoestadistica.text().split(' ').map((palabra, index) =>
+            index === 0 ? palabra.slice(0, -1) : palabra
+        ).join(' ')+" min "+minutosTotales);
     });
     $('.increment-right').click(function() {
         var rightDiv = $(this).closest('.sectionestadistica').find('.numestadisticasright');
         var tipoestadistica = $(this).closest('.grupdivestadisticas').find('span');
-        ////console.log("Estadistica "+tipoestadistica.attr("id")+"left");
+        //////console.log("Estadistica "+tipoestadistica.attr("id")+"left");
         var currentValue = parseInt(rightDiv.text());
         rightDiv.text(currentValue + 1);
         storageManager("guardar",tipoestadistica.attr("id")+"right", currentValue + 1);
         const minutosTotales = Math.floor(iniTiempo / 60);
-        mensajeTablaMarcador('ADVERSARIO '+tipoestadistica.text()+" min "+minutosTotales);
+        mensajeTablaMarcador('ADVERSARIO '+tipoestadistica.text().split(' ').map((palabra, index) =>
+            index === 0 ? palabra.slice(0, -1) : palabra
+        ).join(' ')+" min "+minutosTotales);
     });
     //-------------------------------------
     $('#add-gol-cto').click(function() {
@@ -1244,7 +1262,7 @@ $(document).ready(function() {
     });
     $('#saveadversario').click(function() {
         adversario = $('#textadversario').val();
-        ////console.log(adversario);
+        //////console.log(adversario);
         $('#id2 span').text(adversario);
         $('#textadversario').val("");
         $('#adversario-modal').hide();
@@ -1260,15 +1278,15 @@ $(document).ready(function() {
         //capturar el div cronometros
         var divcrono=$('.cronometros');
         //crear div jugador y añadirlo
-        ////console.log(new_player);
+        //////console.log(new_player);
         nombresCronometros.push(new_player);
         var q_players=nombresCronometros.length;
-        ////console.log(nombresCronometros+" q_players "+q_players);
+        //////console.log(nombresCronometros+" q_players "+q_players);
         q_players--;
-        ////console.log(nombresCronometros+" q_players "+q_players);
+        //////console.log(nombresCronometros+" q_players "+q_players);
         add_fila_player(nombresCronometros,q_players);
         $('#'+new_player).on('change', '#check'+new_player, function() {
-            ////console.log("cambia el checked desde save-new-player ");
+            //////console.log("cambia el checked desde save-new-player ");
 
             if ($(this).prop('checked')) {
                 totaljugadoresencampo++;
@@ -1323,7 +1341,7 @@ $(document).ready(function() {
     });
     $( "#equipos" ).on( "change", function() {
         this.disabled=true;
-        //console.log($(this).val());
+        ////console.log($(this).val());
         equipoElegido=$(this).val();
         //Vaciar el div conometros
         $("#cronometros").empty();
@@ -1356,22 +1374,34 @@ $(document).ready(function() {
         minTiempo=Math.round(maxTiempo/3)*60;
         avgTiempo=Math.round(maxTiempo/2)*60;
         reiniciarIntervalos();
+        if(maxJugadores>8){
+            $('#tarjetasRojasLeft').closest('.sectionestadistica').show();
+            $('#tarjetasAmarillasLeft').closest('.sectionestadistica').show();
+            //console.log("show");
+        }
+        else{
+            $('#tarjetasRojasLeft').closest('.sectionestadistica').hide();
+            $('#tarjetasAmarillasLeft').closest('.sectionestadistica').hide();
+            ////console.log( $("#tarjetasRojasLeft").innerHTML);
+        }
+
         addeventchange();
+
 
 
 
     });
     addeventchange();
     function addeventchange() {
-        console.log("addeventchange");
+        //console.log("addeventchange");
         $('.checkboxplayers').on('change', function() {
                 var idjugador=$(this).attr("id");
                 var arraynombre=idjugador.split("check");
                 var nombre=arraynombre[1];
-                //console.log("linea 964 ");
+                ////console.log("linea 964 ");
 
                 if ($(this).prop('checked')) {
-                    //console.log('Checkbox marcado');
+                    ////console.log('Checkbox marcado');
                     equipotitular.push(nombre);
                     totaljugadoresencampo++;
 
@@ -1381,14 +1411,14 @@ $(document).ready(function() {
                     }
                 } else {
                     var playerdesmarcado=equipotitular.indexOf(nombre);
-                    //console.log("A eliminar "+playerdesmarcado)
+                    ////console.log("A eliminar "+playerdesmarcado)
                     if(playerdesmarcado!==-1){
                         equipotitular.splice(playerdesmarcado,1);
                     }
-                    //console.log('Checkbox desmarcado');
+                    ////console.log('Checkbox desmarcado');
                     totaljugadoresencampo--;
                 }
-                //console.log(equipotitular);
+                ////console.log(equipotitular);
                 $('#jugjug').text("JUGADORES: "+totaljugadoresencampo);
 
             }
@@ -1398,7 +1428,7 @@ $(document).ready(function() {
     };
 
     function checkPortero(nombre) {
-        console.log("checkPortero");
+        //console.log("checkPortero");
         for (var i = 0; i < nombresCronometros.length; i++) {
             var jugador = nombresCronometros[i];
             if(nombre==jugador && $("#pcheck" + jugador).is(':checked') ) {
@@ -1442,8 +1472,8 @@ $(document).ready(function() {
         creargrafico();
     });
     $('.cronometro').click(function() {
-        console.log("cronometro");
-        //console.log(this.id);
+        //console.log("cronometro");
+        ////console.log(this.id);
 
         $("#sp11"+this.id).toggle();
         $("#spbtn1"+this.id).toggle();
@@ -1453,7 +1483,7 @@ $(document).ready(function() {
         if($("#check" + this.id).is(':checked')){
             if(!arraycheckeados.includes(this.id)){
                 arraycheckeados.push(this.id);
-                console.log(this.id);
+                //console.log(this.id);
             }
             if(!equipotitular.includes(this.id)){equipotitular.push(this.id)};
 
@@ -1469,21 +1499,21 @@ $(document).ready(function() {
     });
 
     function creargrafico() {
-        //console.log("Show graficos "+tiempos)
+        ////console.log("Show graficos "+tiempos)
         jugadoresgrafico=[];
         tiemposgrafico=[]
         for (var jugador in tiempos) {
-            //console.log("Show graficos "+jugador+" "+ tiempos[jugador]);
+            ////console.log("Show graficos "+jugador+" "+ tiempos[jugador]);
             jugadoresgrafico.push(jugador);
             tiemposgrafico.push(tiempos[jugador]/60);
         }
         if(first){
-            ////console.log("es la primera volta")
+            //////console.log("es la primera volta")
             mostrargrafico(jugadoresgrafico,tiemposgrafico);
             first=false;
         }else{
             myBarChart.destroy();
-            ////console.log("ya no es la primera volta")
+            //////console.log("ya no es la primera volta")
             mostrargrafico(jugadoresgrafico,tiemposgrafico);
         }
     }
@@ -1546,9 +1576,9 @@ $(document).ready(function() {
         const Partido="CTO "+adversario;
         const resultadoCto = $("#resulCto").text();
         const resultadoAdv = $("#resulAdv").text();
-        //console.log(fechacompleta)
-        //console.log(Partido)
-        //console.log(equipotitular);
+        ////console.log(fechacompleta)
+        ////console.log(Partido)
+        ////console.log(equipotitular);
         var nombres=[];
         var tiempos=[];
         var data={};
@@ -1677,5 +1707,3 @@ $(document).ready(function() {
     $(window).scrollTop(0);
 });
 //-------------------------------------------------------------------------------------
-
-
