@@ -1160,7 +1160,7 @@ $(document).ready(function() {
         leftDiv.text(currentValue + 1);
         storageManager("guardar",tipoestadistica.attr("id")+"left", currentValue + 1);
         const minutosTotales = Math.floor(iniTiempo / 60);
-        mensajeTablaMarcador('CTO '+tipoestadistica+" min "+minutosTotales);
+        mensajeTablaMarcador('CTO '+tipoestadistica.text()+" min "+minutosTotales);
     });
     $('.increment-right').click(function() {
         var rightDiv = $(this).closest('.sectionestadistica').find('.numestadisticasright');
@@ -1170,7 +1170,7 @@ $(document).ready(function() {
         rightDiv.text(currentValue + 1);
         storageManager("guardar",tipoestadistica.attr("id")+"right", currentValue + 1);
         const minutosTotales = Math.floor(iniTiempo / 60);
-        mensajeTablaMarcador('ADVERSARIO '+tipoestadistica+" min "+minutosTotales);
+        mensajeTablaMarcador('ADVERSARIO '+tipoestadistica.text()+" min "+minutosTotales);
     });
     //-------------------------------------
     $('#add-gol-cto').click(function() {
@@ -1677,4 +1677,5 @@ $(document).ready(function() {
     $(window).scrollTop(0);
 });
 //-------------------------------------------------------------------------------------
+
 
