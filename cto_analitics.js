@@ -1159,6 +1159,7 @@ $(document).ready(function() {
         var currentValue = parseInt(leftDiv.text());
         leftDiv.text(currentValue + 1);
         storageManager("guardar",tipoestadistica.attr("id")+"left", currentValue + 1);
+        mensajeTablaMarcador('CTO '+tipoestadistica+" min "+minutosTotales);
     });
     $('.increment-right').click(function() {
         var rightDiv = $(this).closest('.sectionestadistica').find('.numestadisticasright');
@@ -1167,6 +1168,7 @@ $(document).ready(function() {
         var currentValue = parseInt(rightDiv.text());
         rightDiv.text(currentValue + 1);
         storageManager("guardar",tipoestadistica.attr("id")+"right", currentValue + 1);
+        mensajeTablaMarcador('ADVERSARIO '+tipoestadistica+" min "+minutosTotales);
     });
     //-------------------------------------
     $('#add-gol-cto').click(function() {
