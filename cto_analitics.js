@@ -74,6 +74,8 @@ $(document).ready(function() {
         if(maxTiempo=="") enmarcha=50;
         if(mensajes == null) mensajes={};
         if(marcamensajes == null) marcamensajes={};
+        if(expulsados == null) expulsados=[];
+
         minTiempo=Math.round(maxTiempo/3)*60;
         avgTiempo=Math.round(maxTiempo/2)*60;
         var resulAdv=0;
@@ -124,6 +126,7 @@ $(document).ready(function() {
         $('#tarjetasAmarillasLeft').closest('.sectionestadistica').hide();
         ////console.log( $("#tarjetasRojasLeft").innerHTML);
     }
+    mostrarTotalTiempo();
 
     if(enmarcha==1){
         //
@@ -285,16 +288,14 @@ $(document).ready(function() {
         // Mostrar la fecha y hora en el elemento con id "fecha-hora"
         return cadena;
     }
+    function mostrarTotalTiempo(){
+        console.log("mostrarTotalTiempo");
+        const minutosTotales = Math.floor(iniTiempo / 60);
+        const segundosTotales = iniTiempo % 60;
+        $(`#time0`).text(` ${minutosTotales}:${segundosTotales < 10 ? '0' : ''}${segundosTotales}`);
+    }
 
-    function iniciartotaltiempo(){
-        //console.log("iniciartotaltiempo "+enmarcha);
-        if(marcatiempototalDate==null || marcatiempototalDate==0)
-        {
-            marcatiempototalDate = fechaHora();
-            storageManager("guardar",'marcatiempototaldate', marcatiempototalDate);
-            mensajeTablaMarcador('INICIO TIEMPO TOTAL');
-        }
-        /*inicio*/
+    function accionesTotalTiempo(){
         if((Math.floor(Date.now() / 1000)-marcatiempoTotal)>1 && marcatiempoTotal>0 && enmarcha==1){
             iniTiempo+=Math.floor(Date.now() / 1000)-marcatiempoTotal;
             //console.log("aqui");
@@ -310,26 +311,27 @@ $(document).ready(function() {
         marcatiempoTotal = Math.floor(Date.now() / 1000);
         storageManager("guardar",'marcatiempototal', marcatiempoTotal);
         //console.log("marcatiempototal");
-
         $(`#time0`).text(` ${minutosTotales}:${segundosTotales < 10 ? '0' : ''}${segundosTotales}`+'  ('+marcatiempototalDate+')');
+    }
+
+    function iniciartotaltiempo(){
+        //console.log("iniciartotaltiempo "+enmarcha);
+        if(marcatiempototalDate==null || marcatiempototalDate==0)
+        {
+            marcatiempototalDate = fechaHora();
+            storageManager("guardar",'marcatiempototaldate', marcatiempototalDate);
+            mensajeTablaMarcador('INICIO TIEMPO TOTAL');
+        }
+        /*inicio*/
+        accionesTotalTiempo();
+
+
         totalTiempo = setInterval(function() {
-            if((Math.floor(Date.now() / 1000)-marcatiempoTotal)>1 && marcatiempoTotal>0 && enmarcha==1){
-                iniTiempo+=Math.floor(Date.now() / 1000)-marcatiempoTotal;
-                //console.log("aqui");
+            accionesTotalTiempo();
+            for (var jugador in intervalos) {
+                accionesCronometroJugador(jugador);
+                //console.log("accionesCronometroJugador" +jugador);
             }
-            else{
-                if(Math.floor(Date.now() / 1000)!=marcatiempoTotal) iniTiempo++;
-            }
-            const minutosTotales = Math.floor(iniTiempo / 60);
-            const segundosTotales = iniTiempo % 60;
-
-            storageManager("guardar",'tiempototal', iniTiempo);
-
-            marcatiempoTotal = Math.floor(Date.now() / 1000);
-            storageManager("guardar",'marcatiempototal', marcatiempoTotal);
-            //console.log("marcatiempototal");
-
-            $(`#time0`).text(` ${minutosTotales}:${segundosTotales < 10 ? '0' : ''}${segundosTotales}`+'  ('+marcatiempototalDate+')');
         }, 1000);
 
     }
@@ -388,8 +390,47 @@ $(document).ready(function() {
          }*/
 
     }
+    function mostrarTiempoJugador(jugador){
+        const minutos = Math.floor(tiempos[jugador] / 60);
+        const segundos = tiempos[jugador] % 60;
+        ////console.log("Creando intervalo: "+jugador+" "+tiempos[jugador]);
+        $("#time" + jugador).text(`${minutos}:${segundos < 10 ? '0' : ''}${segundos}`);
+    }
 
     // Crear el intervalo para cada cronómetro
+    function accionesCronometroJugador(jugador){
+        showTimeColor(tiempos[jugador],jugador);
+        const minutos = Math.floor(tiempos[jugador] / 60);
+        const segundos = tiempos[jugador] % 60;
+        ////console.log("Creando intervalo: "+jugador+" "+tiempos[jugador]);
+        $("#time" + jugador).text(`${minutos}:${segundos < 10 ? '0' : ''}${segundos}`);
+        if((Math.floor(Date.now() / 1000)-marcatiempo[jugador])>1 && enmarcha==1){
+            //if(primero==false) tiempos[jugador]+=Math.floor(Date.now() / 1000)-marcatiempo[jugador];
+            tiempos[jugador]+=Math.floor(Date.now() / 1000)-marcatiempo[jugador];
+        }
+        else{
+            if(Math.floor(Date.now() / 1000)!=marcatiempo[jugador])tiempos[jugador]++
+        }
+        //if(jugador=="Julia_Garcia") //console.log(jugador+" 2 "+tiempos[jugador]);
+        storageManager("guardar",'tiempos', tiempos);
+        marcatiempo[jugador] = Math.floor(Date.now() / 1000);
+        storageManager("guardar",'marcatiempo', marcatiempo);
+
+        //timeout para hacer desaparecer el mensaje
+        if(mensajes != null){
+            if(mensajes[jugador]!=null){
+                if(Math.floor(Date.now() / 1000)-marcamensajes[jugador]>5){
+                    mensajes[jugador]="";
+                    marcamensajes[jugador]="";
+                    storageManager("guardar",'marcamensajes', marcamensajes);
+                    storageManager("guardar",'mensajes', mensajes);
+                    //$("#INFO"+jugador).text("");
+                    $("#sp11"+jugador).text("PULSA PARA ABRIR EL MENU");
+                }
+            }
+        }
+
+    }
     function crearIntervalo(jugador) {
 
         //console.log(jugador+" "+enmarcha)
@@ -403,76 +444,11 @@ $(document).ready(function() {
             }
 
             storageManager("guardar",'checkeados', arraycheckeados);
-            /**/
-            //if(jugador=="Julia_Garcia") //console.log(jugador+" "+tiempos[jugador]);
-
-            showTimeColor(tiempos[jugador],jugador);
-            const minutos = Math.floor(tiempos[jugador] / 60);
-            const segundos = tiempos[jugador] % 60;
-            ////console.log("Creando intervalo: "+jugador+" "+tiempos[jugador]);
-            $("#time" + jugador).text(`${minutos}:${segundos < 10 ? '0' : ''}${segundos}`);
-            if((Math.floor(Date.now() / 1000)-marcatiempo[jugador])>1 && enmarcha==1){
-                //if(primero==false) tiempos[jugador]+=Math.floor(Date.now() / 1000)-marcatiempo[jugador];
-                tiempos[jugador]+=Math.floor(Date.now() / 1000)-marcatiempo[jugador];
-            }
-            else{
-                if(Math.floor(Date.now() / 1000)!=marcatiempo[jugador])tiempos[jugador]++
-            }
-            //if(jugador=="Julia_Garcia") //console.log(jugador+" 2 "+tiempos[jugador]);
-            storageManager("guardar",'tiempos', tiempos);
-            marcatiempo[jugador] = Math.floor(Date.now() / 1000);
-            storageManager("guardar",'marcatiempo', marcatiempo);
-
-            //timeout para hacer desaparecer el mensaje
-            if(mensajes != null){
-                if(mensajes[jugador]!=null){
-                    if(Math.floor(Date.now() / 1000)-marcamensajes[jugador]>5){
-                        mensajes[jugador]="";
-                        marcamensajes[jugador]="";
-                        storageManager("guardar",'marcamensajes', marcamensajes);
-                        storageManager("guardar",'mensajes', mensajes);
-                        //$("#INFO"+jugador).text("");
-                        $("#sp11"+jugador).text("PULSA PARA ABRIR EL MENU");
-                    }
-                }
-            }
-            //if(jugador=="Julia_Garcia") //console.log(jugador+" 3 "+tiempos[jugador]);
-            /**/
-            intervalos[jugador] = setInterval(function() {
-                //if(jugador=="Julia_Garcia") //console.log(jugador+" "+tiempos[jugador]);
-
-                showTimeColor(tiempos[jugador],jugador);
-                const minutos = Math.floor(tiempos[jugador] / 60);
-                const segundos = tiempos[jugador] % 60;
-                ////console.log("Creando intervalo: "+jugador+" "+tiempos[jugador]);
-                $("#time" + jugador).text(`${minutos}:${segundos < 10 ? '0' : ''}${segundos}`);
-                if((Math.floor(Date.now() / 1000)-marcatiempo[jugador])>1 && enmarcha==1){
-                    //if(primero==false) tiempos[jugador]+=Math.floor(Date.now() / 1000)-marcatiempo[jugador];
-                    tiempos[jugador]+=Math.floor(Date.now() / 1000)-marcatiempo[jugador];
-                }
-                else{
-                    if(Math.floor(Date.now() / 1000)!=marcatiempo[jugador])tiempos[jugador]++
-                }
-                //if(jugador=="Julia_Garcia") //console.log(jugador+" 2 "+tiempos[jugador]);
-                storageManager("guardar",'tiempos', tiempos);
-                marcatiempo[jugador] = Math.floor(Date.now() / 1000);
-                storageManager("guardar",'marcatiempo', marcatiempo);
-
-                //timeout para hacer desaparecer el mensaje
-                if(mensajes != null){
-                    if(mensajes[jugador]!=null){
-                        if(Math.floor(Date.now() / 1000)-marcamensajes[jugador]>5){
-                            mensajes[jugador]="";
-                            marcamensajes[jugador]="";
-                            storageManager("guardar",'marcamensajes', marcamensajes);
-                            storageManager("guardar",'mensajes', mensajes);
-                            //$("#INFO"+jugador).text("");
-                            $("#sp11"+jugador).text("PULSA PARA ABRIR EL MENU");
-                        }
-                    }
-                }
-                //if(jugador=="Julia_Garcia") //console.log(jugador+" 3 "+tiempos[jugador]);
-            }, 1000);
+            accionesCronometroJugador(jugador);
+            intervalos[jugador] = jugador;
+            /*intervalos[jugador] = setInterval(function() {
+                accionesCronometroJugador(jugador);
+            }, 1000);*/
         }
 
     }
@@ -487,12 +463,15 @@ $(document).ready(function() {
     function pararIntervalos() {
         //console.log("pararIntervalos");
         for (var jugador in intervalos) {
-            clearInterval(intervalos[jugador]);
+            //accionesCronometroJugador(jugador);
+            mostrarTiempoJugador(jugador);
+            //clearInterval(intervalos[jugador]);
             //###sugerencia 2
             delete marcatiempo[jugador]
             delete intervalos[jugador];
         }
         storageManager("guardar",'tiempos', tiempos);
+        mostrarTotalTiempo();
     }
 
     function reiniciarIntervalos() {
@@ -672,6 +651,7 @@ $(document).ready(function() {
         var nom_txt=nombre.replace(/_/g, " ")
         var accion=id.substring(0,2)
         var texto=""
+        console.log(accion+" "+nombre);
         //Recoger minuto del partido
         const minutosTotales = Math.floor(iniTiempo / 60);
         if(accion=="AS"){
@@ -692,6 +672,10 @@ $(document).ready(function() {
         if(accion=="RD"){
             texto = "Remate Dentro: "+nom_txt+" min "+minutosTotales+"";
             updateVarLocalStorage('rematesPorterialeft','rematesPorteriaLeft');
+        }
+        if(accion=="FJ"){
+            texto = "Fuera De Juego: "+nom_txt+" min "+minutosTotales+"";
+            updateVarLocalStorage('fuerasJuegoleft','fuerasJuegoLeft');
         }
         if(accion=="RF"){
             texto = "Remate Fuera: "+nom_txt+" min "+minutosTotales+"";
@@ -715,8 +699,8 @@ $(document).ready(function() {
 
             $("#check"+nombre).prop('checked',false);
             $("#check"+nombre).prop('disabled', true);
-            clearInterval(intervalos[nombre]);
-
+            //clearInterval(intervalos[nombre]);
+            mostrarTiempoJugador(nombre);
             delete intervalos[nombre];
             delete arraycheckeados[nombre];
             arraycheckeados = arraycheckeados.filter(nom => nom !== nombre);
@@ -844,10 +828,14 @@ $(document).ready(function() {
 
         var buttonCC =$("<button>")
         buttonCC.text("CAMBIO");
-        buttonCC.attr("class","buttonaccion");
+        buttonCC.attr("class","buttonaccion_sep");
         buttonCC.attr("id","CC"+nombresCronometros[i]);
         buttonCC.on("click",function(){cambiarJugador(nombresCronometros[i])});
 
+        var buttonFJ =$("<button>")
+        buttonFJ.text("FUERA JUEGO");
+        buttonFJ.attr("class","buttonaccion buttonaccion_sep");
+        buttonFJ.attr("id","FJ"+nombresCronometros[i]);
 
 
 
@@ -899,7 +887,7 @@ $(document).ready(function() {
         var spancambio = $("<div>");
         spancambio.attr("class", "spancambio");
         spancambio.attr("id", "spcambio" + nombresCronometros[i]);
-        spancambio.text('CAMBIO');
+        spancambio.text('OTROS');
 
 
         spanjugador.attr("id", "name" + nombresCronometros[i]);
@@ -932,6 +920,8 @@ $(document).ready(function() {
         spanbotones.append(spanfaltas);
         spanbotones.append(buttonF);
         spanbotones.append(buttonFR);
+        spanbotones.append(buttonTA);
+        spanbotones.append(buttonTR);
         spanbotones.hide();
         span2.append(spanbotones);
         var spanbotones = $("<span>");
@@ -946,7 +936,7 @@ $(document).ready(function() {
         spanbotones.hide();
         span2.append(spanbotones);
 
-        var spanbotones = $("<span>");
+        /*var spanbotones = $("<span>");
         spanbotones.attr("id", "spbtn3"+nombresCronometros[i]);
         spanbotones.attr("class", "spbotones");
         //alert(spanfaltas.innerHTML);
@@ -954,14 +944,16 @@ $(document).ready(function() {
         spanbotones.append(buttonTA);
         spanbotones.append(buttonTR);
         spanbotones.hide();
-        span2.append(spanbotones);
+        span2.append(spanbotones);*/
 
         var spanbotones = $("<span>");
         spanbotones.attr("id", "spbtn4"+nombresCronometros[i]);
-        spanbotones.attr("class", "spbotones");
+        spanbotones.attr("class", "spbotones_sep");
         //alert(spanfaltas.innerHTML);
+
         spanbotones.append(spancambio);
         spanbotones.append(buttonCC);
+        spanbotones.append(buttonFJ);
         spanbotones.hide();
         span2.append(spanbotones);
 
@@ -1066,7 +1058,8 @@ $(document).ready(function() {
         const jugadorEnJuego = $('#jugadores-en-juego').val();
         const jugadorFueraJuego = $('#jugadores-fuera-juego').val();
         if(jugadorEnJuego){
-            clearInterval(intervalos[jugadorEnJuego]);
+            //clearInterval(intervalos[jugadorEnJuego]);
+            mostrarTiempoJugador/jugadorEnJuego
             //###sugerencia5
             delete marcatiempo[jugadorEnJuego];
             delete intervalos[jugadorEnJuego];
@@ -1707,4 +1700,3 @@ $(document).ready(function() {
     $(window).scrollTop(0);
 });
 //-------------------------------------------------------------------------------------
-
