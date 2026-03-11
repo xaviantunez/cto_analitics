@@ -2,17 +2,19 @@ const alevinB = [
     'Ivor_Fuentes','Alexis_Garrigos', 'Aleix_Ciscar', 'Arnau_GE', 'Carles_Choez', 'Dario_Moreno',
     'Gabriel_Ruzafa', 'Hector_Collado', 'Joan_Rueda', 'Maia_Miras', 'Marc_Iborra','Oscar_Tebar', 'Andreu_Perez',
     'Arnau_GLL', 'Brais_Girau', 'Carlos_Cortes', 'Guillem_Ortola', 'Leo_Antunez', 'Mateo_Virgili', 'Miguel_Monrabal',
-    'Victor_Ibiza'];
+    'Victor_Ibiza','Didac_Carmona','Miguel_Angel_Arjona'];
+
 const alevinA = ['Pablo_Munoz','Ianis_Lungu','Dani_Lopez', 'Dani_Ortega','Cristian_Firici','Maxim_Moran', 'Ruben_Escriva','Andreu_Perez',
     'Brais_Girau', 'Hugo_Martin', 'Manel_Fuster', 'Marc_Colom', 'Mateo_Virgili', 'Guillem_Ortola', 'Leo_Antunez',
     'Arnau_GLL','Carlos_Cortes','Victor_Ibiza'
 ];
 
-const benjaminA = ["Edgar_Bertomeu","Oscar_Moreno", "Erik_Utrilla", "Jordi_Oltra", "Alex_Lledo", "Daniel_Matel",  "Joan_Caldes",
+const benjaminA = ["Edgar_Bertomeu","Oscar_Moreno", "Jordi_Oltra", "Alex_Lledo", "Daniel_Matel",  "Joan_Caldes",
     "Guillem_Server", "Marc_Gomar", "Gonzalo_Llopis", "Joan_Vidal", "Marc_Sigalat", "Xavi_Riera", "Xavi_Arlandis",
-    "Albert_Barreres", "Benicio_Morales"];
+    "Albert_Barreres"];
+
 const benjaminB = ["Adomas_Volskis", "Saul_Costa", "Sergi_Climent", "Mario_Mas", "Oliver_Mas", "Leo_Barreres", "Marti_Veiguela",
-     "Joan_Barber", "Marco_Gomez", "Edu_Mena", "Aritz_Salinas", "Leo_Perez"
+     "Joan_Barber", "Marco_Gomez", "Aritz_Salinas", "Leo_Perez"
 ];
 const alevinF = ["Sofia_Escriva", "Julia_Garcia", "Carlota_Esteve", "Martina_Ciscar", "Julieta_Robles", "Ana_Lleches",  "Carmen_Ferrando",
     "Emma_Vicens", "Mya_Mas", "Anna_Iturriaga", "Lola_Iturriaga", "Martina_Benet", "Neus_Mestre",
@@ -42,6 +44,7 @@ const juvenilB = [];
 const juvenilF = [];
 //const equips =["prebenjaminA","benjaminB","benjaminA","alevinF","alevinB","alevinA","infantilA","infantilB","infantilF","cadeteF","cadeteB","cadeteA","juvenilA","juvenilB","juvenilF"];
 const equips =["prebenjaminA","benjaminB","benjaminA","alevinF","alevinB","alevinA","infantilA","cadeteF","cadeteA","juvenilA"];
+
 
 
 
