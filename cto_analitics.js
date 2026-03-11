@@ -162,7 +162,7 @@ $(document).ready(function() {
             $('.checkboxplayers').prop('disabled', true);
             $('.buttondelete').hide();
             $('.checkboxportero').hide();
-            $('.spanportero').hide();
+            //$('.spanportero').hide();
             $('.spantitulos').hide();
 
 
@@ -207,6 +207,7 @@ $(document).ready(function() {
                     $("#AS"+jugador).hide();
                     $("#GO"+jugador).hide();
                     $("#RD"+jugador).hide();
+                    $("#FJ"+jugador).hide();
                     $("#RF"+jugador).show();
                     $('.spantitulos').show();
 
@@ -220,6 +221,7 @@ $(document).ready(function() {
                 $("#RF"+jugador).show();
                 $("#RD"+jugador).show();
                 $("#TP"+jugador).hide();
+                $("#FJ"+jugador).show();
                 $("#PA"+jugador).hide();
                 $("#SP"+jugador).hide();
                 $("#pcheck"+jugador).hide();
@@ -227,6 +229,7 @@ $(document).ready(function() {
 
             }
             showTimeColor(tiempos[jugador],jugador,true);
+            hideCheckPorteros();
             ////console.log(tiempos[jugador]+" "+jugador);
         }
         if(!iniciado){
@@ -866,7 +869,7 @@ $(document).ready(function() {
         var spanpuerta = $("<span>");
         spanpuerta.attr("class", "spanportero");
         spanpuerta.attr("id", "puerta" + nombresCronometros[i]);
-        spanpuerta.text('Portero');
+        spanpuerta.text(' Porter@');
         spanpuerta.attr("class","spanjugador");
         //checkbox.attr("onclick", "comprobarcheckbox()");
 
@@ -976,6 +979,18 @@ $(document).ready(function() {
             ////console.log(jugador);
         }
     }
+    function hideCheckPorteros(){
+        //console.log("showCheckPorteros");
+        if(portero!='') {
+            for (var i = 0; i < nombresCronometros.length; i++) {
+                var jugador = nombresCronometros[i];
+                $("#pcheck" + jugador).hide();
+                if(jugador!=portero) $("#puerta" + jugador).hide();
+                $("#check" + jugador).hide();
+                ////console.log(jugador);
+            }
+        }
+    }
 
     // Evento para el botón de detener todos los cronómetros
     $('#parar-todos').click(function() {
@@ -1064,6 +1079,11 @@ $(document).ready(function() {
             delete marcatiempo[jugadorEnJuego];
             delete intervalos[jugadorEnJuego];
             mensajeTablaMarcador('CAMBIO: '+jugadorEnJuego);
+            if(jugadorEnJuego==portero){
+                portero="";
+                storageManager("guardar", 'portero', jugador);
+                showCheckPorteros();
+            }
             $(`#check${jugadorEnJuego}`).prop('checked', false);
             $("#TP"+jugadorEnJuego).hide();
             $("#PA"+jugadorEnJuego).hide();
@@ -1071,6 +1091,7 @@ $(document).ready(function() {
             $("#GO"+jugadorEnJuego).show();
             $("#RF"+jugadorEnJuego).show();
             $("#RD"+jugadorEnJuego).show();
+            $("#FJ"+jugadorEnJuego).show();
             if(maxJugadores>8) {
                 $("#TR"+jugadorEnJuego).show();
                 $("#TA"+jugadorEnJuego).show();
@@ -1106,6 +1127,7 @@ $(document).ready(function() {
                     mensajeTablaMarcador('ENTRA: '+jugadorFueraJuego);
                     if($("#pcheck"+jugadorFueraJuego).is(":checked")){
                         $("#TP"+jugadorFueraJuego).show();
+                        $("#FJ"+jugadorFueraJuego).hide();
                         $("#PA"+jugadorFueraJuego).show();
                         $("#AS"+jugadorFueraJuego).hide();
                         $("#GO"+jugadorFueraJuego).hide();
@@ -1142,6 +1164,7 @@ $(document).ready(function() {
                 $("#GO"+jugador).show();
                 $("#RF"+jugador).show();
                 $("#RD"+jugador).show();
+                $("#FJ"+jugador).show();
                 if(maxJugadores>8) {
                     $("#TR"+jugador).show();
                     $("#TA"+jugador).show();
@@ -1426,10 +1449,12 @@ $(document).ready(function() {
             var jugador = nombresCronometros[i];
             if(nombre==jugador && $("#pcheck" + jugador).is(':checked') ) {
                 storageManager("guardar", 'portero', jugador);
+                portero=jugador;
                 if (iniciado) {
                     $("#TP" + jugador).show();
                     $("#PA" + jugador).show();
                     $("#AS" + jugador).hide();
+                    $("#FJ" + jugador).hide();
                     $("#GO" + jugador).hide();
                     $("#RF" + jugador).hide();
                     $("#RD" + jugador).hide();
@@ -1443,6 +1468,7 @@ $(document).ready(function() {
                     $("#TP" + jugador).hide();
                     $("#PA" + jugador).hide();
                     $("#AS" + jugador).show();
+                    $("#FJ" + jugador).show();
                     $("#GO" + jugador).show();
                     $("#RF" + jugador).show();
                     $("#RD" + jugador).show();
@@ -1452,6 +1478,11 @@ $(document).ready(function() {
                 }
                 $("#pcheck" + jugador).prop("checked",false);
             }
+            if(iniciado){
+                $("#pcheck" + jugador).hide();
+                $("#puerta" + jugador).hide();
+            }
+
 
 
         }
