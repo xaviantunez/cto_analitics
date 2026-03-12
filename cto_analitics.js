@@ -76,7 +76,7 @@ $(document).ready(function() {
         if(mensajes == null) mensajes={};
         if(marcamensajes == null) marcamensajes={};
         if(expulsados == null) expulsados=[];
-        if(portero==null) portero="";
+        if(portero == null) portero="";
 
         minTiempo=Math.round(maxTiempo/3)*60;
         avgTiempo=Math.round(maxTiempo/2)*60;
@@ -146,14 +146,13 @@ $(document).ready(function() {
         $('#iniciar-todos').toggle();
         //ajustaCronometros();
         iniciar();
-        window.location.reload();
     });
 
     function iniciar(){
         //console.log("iniciar");
         var texto="";
         if(totaljugadoresencampo<7 && cntErrores==0){
-            alert('SOLO TIENES '+totaljugadoresencampo+" JUGADORES SELECCIONADOS\n\nPOR FAVOR REVISALO");
+            alert('SOLO TIENES '+totaljugadoresencampo+" DEPORTISTAS SELECCIONADOS\n\nPOR FAVOR REVISALO");
             cntErrores+=1;
             return
         }
@@ -523,7 +522,7 @@ $(document).ready(function() {
         }
         removeestadisticas();
         totaljugadoresencampo=0;
-        $('#jugjug').text("JUGADORES: "+totaljugadoresencampo);
+        $('#jugjug').text("JUGANDO: "+totaljugadoresencampo);
         $('#id2 span').text("Adversario");
         $('#resulAdv').text(0);
         $('#resulCto').text(0);
@@ -576,7 +575,7 @@ $(document).ready(function() {
                 totaljugadoresencampo++;
                 //console.log(totaljugadoresencampo);
             });
-            $('#jugjug').text("JUGADORES: "+totaljugadoresencampo);
+            $('#jugjug').text("JUGANDO: "+totaljugadoresencampo);
         }
     }
 
@@ -619,7 +618,7 @@ $(document).ready(function() {
         nombresCronometros.splice(positiontodelete,1);
         if ($("#check" + nombre).is(':checked')) {
             totaljugadoresencampo--;
-            $('#jugjug').text("JUGADORES: "+totaljugadoresencampo);
+            $('#jugjug').text("JUGANDO: "+totaljugadoresencampo);
         }
         $("#"+nombre).remove();
     });
@@ -1311,7 +1310,7 @@ $(document).ready(function() {
                 totaljugadoresencampo++;
 
             } else { totaljugadoresencampo--;}
-            $('#jugjug').text("JUGADORES: "+totaljugadoresencampo);
+            $('#jugjug').text("JUGANDO: "+totaljugadoresencampo);
 
         });
         $('#new-player-modal').hide();
@@ -1438,7 +1437,7 @@ $(document).ready(function() {
                     totaljugadoresencampo--;
                 }
                 ////console.log(equipotitular);
-                $('#jugjug').text("JUGADORES: "+totaljugadoresencampo);
+                $('#jugjug').text("JUGANDO: "+totaljugadoresencampo);
 
             }
         )
@@ -1734,5 +1733,3 @@ $(document).ready(function() {
     $(window).scrollTop(0);
 });
 //-------------------------------------------------------------------------------------
-
-
