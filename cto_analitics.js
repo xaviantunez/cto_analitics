@@ -146,6 +146,7 @@ $(document).ready(function() {
         $('#iniciar-todos').toggle();
         //ajustaCronometros();
         iniciar();
+        window.location.reload();
     });
 
     function iniciar(){
@@ -1733,4 +1734,5 @@ $(document).ready(function() {
     $(window).scrollTop(0);
 });
 //-------------------------------------------------------------------------------------
+
 
