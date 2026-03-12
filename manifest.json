@@ -1,7 +1,7 @@
 {
     "name": "AFCTO Analitics",
     "short_name": "AFCTO Analitics",
-    "start_url": "https://xaviantunez.github.io/cto_analitics/index.html",
+    "start_url": "https://xaviantunez.github.io/cto_analitics/",
     "display": "standalone",
     "background_color": "#ffffff",
     "theme_color": "#2c3e50",
@@ -19,3 +19,4 @@
     ]
 
 }
+
