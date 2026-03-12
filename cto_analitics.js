@@ -78,7 +78,7 @@ $(document).ready(function() {
         if(expulsados == null) expulsados=[];
         if(portero == null) portero="";
 
-        minTiempo=Math.round(maxTiempo/3)*60;
+        minTiempo=Math.round(maxTiempo*0.3)*60;
         avgTiempo=Math.round(maxTiempo/2)*60;
         var resulAdv=0;
         var resulCto=0;
@@ -1389,7 +1389,7 @@ $(document).ready(function() {
         storageManager("guardar",'equipoelegido', equipoElegido);
         storageManager("guardar",'maxTiempo', maxTiempo);
         storageManager("guardar",'maxJugadores', maxJugadores);
-        minTiempo=Math.round(maxTiempo/3)*60;
+        minTiempo=Math.round(maxTiempo*0.3)*60;
         avgTiempo=Math.round(maxTiempo/2)*60;
         reiniciarIntervalos();
         if(maxJugadores>8){
@@ -1733,3 +1733,4 @@ $(document).ready(function() {
     $(window).scrollTop(0);
 });
 //-------------------------------------------------------------------------------------
+
