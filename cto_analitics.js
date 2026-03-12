@@ -29,6 +29,7 @@ $(document).ready(function() {
     var minTiempo=600;
     var avgTiempo=1500;
     var maxTiempo=50;
+    var portero="";
 
     equips.forEach(function(nombre, index) {
 
@@ -75,6 +76,7 @@ $(document).ready(function() {
         if(mensajes == null) mensajes={};
         if(marcamensajes == null) marcamensajes={};
         if(expulsados == null) expulsados=[];
+        if(portero==null) portero="";
 
         minTiempo=Math.round(maxTiempo/3)*60;
         avgTiempo=Math.round(maxTiempo/2)*60;
@@ -1731,3 +1733,4 @@ $(document).ready(function() {
     $(window).scrollTop(0);
 });
 //-------------------------------------------------------------------------------------
+
