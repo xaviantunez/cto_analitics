@@ -75,7 +75,7 @@
             color: white;
             font-weight: bold;
             background-color: grey;
-            border-radius: 8px;
+            border-radius: 5px;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 
         }
@@ -199,10 +199,19 @@
             width: 100%;
             vertical-align: top;
             border:1px solid #aaaaaa;
+            border-radius: 5px;
+            margin-top:0px;
+        }
+        #datosrelevantes{
+            width: 100% !important;
+            vertical-align: top;
+            border:1px solid #aaaaaa;
             margin-top:5px;
             background:#e0e0e0;
             border-radius: 5px;
+            margin-bottom:0px;
         }
+
         .sectionestadistica{
             padding: 15px 0;
             border-top: 1px solid;
@@ -410,13 +419,14 @@
         #iniciar-todos,#parar-todos{padding: 12px 12px;max-width: 75px;}
         .contenedor-jugadores {
             display: flex;
-            gap: 15px;           /* Espacio entre divs */
+            gap: 10px;           /* Espacio entre divs */
             align-items: center; /* Centra verticalmente */
             width: 100%;
         }
         #divcapitan {
             flex: 1;             /* Ocupa espacio disponible */
             max-width: 75px;
+            margin-right:12px;
         }
 
         #divjugjugando {
@@ -477,7 +487,6 @@
 
     <div id="divjugjugando">
         <p id="jugjug">JUGANDO: </p>
-
     </div>
     <!---->
     <div id="divnewplayer">
@@ -647,9 +656,10 @@
 </div>-->
 <canvas id="myBarChart" width="400" height="400" style="display:none;"></canvas>
 <div id="marcaor-partido">
+    <p id="datosrelevantes">DATOS RELEVANTES</p>
     <table id="tablaDatosPartido">
         <tr>
-            <th id="iden2">DATOS RELEVANTES</th>
+            <td id="iden2" ></td>
         </tr>
     </table>
 </div>
