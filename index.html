@@ -25,8 +25,13 @@
             border-radius: 5px; /* Bordes redondeados */
             transition: background-color 0.3s; /* Transición suave */
         }
+        #iniciar-todos,#guardar-excel{
+            border-color: #17ad5b;
+        }
         button#showgrafics{
             padding: 10px;
+            border-radius: 5px;
+            border-color:#dddddd;
         }
         #reiniciar-todos, #add-new-player {background-color: #1a1a19;}
         #iniciar-todos, #cambiar-estado{ background-color: #107c41;}
@@ -62,7 +67,7 @@
             max-height: 200px;
             display: inline-block;
             margin: 0px;
-            padding: 1px 0;
+            padding: 2px 0;
             color: white;
             font-weight: bold;
             background-color: grey;
@@ -137,13 +142,14 @@
         #add-gol-cto, #save-gol,#salir-gol,#salir-gol-adv, #save-capitan, #cancel-capitan{
             background-color: #107c41;
             padding: 10px;
-
+            margin:7px auto;
             color: white; /* Texto blanco */
             border-radius: 5px; /* Bordes redondeados */
             text-align: center;
             min-width: 90px;
             display: block;
             font-size: 14px;
+            border-color: #17ad5b;
         }
         #add-gol-adv{
             background-color: #830909;
@@ -154,6 +160,7 @@
             text-align: center;
             min-width: 90px;
             display: block;
+            border-color: #ab0d0d;
         }
 
         #cambiar-jugadores:hover {
@@ -186,7 +193,10 @@
         #tablaDatosPartido{
             width: 100%;
             vertical-align: top;
-            border:1px solid #000000;
+            border:1px solid #aaaaaa;
+            margin-top:5px;
+            background:#e0e0e0;
+            border-radius: 5px;
         }
         .sectionestadistica{
             padding: 15px 0;
@@ -407,6 +417,7 @@
         #divjugjugando {
             flex: 1;
             text-align: center;  /* Centra el texto */
+            vertical-align: middle;
 
         }
 
@@ -615,18 +626,20 @@
 </div>
 <div id="button-guardar-excel">
     <button id="guardar-excel">Guardar Excel</button>
-</div>
-<div id="button-reiniciar-todos">
     <button id="reiniciar-todos">Reiniciar cronometros</button>
+    <button id="showgrafics">Mostrar Graficos</button>
 </div>
+<!--<div id="button-reiniciar-todos">
+    <button id="reiniciar-todos">Reiniciar cronometros</button>
+</div>-->
 <div id="delete-cookies-modal" style="display:none;">
     <h4>ELIMINAR SESION</h4>
     <button id="eliminarsesion">Si</button>
     <button id="continuarsesion">No</button>
 </div>
-<div id="divgraficos">
+<!--<div id="divgraficos">
     <button id="showgrafics">Mostrar Graficos</button>
-</div>
+</div>-->
 <canvas id="myBarChart" width="400" height="400" style="display:none;"></canvas>
 <div id="marcaor-partido">
     <table id="tablaDatosPartido">
