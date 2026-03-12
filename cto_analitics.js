@@ -30,9 +30,9 @@ $(document).ready(function() {
     var avgTiempo=1500;
     var maxTiempo=50;
     var portero="";
-
+    
     equips.forEach(function(nombre, index) {
-
+        
         $("#equipos").append("<option value='"+nombre+"'>"+(nombre.substr(0,nombre.length-1)+" "+nombre.substr(nombre.length-1,1)).toUpperCase()+"</option>");
 
     });
@@ -80,6 +80,7 @@ $(document).ready(function() {
 
         minTiempo=Math.round(maxTiempo*0.3)*60;
         avgTiempo=Math.round(maxTiempo/2)*60;
+        console.log(minTiempo);console.log(avgTiempo);
         var resulAdv=0;
         var resulCto=0;
         if(capitan!='') {
@@ -148,6 +149,10 @@ $(document).ready(function() {
         iniciar();
         window.location.reload();
     });
+    function decode(cadena){
+        const json = atob(cadena);   // decodifica base64
+        return JSON.parse(json);
+    }
 
     function iniciar(){
         //console.log("iniciar");
@@ -346,7 +351,7 @@ $(document).ready(function() {
         ////console.log("showTimeColor");
         var clase='rojo';
         var claselbl='rojolbl';
-        if(tiempo>minTiempo && tiempo<avgTiempo ){
+        if(tiempo>=minTiempo && tiempo<=avgTiempo ){
             clase='naranja';
             claselbl='naranjalbl';
             //$("#ES"+jugador).removeClass("rojo");
@@ -1369,22 +1374,22 @@ $(document).ready(function() {
         switch(equipoElegido) {
             //case "BenjaminA":nombresCronometros=benjaminA;break;
             //case "BenjaminB":nombresCronometros=benjaminB;break;
-            case "alevinA":nombresCronometros=alevinA;maxTiempo=60;break;
-            case "alevinB":nombresCronometros=alevinB;maxTiempo=60;break;
-            case "alevinF":nombresCronometros=alevinF;maxTiempo=60;break;
-            case "benjaminB":nombresCronometros=benjaminB;maxTiempo=50;break;
-            case "benjaminA":nombresCronometros=benjaminA;maxTiempo=50;break;
-            case "prebenjaminA":nombresCronometros=prebenjaminA;maxTiempo=50;break;
-            case "prebenjaminB":nombresCronometros=prebenjaminB;maxTiempo=50;break;
-            case "infantilA":nombresCronometros=infantilA;maxJugadores=11;maxTiempo=70;break;
-            case "infantilB":nombresCronometros=infantilB;maxJugadores=11;maxTiempo=70;break;
-            case "infantilF":nombresCronometros=infantilF;maxJugadores=11;maxTiempo=70;break;
-            case "cadeteA":nombresCronometros=cadeteA;maxJugadores=11;maxTiempo=80;break;
-            case "cadeteB":nombresCronometros=cadeteB;maxJugadores=11;maxTiempo=80;break;
-            case "cadeteF":nombresCronometros=cadeteF;maxJugadores=11;maxTiempo=80;break;
-            case "juvenilA":nombresCronometros=juvenilA;maxJugadores=11;maxTiempo=90;break;
-            case "juvenilB":nombresCronometros=juvenilB;maxJugadores=11;maxTiempo=90;break;
-            case "juvenilF":nombresCronometros=juvenilB;maxJugadores=11;maxTiempo=90;break;
+            case "alevinA":nombresCronometros=decode(alevinA);maxTiempo=60;break;
+            case "alevinB":nombresCronometros=decode(alevinB);maxTiempo=60;break;
+            case "alevinF":nombresCronometros=decode(alevinF);maxTiempo=60;break;
+            case "benjaminB":nombresCronometros=decode(benjaminB);maxTiempo=50;break;
+            case "benjaminA":nombresCronometros=decode(benjaminA);maxTiempo=50;break;
+            case "prebenjaminA":nombresCronometros=decode(prebenjaminA);maxTiempo=50;break;
+            case "prebenjaminB":nombresCronometros=decode(prebenjaminB);maxTiempo=50;break;
+            case "infantilA":nombresCronometros=decode(infantilA);maxJugadores=11;maxTiempo=70;break;
+            case "infantilB":nombresCronometros=decode(infantilB);maxJugadores=11;maxTiempo=70;break;
+            case "infantilF":nombresCronometros=decode(infantilF);maxJugadores=11;maxTiempo=70;break;
+            case "cadeteA":nombresCronometros=decode(cadeteA);maxJugadores=11;maxTiempo=80;break;
+            case "cadeteB":nombresCronometros=decode(cadeteB);maxJugadores=11;maxTiempo=80;break;
+            case "cadeteF":nombresCronometros=decode(cadeteF);maxJugadores=11;maxTiempo=80;break;
+            case "juvenilA":nombresCronometros=decode(juvenilA);maxJugadores=11;maxTiempo=90;break;
+            case "juvenilB":nombresCronometros=decode(juvenilB);maxJugadores=11;maxTiempo=90;break;
+            case "juvenilF":nombresCronometros=decode(juvenilF);maxJugadores=11;maxTiempo=90;break;
         }
         //alert('');
         storageManager("guardar",'equipoelegido', equipoElegido);
@@ -1392,6 +1397,8 @@ $(document).ready(function() {
         storageManager("guardar",'maxJugadores', maxJugadores);
         minTiempo=Math.round(maxTiempo*0.3)*60;
         avgTiempo=Math.round(maxTiempo/2)*60;
+        console.log(minTiempo);
+        console.log(avgTiempo);
         reiniciarIntervalos();
         if(maxJugadores>8){
             $('#tarjetasRojasLeft').closest('.sectionestadistica').show();
@@ -1734,5 +1741,3 @@ $(document).ready(function() {
     $(window).scrollTop(0);
 });
 //-------------------------------------------------------------------------------------
-
-
