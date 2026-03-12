@@ -26,14 +26,16 @@
             border-radius: 5px; /* Bordes redondeados */
             transition: background-color 0.3s; /* Transición suave */
         }
-        #iniciar-todos,#guardar-excel{
-            border-color: #17ad5b;
-        }
+
+        button#showgrafics{background-color: #dddddd;}
         button#showgrafics, #guardar-excel, #reiniciar-todos{
             padding: 10px;
             border-radius: 5px;
             border-color:#dddddd;
             padding: 8px 24px;
+        }
+        #iniciar-todos,#guardar-excel{
+            border-color: #17ad5b;
         }
         #reiniciar-todos, #add-new-player {background-color: #1a1a19;}
         #iniciar-todos, #cambiar-estado{ background-color: #107c41;}
@@ -62,19 +64,20 @@
             color: white;
         }
         #divjugjugando p{
-            max-height: 10px;
+            /*max-height: 10px;*/
+            vertical-align: text-top;
         }
         #divjugjugando{
             width: 60%;
-            max-height: 200px;
             display: inline-block;
             margin: 0px;
-            padding: 2px 0;
+            padding: 0px 0;
             color: white;
             font-weight: bold;
             background-color: grey;
             border-radius: 8px;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+
         }
         .cronometro {
             color: #4b4040;
@@ -402,7 +405,7 @@
         #tryCapitan,add-new-player,#change-localteam,#add-rival{
             display: inline-block;
             margin: 0px;
-            padding: 12px 12px;
+            padding: 16px 12px;
         }
         #iniciar-todos,#parar-todos{padding: 12px 12px;max-width: 75px;}
         .contenedor-jugadores {
@@ -419,7 +422,7 @@
         #divjugjugando {
             flex: 1;
             text-align: center;  /* Centra el texto */
-            vertical-align: middle;
+
 
         }
 
